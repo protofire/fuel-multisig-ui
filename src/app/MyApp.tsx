@@ -2,6 +2,8 @@
 import { CacheProvider } from "@emotion/react";
 
 import { NetworkConnectionConfig } from "@/context/NetworkConnectionConfig";
+import {Router} from "next/router";
+import NProgress from "nprogress";
 import {
   SettingsThemeConsumer,
   SettingsThemeProvider,
