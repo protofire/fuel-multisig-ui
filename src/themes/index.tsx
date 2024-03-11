@@ -1,5 +1,7 @@
-import { CssBaseline, GlobalStyles, StyledEngineProvider } from "@mui/material";
+"use client";
+import { CssBaseline, GlobalStyles } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { Public_Sans } from "next/font/google";
 import { ReactNode, useMemo } from "react";
 
@@ -67,13 +69,13 @@ export default function ThemeCustomization({
 
   return (
     <div className={publicSans.className}>
-      <StyledEngineProvider injectFirst>
+      <AppRouterCacheProvider options={{ enableCssLayer: true }}>
         <ThemeProvider theme={themes}>
           <CssBaseline />
           <GlobalStyles styles={() => GlobalStyling(theme) as any} />
           {children}
         </ThemeProvider>
-      </StyledEngineProvider>
+      </AppRouterCacheProvider>
     </div>
   );
 }
