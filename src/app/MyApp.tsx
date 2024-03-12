@@ -17,17 +17,15 @@ export default function MyApp({ children }: { children: React.ReactNode }) {
     <CacheProvider value={clientSideEmotionCache}>
       <NetworkConnectionConfig>
         <SettingsThemeConsumer>
-          {({ settings }) => 
-             (
-              <SettingsThemeProvider>
-                <ThemeCustomization settings={settings}>
-                  {children}
-                </ThemeCustomization>
-              </SettingsThemeProvider>
-            )
-          }
+          {({ settings }) => (
+            <SettingsThemeProvider>
+              <ThemeCustomization settings={settings}>
+                {children}
+              </ThemeCustomization>
+            </SettingsThemeProvider>
+          )}
         </SettingsThemeConsumer>
       </NetworkConnectionConfig>
     </CacheProvider>
-  )
+  );
 }
