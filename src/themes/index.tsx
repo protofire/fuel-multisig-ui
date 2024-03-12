@@ -2,7 +2,7 @@
 import { CssBaseline, GlobalStyles } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import { Public_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { ReactNode, useMemo } from "react";
 
 import { Settings } from "@/themes/types";
@@ -15,10 +15,30 @@ import typographyOptions from "./typography";
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 
-const publicSans = Public_Sans({
-  subsets: ["latin"],
+const Px_Grotesk = localFont({
+  src: [
+    {
+      path: "../app/fonts/Px-Grotesk-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../app/fonts/Px-Grotesk-Regular-Italic.woff2",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../app/fonts/Px-Grotesk-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../app/fonts/Px-Grotesk-Light.woff2",
+      weight: "200",
+      style: "normal",
+    },
+  ],
 });
-
 export default function ThemeCustomization({
   children,
   settings,
@@ -30,7 +50,7 @@ export default function ThemeCustomization({
   const theme = Palette({ mode, skin });
 
   const themeTypography = typographyOptions(
-    [publicSans.style.fontFamily].join(",")
+    [Px_Grotesk.style.fontFamily].join(",")
   );
 
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
@@ -68,7 +88,7 @@ export default function ThemeCustomization({
   });
 
   return (
-    <div className={publicSans.className}>
+    <div className={Px_Grotesk.className}>
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
         <ThemeProvider theme={themes}>
           <CssBaseline />
