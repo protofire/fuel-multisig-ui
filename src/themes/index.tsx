@@ -92,7 +92,14 @@ export default function ThemeCustomization({
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
         <ThemeProvider theme={themes}>
           <CssBaseline />
-          <GlobalStyles styles={() => GlobalStyling(theme) as any} />
+          <GlobalStyles
+            styles={() =>
+              GlobalStyling(
+                theme
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ) as any
+            }
+          />
           {children}
         </ThemeProvider>
       </AppRouterCacheProvider>
