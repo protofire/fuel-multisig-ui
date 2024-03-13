@@ -22,7 +22,8 @@ export function WelcomeCard() {
         sx={{
           display: "flex",
           justifyContent: "space-around",
-          width: "80%",
+          flexDirection: { xs: "column", sm: "row" },
+          width: { xs: "90%", sm: "80%" },
           mt: "4rem",
         }}
       >
@@ -33,8 +34,8 @@ export function WelcomeCard() {
             alignItems: "left",
             gap: "0.5rem",
             backgroundColor: theme.palette.primary.main,
-            padding: { xs: 1, sm: 2, md: 4, lg: 6, xl: 6 },
-            borderRadius: "0.8rem 0 0 0.8rem",
+            padding: { xs: 4, sm: 2, md: 4, lg: 4, xl: 4 },
+            borderRadius: { xs: "0.8rem 0.8rem 0 0", sm: "0.8rem 0 0 0.8rem" },
           }}
         >
           <Typography variant="h1" color="black">
@@ -58,8 +59,8 @@ export function WelcomeCard() {
             alignItems: "left",
             gap: "0.5rem",
             backgroundColor: theme.palette.background.paper,
-            padding: { xs: 1, sm: 2, md: 4, lg: 6, xl: 6 },
-            borderRadius: "0 0.8rem 0.8rem 0",
+            padding: { xs: 4, sm: 2, md: 4, lg: 4, xl: 4 },
+            borderRadius: { xs: "0 0 0.8rem 0.8rem", sm: "0 0.8rem 0.8rem 0" },
           }}
         >
           <Image
