@@ -1,1 +1,1 @@
-export const LOGO_APP = "/vercel.svg";
+export const LOGO_APP = "/app-logo.svg";

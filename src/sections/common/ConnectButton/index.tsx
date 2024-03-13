@@ -8,7 +8,8 @@ import { StyledConnectButton } from "./styled";
 
 export const ConnectButton: React.FC = () => {
   const { ref: refButton, recentlyClicked } = useRecentlyClicked(500);
-  const { accountConnected } = useNetworkConnection();
+  const { accountConnected, connectWallet, isLoading, disconnectWallet } =
+    useNetworkConnection();
 
   if (accountConnected) return <>{accountConnected}</>;
 
@@ -16,8 +17,8 @@ export const ConnectButton: React.FC = () => {
     <>
       <StyledConnectButton
         ref={refButton}
-        isLoading={recentlyClicked}
-        onClick={() => console.log(true)}
+        isLoading={recentlyClicked || isLoading}
+        onClick={connectWallet}
       >
         Connect
       </StyledConnectButton>
