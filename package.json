@@ -25,6 +25,7 @@
     "@mui/material-nextjs": "^5.15.11",
     "fuels": "^0.76.0",
     "next": "14.1.1",
+    "nextjs-toploader": "^1.6.6",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -47,5 +48,10 @@
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,jsx,tsx}": [
+      "yarn lint"
+    ]
   }
 }

@@ -4,6 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Link from "next/link";
 
+import { APP_NAME } from "@/config/app";
 import { ROUTES } from "@/config/routes";
 import { MainContentCard } from "@/sections/shared/MainContentCard";
 
@@ -20,7 +21,7 @@ export function WelcomeCard() {
       }}
     >
       <Typography variant="h1" color="white">
-        Welcome to Igniters
+        Welcome to {APP_NAME}
       </Typography>
       <Typography variant="h5" color="grey">
         The most trusted decentralized multisig platform on fuel ecosystem.

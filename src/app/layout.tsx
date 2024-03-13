@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NextTopLoader from "nextjs-toploader";
 
 import MyApp from "./MyApp";
 
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <NextTopLoader />
         <MyApp>{children}</MyApp>
       </body>
     </html>
