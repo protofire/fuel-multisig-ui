@@ -66,7 +66,7 @@ export function WelcomeCard() {
             src={LOGO_APP}
             alt={`${APP_NAME} Wallet`}
             priority
-            width={150} 
+            width={150}
             height={60}
           />
           <Typography variant="h3" color="white">
