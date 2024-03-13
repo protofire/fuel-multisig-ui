@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
+import NextTopLoader from "nextjs-toploader";
 
 import MyApp from "./MyApp";
-// import { Inter } from "next/font/google";
-
-// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Fuel Multisig Wallet",
@@ -19,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <NextTopLoader />
         <MyApp>{children}</MyApp>
       </body>
     </html>

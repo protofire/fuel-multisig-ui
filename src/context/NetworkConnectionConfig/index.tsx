@@ -1,3 +1,4 @@
+"use client";
 import { FuelProvider } from "@fuel-wallet/react";
 import { PropsWithChildren } from "react";
 

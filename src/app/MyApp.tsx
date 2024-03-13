@@ -2,8 +2,6 @@
 import { CacheProvider } from "@emotion/react";
 
 import { NetworkConnectionConfig } from "@/context/NetworkConnectionConfig";
-import {Router} from "next/router";
-import NProgress from "nprogress";
 import {
   SettingsThemeConsumer,
   SettingsThemeProvider,
@@ -19,17 +17,15 @@ export default function MyApp({ children }: { children: React.ReactNode }) {
     <CacheProvider value={clientSideEmotionCache}>
       <NetworkConnectionConfig>
         <SettingsThemeConsumer>
-          {({ settings }) => 
-             (
-              <SettingsThemeProvider>
-                <ThemeCustomization settings={settings}>
-                  {children}
-                </ThemeCustomization>
-              </SettingsThemeProvider>
-            )
-          }
+          {({ settings }) => (
+            <SettingsThemeProvider>
+              <ThemeCustomization settings={settings}>
+                {children}
+              </ThemeCustomization>
+            </SettingsThemeProvider>
+          )}
         </SettingsThemeConsumer>
       </NetworkConnectionConfig>
     </CacheProvider>
-  )
+  );
 }
