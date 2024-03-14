@@ -1,6 +1,8 @@
 import { FuelConnector } from "@fuel-wallet/sdk";
 
+import { FueletIcon } from "./FueletIcon";
 import { FuelWalletDevIcon } from "./FuelWalletDevIcon";
+import { FuelWalletIcon } from "./FuelWalletIcon";
 
 type PathName = string | undefined;
 
@@ -16,16 +18,14 @@ function getSvgFileName(path: PathName): string {
   return "";
 }
 
-export function getConnectorImage(path: PathName) {
-  const name: FuelConnector["name"] = getSvgFileName(path);
-
+export function getConnectorImage(name: FuelConnector["name"] | undefined) {
   switch (name) {
     case "Fuel Wallet":
-      return <FuelWalletDevIcon />;
+      return <FuelWalletIcon />;
     case "Fuel Wallet Development":
       return <FuelWalletDevIcon />;
     case "Fuelet Wallet":
-      return <FuelWalletDevIcon />;
+      return <FueletIcon />;
 
     default:
       return <FuelWalletDevIcon />;

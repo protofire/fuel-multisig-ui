@@ -11,17 +11,21 @@ import { StyledMenuItem, StyledSelect, StyledTypography } from "./styled";
 
 const OPTION_FOR_DISCONNECTING = "disconnect";
 
+interface Props {
+  accounts: AccountWalletItem[];
+  accountConnected: AccountWalletItem["address"]["formatted"];
+  setAccount?: (account: AccountWalletItem) => void;
+  disconnectWallet: () => void;
+  balance?: string;
+}
+
 export function AccountSelect({
   accounts,
   accountConnected,
   setAccount,
   disconnectWallet,
-}: {
-  accounts: AccountWalletItem[];
-  accountConnected: AccountWalletItem["address"]["formatted"];
-  setAccount?: (account: AccountWalletItem) => void;
-  disconnectWallet: () => void;
-}) {
+  balance,
+}: Props) {
   const currentAccount = useMemo(() => {
     return accounts.find((a) => a.address.formatted === accountConnected);
   }, [accounts, accountConnected]);
@@ -33,7 +37,9 @@ export function AccountSelect({
       disconnectWallet();
       return;
     }
-    const newAccount = accounts?.find((element) => element.address === address);
+    const newAccount = accounts?.find(
+      (element) => element.address.formatted === address
+    );
     if (!newAccount) {
       console.error(
         `Theres not an account with this address ${event.target.value}`
@@ -89,7 +95,7 @@ export function AccountSelect({
             </Avatar>
             <Stack>
               <p>{truncateAddress(value as string)}</p>
-              <span>0.1234 ETH</span>
+              <span>{balance}</span>
             </Stack>
           </Box>
         );

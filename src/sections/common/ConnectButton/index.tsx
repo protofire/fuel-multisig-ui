@@ -2,6 +2,7 @@
 import * as React from "react";
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
+import { useGetBalance } from "@/hooks/useGetBalance";
 import { useRecentlyClicked } from "@/hooks/useRecentlyClicked";
 
 import { AccountSelect } from "../AccountSelect";
@@ -16,6 +17,7 @@ export const ConnectButton: React.FC = () => {
     disconnectWallet,
     accounts,
   } = useNetworkConnection();
+  const { formatted, isLoading: isLoadingBalance } = useGetBalance();
 
   if (accountConnected)
     return (
@@ -23,6 +25,7 @@ export const ConnectButton: React.FC = () => {
         accountConnected={accountConnected}
         accounts={accounts}
         disconnectWallet={disconnectWallet}
+        balance={formatted}
       />
     );
 
