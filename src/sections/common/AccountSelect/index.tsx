@@ -69,33 +69,35 @@ export function AccountSelect({
       onChange={_handleChange}
       renderValue={(value) => {
         return (
-          <>
-            <Box
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {currentAccount && (
+              <Avatar>
+                <EmojiAvatarIcon address={currentAccount?.address.hex} />
+              </Avatar>
+            )}
+            <Avatar
               sx={{
-                display: "flex",
+                position: "absolute",
+                width: "21px",
+                height: "21px",
+                marginTop: "1.2rem",
+                marginLeft: "1.7rem",
+                backgroundColor: "black",
+                overflow: "hidden",
               }}
             >
-              {currentAccount && (
-                <Avatar>
-                  <EmojiAvatarIcon address={currentAccount?.address.hex} />
-                </Avatar>
-              )}
-              <Avatar
-                sx={{
-                  width: "30px",
-                  height: "30px",
-                  marginTop: "2px",
-                  marginLeft: "5px",
-                }}
-              >
-                {getConnectorImage(currentAccount?.walletLogoUrl)}
-              </Avatar>
-              <Stack>
-                <p>{truncateAddress(value as string)}</p>
-                <span>{balance}</span>
-              </Stack>
-            </Box>
-          </>
+              {getConnectorImage(currentAccount?.walletLogoUrl)}
+            </Avatar>
+            <Stack>
+              <p>{truncateAddress(value as string)}</p>
+              <span>{balance}</span>
+            </Stack>
+          </Box>
         );
       }}
     >
