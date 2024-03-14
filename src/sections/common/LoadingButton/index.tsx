@@ -3,6 +3,8 @@ import Button, { ButtonProps } from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import * as React from "react";
 
+import theme from "@/themes/theme";
+
 export interface LoadingButtonProps extends Omit<ButtonProps, "ref"> {
   isLoading?: boolean;
 }
@@ -34,6 +36,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = React.forwardRef<
             left: "50%",
             marginTop: "-12px", // half of size
             marginLeft: "-12px", // half of size
+            color: "black",
           }}
         />
       )}
