@@ -12,8 +12,8 @@ export const StyledSelect = styled(Select)<Omit<SelectProps, "variant">>(
   () => ({
     color: "white",
     margin: "0",
-    padding: "0",
-    height: "2.88em",
+    padding: "1.6rem 0.6rem",
+    height: "3rem",
     borderRadius: "0.5rem",
     "&.Mui-focused": {
       backgroundColor: "#3A3334",
@@ -24,16 +24,18 @@ export const StyledSelect = styled(Select)<Omit<SelectProps, "variant">>(
     "& fieldset": {
       borderColor: "#1a1a1a !important",
     },
+    "& .MuiSelect-outlined": {
+      padding: "0",
+    },
     "& span": {
-      fontSize: "0.9rem",
-      marginLeft: "1rem",
+      fontSize: "1rem",
+      margin: "0 0.6rem 0 1rem",
       fontWeight: "800",
-      lineHeight: "18px",
+      lineHeight: "0.8rem",
     },
     "& p": {
-      fontSize: "0.8rem",
-      marginLeft: "1rem",
-      lineHeight: "18px",
+      fontSize: "0.9rem",
+      margin: "0 0.6rem 0 1rem",
     },
     "& legend": {
       display: "none",

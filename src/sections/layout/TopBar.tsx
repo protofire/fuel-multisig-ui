@@ -15,7 +15,12 @@ export function TopBar({
   return (
     <AppBar elevation={0} position="fixed">
       <Toolbar>
-        <Stack direction="row" alignItems="center" gap={1} sx={{ flexGrow: 1 }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          gap={1}
+          sx={{ flexGrow: 1, lineHeight: "0" }}
+        >
           <Link href={ROUTES.Welcome} passHref>
             <Image
               src={LOGO_APP}
