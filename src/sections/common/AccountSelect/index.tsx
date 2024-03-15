@@ -83,8 +83,8 @@ export function AccountSelect({
             <Avatar
               sx={{
                 position: "absolute",
-                width: "21px",
-                height: "21px",
+                width: "19px",
+                height: "19px",
                 marginTop: "1.2rem",
                 marginLeft: "1.7rem",
                 backgroundColor: "black",
