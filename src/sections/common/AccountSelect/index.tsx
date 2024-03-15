@@ -1,10 +1,10 @@
-import PowerOffIcon from "@mui/icons-material/PowerOff";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { Avatar, Box, SelectChangeEvent, Stack } from "@mui/material";
 import { useMemo } from "react";
 
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { getConnectorImage } from "@/services/fuel/connectors";
-import { shortNameLonger, truncateAddress } from "@/utils/formatString";
+import { truncateAddress } from "@/utils/formatString";
 
 import { EmojiAvatarIcon } from "../EmojiAvatar/EmojiAvatarIcon";
 import { AccountSelectSkeleton } from "./AccountSelectSkeleton";
@@ -97,21 +97,31 @@ export function AccountSelect({
     >
       {accounts.map((a) => (
         <StyledMenuItem key={a.address.formatted} value={a.address.formatted}>
-          <Stack sx={{ display: "flex", flexDirection: "row" }}>
-            <Stack>
-              <span>{shortNameLonger(a.name as string)}</span>
-              <p>{truncateAddress(a.address.formatted)}</p>
-            </Stack>
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Avatar>
+              <EmojiAvatarIcon address={a.address.hex} />
+            </Avatar>
+            <p>{truncateAddress(a.address.formatted)}</p>
           </Stack>
         </StyledMenuItem>
       ))}
       <StyledMenuItem value={OPTION_FOR_DISCONNECTING}>
         <>
-          <PowerOffIcon sx={{ fontSize: "2rem" }} />
-          <Stack>
-            <Stack>
-              <StyledTypography>Disconect Wallet</StyledTypography>
-            </Stack>
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <PowerSettingsNewIcon sx={{ fontSize: "1.6rem" }} />
+            <StyledTypography>Disconect Wallet</StyledTypography>
           </Stack>
         </>
       </StyledMenuItem>
