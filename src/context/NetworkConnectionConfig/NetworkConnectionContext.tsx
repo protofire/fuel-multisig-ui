@@ -42,6 +42,7 @@ export interface NetworkConnectionContextType {
   wallet: WalletType | undefined | null; // null when is loaded and to connected
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
+  setAccount?: (account: AccountWalletItem) => void;
 }
 
 export const NetworkConnectionContext = createContext<
@@ -61,7 +62,7 @@ export const NetworkConnectionProvider: React.FC<
   const { account } = useAccount();
   const { accounts } = useAccounts();
   const { disconnect } = useDisconnect();
-  const { connect, isConnecting, isError: errorConnecting } = useConnectUI();
+  const { connect, isConnecting, isError } = useConnectUI();
   const _accounts = useMemo(() => {
     if (!accounts || !wallet) return [];
 
@@ -79,13 +80,13 @@ export const NetworkConnectionProvider: React.FC<
   }, [accounts, wallet]);
 
   useEffect(() => {
-    if (!errorConnecting) return;
+    if (!isError) return;
 
     setError("ACCOUNTS_NOT_FOUND");
     alert(
       "Error trying to connect the wallet, check that you have internet connection and at least one account created."
     );
-  }, [errorConnecting]);
+  }, [isError]);
 
   const connectWallet = useCallback(async () => {
     try {

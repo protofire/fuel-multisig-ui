@@ -41,6 +41,7 @@ export function AccountSelect({
       disconnectWallet();
       return;
     }
+
     const newAccount = accounts?.find(
       (element) => element.address.formatted === address
     );
@@ -53,7 +54,7 @@ export function AccountSelect({
     setAccount?.(newAccount);
   };
 
-  if (isLoading || !currentAccount || !accounts || !accountConnected)
+  if (isLoading || !currentAccount || !accounts)
     return <AccountSelectSkeleton />;
 
   return (
@@ -96,7 +97,12 @@ export function AccountSelect({
       }}
     >
       {accounts.map((a) => (
-        <StyledMenuItem key={a.address.formatted} value={a.address.formatted}>
+        <StyledMenuItem
+          selected={currentAccount.address.formatted === a.address.formatted}
+          disabled={true}
+          key={a.address.formatted}
+          value={a.address.formatted}
+        >
           <Stack
             sx={{
               display: "flex",
@@ -112,18 +118,16 @@ export function AccountSelect({
         </StyledMenuItem>
       ))}
       <StyledMenuItem value={OPTION_FOR_DISCONNECTING}>
-        <>
-          <Stack
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <PowerSettingsNewIcon sx={{ fontSize: "1.6rem" }} />
-            <StyledTypography>Disconnect Wallet</StyledTypography>
-          </Stack>
-        </>
+        <Stack
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <PowerSettingsNewIcon sx={{ fontSize: "1.6rem" }} />
+          <StyledTypography>Disconnect Wallet</StyledTypography>
+        </Stack>
       </StyledMenuItem>
     </StyledSelect>
   );
