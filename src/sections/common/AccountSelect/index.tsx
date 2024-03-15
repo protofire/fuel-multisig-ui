@@ -97,14 +97,12 @@ export function AccountSelect({
     >
       {accounts.map((a) => (
         <StyledMenuItem key={a.address.formatted} value={a.address.formatted}>
-          <>
-            <Stack sx={{ display: "flex", flexDirection: "row" }}>
-              <Stack>
-                <span>{shortNameLonger(a.name as string)}</span>
-                <p>{truncateAddress(a.address.formatted)}</p>
-              </Stack>
+          <Stack sx={{ display: "flex", flexDirection: "row" }}>
+            <Stack>
+              <span>{shortNameLonger(a.name as string)}</span>
+              <p>{truncateAddress(a.address.formatted)}</p>
             </Stack>
-          </>
+          </Stack>
         </StyledMenuItem>
       ))}
       <StyledMenuItem value={OPTION_FOR_DISCONNECTING}>
