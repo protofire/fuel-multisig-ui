@@ -7,6 +7,7 @@ import { getConnectorImage } from "@/services/fuel/connectors";
 import { shortNameLonger, truncateAddress } from "@/utils/formatString";
 
 import { EmojiAvatarIcon } from "../EmojiAvatar/EmojiAvatarIcon";
+import { AccountSelectSkeleton } from "./AccountSelectSkeleton";
 import { StyledMenuItem, StyledSelect, StyledTypography } from "./styled";
 
 const OPTION_FOR_DISCONNECTING = "disconnect";
@@ -17,6 +18,8 @@ interface Props {
   setAccount?: (account: AccountWalletItem) => void;
   disconnectWallet: () => void;
   balance?: string;
+  isLoading: boolean;
+  isLoadingBalance: boolean;
 }
 
 export function AccountSelect({
@@ -25,6 +28,7 @@ export function AccountSelect({
   setAccount,
   disconnectWallet,
   balance,
+  isLoading = false,
 }: Props) {
   const currentAccount = useMemo(() => {
     return accounts.find((a) => a.address.formatted === accountConnected);
@@ -49,18 +53,8 @@ export function AccountSelect({
     setAccount?.(newAccount);
   };
 
-  if (!accounts)
-    return (
-      <StyledSelect value={""} placeholder="Select Account..."></StyledSelect>
-    );
-
-  if (!accountConnected)
-    return (
-      <StyledSelect
-        value={"No Account"}
-        placeholder="No account"
-      ></StyledSelect>
-    );
+  if (isLoading || !currentAccount || !accounts || !accountConnected)
+    return <AccountSelectSkeleton />;
 
   return (
     <StyledSelect
