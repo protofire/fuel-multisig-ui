@@ -121,7 +121,7 @@ export function AccountSelect({
             }}
           >
             <PowerSettingsNewIcon sx={{ fontSize: "1.6rem" }} />
-            <StyledTypography>Disconect Wallet</StyledTypography>
+            <StyledTypography>Disconnect Wallet</StyledTypography>
           </Stack>
         </>
       </StyledMenuItem>
