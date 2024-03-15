@@ -45,22 +45,13 @@ export const StyledSelect = styled(Select)<Omit<SelectProps, "variant">>(
 
 export const StyledMenuItem = styled(MenuItem)<MenuItemProps>(() => ({
   color: "white",
-  "& span": {
-    fontSize: "0.9rem",
-    marginLeft: "1rem",
-    fontWeight: "800",
-    lineHeight: "18px",
-  },
   "& p": {
-    fontSize: "0.8rem",
-    marginLeft: "1rem",
-    lineHeight: "18px",
-    marginRight: "0",
+    fontSize: "0.9rem",
+    margin: "0 0.6rem 0 1rem",
   },
 }));
 
 export const StyledTypography = styled(Typography)<TypographyProps>(() => ({
-  marginLeft: "0",
-  height: "10px",
-  fontSize: "1rem",
+  fontSize: "1.1rem",
+  margin: "0.2rem 0 0 0",
 }));

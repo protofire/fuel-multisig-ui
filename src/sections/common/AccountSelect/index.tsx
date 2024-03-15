@@ -1,12 +1,13 @@
-import PowerOffIcon from "@mui/icons-material/PowerOff";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { Avatar, Box, SelectChangeEvent, Stack } from "@mui/material";
 import { useMemo } from "react";
 
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { getConnectorImage } from "@/services/fuel/connectors";
-import { shortNameLonger, truncateAddress } from "@/utils/formatString";
+import { truncateAddress } from "@/utils/formatString";
 
 import { EmojiAvatarIcon } from "../EmojiAvatar/EmojiAvatarIcon";
+import { AccountSelectSkeleton } from "./AccountSelectSkeleton";
 import { StyledMenuItem, StyledSelect, StyledTypography } from "./styled";
 
 const OPTION_FOR_DISCONNECTING = "disconnect";
@@ -17,6 +18,8 @@ interface Props {
   setAccount?: (account: AccountWalletItem) => void;
   disconnectWallet: () => void;
   balance?: string;
+  isLoading: boolean;
+  isLoadingBalance: boolean;
 }
 
 export function AccountSelect({
@@ -25,6 +28,7 @@ export function AccountSelect({
   setAccount,
   disconnectWallet,
   balance,
+  isLoading = false,
 }: Props) {
   const currentAccount = useMemo(() => {
     return accounts.find((a) => a.address.formatted === accountConnected);
@@ -49,18 +53,8 @@ export function AccountSelect({
     setAccount?.(newAccount);
   };
 
-  if (!accounts)
-    return (
-      <StyledSelect value={""} placeholder="Select Account..."></StyledSelect>
-    );
-
-  if (!accountConnected)
-    return (
-      <StyledSelect
-        value={"No Account"}
-        placeholder="No account"
-      ></StyledSelect>
-    );
+  if (isLoading || !currentAccount || !accounts || !accountConnected)
+    return <AccountSelectSkeleton />;
 
   return (
     <StyledSelect
@@ -83,8 +77,8 @@ export function AccountSelect({
             <Avatar
               sx={{
                 position: "absolute",
-                width: "21px",
-                height: "21px",
+                width: "19px",
+                height: "19px",
                 marginTop: "1.2rem",
                 marginLeft: "1.7rem",
                 backgroundColor: "black",
@@ -103,21 +97,31 @@ export function AccountSelect({
     >
       {accounts.map((a) => (
         <StyledMenuItem key={a.address.formatted} value={a.address.formatted}>
-          <Stack sx={{ display: "flex", flexDirection: "row" }}>
-            <Stack>
-              <span>{shortNameLonger(a.name as string)}</span>
-              <p>{truncateAddress(a.address.formatted)}</p>
-            </Stack>
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Avatar>
+              <EmojiAvatarIcon address={a.address.hex} />
+            </Avatar>
+            <p>{truncateAddress(a.address.formatted)}</p>
           </Stack>
         </StyledMenuItem>
       ))}
       <StyledMenuItem value={OPTION_FOR_DISCONNECTING}>
         <>
-          <PowerOffIcon sx={{ fontSize: "2rem" }} />
-          <Stack>
-            <Stack>
-              <StyledTypography>Disconect Wallet</StyledTypography>
-            </Stack>
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <PowerSettingsNewIcon sx={{ fontSize: "1.6rem" }} />
+            <StyledTypography>Disconnect Wallet</StyledTypography>
           </Stack>
         </>
       </StyledMenuItem>

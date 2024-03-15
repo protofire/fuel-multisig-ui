@@ -26,6 +26,8 @@ export const ConnectButton: React.FC = () => {
         accounts={accounts}
         disconnectWallet={disconnectWallet}
         balance={formatted}
+        isLoading={isLoading}
+        isLoadingBalance={isLoadingBalance}
       />
     );
 
