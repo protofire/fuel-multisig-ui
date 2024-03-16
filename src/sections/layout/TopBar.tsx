@@ -5,7 +5,7 @@ import Link from "next/link";
 import { APP_NAME } from "@/config/app";
 import { LOGO_APP } from "@/config/images";
 import { ROUTES } from "@/config/routes";
-import { ConnectButton } from "@/sections/common/ConnectButton";
+import { ConnectButton } from "@/sections/Auth/ConnectButton";
 
 export function TopBar({
   buttonActionComponent = <ConnectButton />,

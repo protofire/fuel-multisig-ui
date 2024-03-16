@@ -2,8 +2,9 @@
 import {
   useAccount,
   useAccounts,
-  useConnectUI,
+  useConnect,
   useDisconnect,
+  useFuel,
   useIsConnected,
   useWallet,
 } from "@fuel-wallet/react";
@@ -17,10 +18,12 @@ import React, {
   useState,
 } from "react";
 
+import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
+import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 import {
-  AccountWalletItem,
   toAccountSelect,
-} from "@/domain/ui/AccountSelectItem";
+  toWalletProvider,
+} from "@/services/fuel/connectors/transformer";
 
 type NetworkConnectionError =
   | "FAILED_TO_CONNECT"
@@ -40,7 +43,9 @@ export interface NetworkConnectionContextType {
   error: NetworkConnectionError | undefined;
   accountConnected: string | undefined;
   wallet: WalletType | undefined | null; // null when is loaded and to connected
-  connectWallet: () => Promise<void>;
+  walletProviders: WalletProviderItem[];
+  walletProviderConnected: WalletProviderItem | undefined;
+  connectWallet: (connectorName: FuelConnector["name"]) => Promise<void>;
   disconnectWallet: () => void;
   setAccount?: (account: AccountWalletItem) => void;
 }
@@ -57,45 +62,62 @@ export const NetworkConnectionProvider: React.FC<
   NetworkConnectionProviderProps
 > = ({ children }) => {
   const [error, setError] = useState<NetworkConnectionContextType["error"]>();
-  const { wallet, isLoading } = useWallet();
+  const [walletProviders, setWalletProviders] = useState<WalletProviderItem[]>(
+    []
+  );
+  const { wallet, isLoading: isLoadingWallet } = useWallet();
   const { isConnected } = useIsConnected();
   const { account } = useAccount();
   const { accounts } = useAccounts();
+  const { fuel } = useFuel();
+  const {
+    connect,
+    isLoading: isConnecting,
+    error: errorConnecting,
+  } = useConnect();
   const { disconnect } = useDisconnect();
-  const { connect, isConnecting, isError } = useConnectUI();
+  const [walletProviderConnected, setWalletProviderConnected] = useState<
+    WalletProviderItem | undefined
+  >();
+
   const _accounts = useMemo(() => {
     if (!accounts || !wallet) return [];
 
-    const connectorName =
-      (wallet?.connector as FuelConnectorExtended)._currentConnector?.name ??
-      "";
-
     return accounts.map((address, index) =>
-      toAccountSelect(
-        address as `fuel${string}`,
-        connectorName,
-        `Acct. ${index + 1}`
-      )
+      toAccountSelect(address as `fuel${string}`, `Acct. ${index + 1}`)
     );
   }, [accounts, wallet]);
 
   useEffect(() => {
-    if (!isError) return;
+    setWalletProviderConnected(undefined);
 
-    setError("ACCOUNTS_NOT_FOUND");
-    alert(
-      "Error trying to connect the wallet, check that you have internet connection and at least one account created."
-    );
-  }, [isError]);
-
-  const connectWallet = useCallback(async () => {
-    try {
-      connect();
-    } catch (err) {
-      console.log("error connecting: ", err);
-      setError("FAILED_TO_CONNECT");
+    if (isConnected) {
+      const connector = fuel.currentConnector();
+      connector && setWalletProviderConnected(toWalletProvider(connector));
     }
-  }, [connect]);
+  }, [fuel, isConnected]);
+
+  useEffect(() => {
+    if (!fuel) return;
+
+    fuel
+      .connectors()
+      .then((values) =>
+        setWalletProviders(values.map((c) => toWalletProvider(c)))
+      );
+  }, [fuel]);
+
+  const connectWallet = useCallback(
+    async (connectorName: string | null | undefined) => {
+      try {
+        connect(connectorName);
+      } catch (err) {
+        console.log("error connecting: ", err);
+        setError("FAILED_TO_CONNECT");
+      }
+    },
+    [connect]
+  );
 
   const disconnectWallet = async () => {
     if (!isConnected) return;
@@ -106,10 +128,12 @@ export const NetworkConnectionProvider: React.FC<
   return (
     <NetworkConnectionContext.Provider
       value={{
+        walletProviderConnected,
+        walletProviders,
         wallet,
         accounts: _accounts,
         accountConnected: account || undefined,
-        isLoading: isLoading || isConnecting,
+        isLoading: isLoadingWallet || isConnecting,
         error,
         connectWallet,
         disconnectWallet,
