@@ -3,10 +3,11 @@ import { Avatar, Box, SelectChangeEvent, Stack } from "@mui/material";
 import { useMemo } from "react";
 
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
-import { getConnectorImage } from "@/services/fuel/connectors";
+import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
+import { getConnectorImage } from "@/services/fuel/connectors/icons";
 import { truncateAddress } from "@/utils/formatString";
 
-import { EmojiAvatarIcon } from "../EmojiAvatar/EmojiAvatarIcon";
+import { EmojiAvatarIcon } from "../../common/EmojiAvatar/EmojiAvatarIcon";
 import { AccountSelectSkeleton } from "./AccountSelectSkeleton";
 import { StyledMenuItem, StyledSelect, StyledTypography } from "./styled";
 
@@ -20,6 +21,7 @@ interface Props {
   balance?: string;
   isLoading: boolean;
   isLoadingBalance: boolean;
+  walletProvider: WalletProviderItem;
 }
 
 export function AccountSelect({
@@ -28,6 +30,7 @@ export function AccountSelect({
   setAccount,
   disconnectWallet,
   balance,
+  walletProvider,
   isLoading = false,
 }: Props) {
   const currentAccount = useMemo(() => {
@@ -86,7 +89,7 @@ export function AccountSelect({
                 overflow: "hidden",
               }}
             >
-              {getConnectorImage(currentAccount?.walletLogoUrl)}
+              {getConnectorImage(walletProvider?.logo.src)}
             </Avatar>
             <Stack>
               <p>{truncateAddress(value as string)}</p>
