@@ -1,13 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
-import {
-  Box,
-  Chip,
-  IconButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Modal,
-} from "@mui/material";
+import { Box, Chip, IconButton, ListItem, Modal } from "@mui/material";
 import React from "react";
 
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
@@ -19,6 +11,8 @@ import {
   ModalStyledDivider,
   ModalStyledList,
   ModalStyledListItem,
+  ModalStyledListItemIcon,
+  ModalStyledListItemText,
   ModalTypography,
 } from "./styled";
 
@@ -73,10 +67,10 @@ export function ModalWallet({
                       handleClick(w.id);
                     }}
                   >
-                    <ListItemIcon>
+                    <ModalStyledListItemIcon>
                       {w.logo.src ? getConnectorImage(w.logo?.src) : null}
-                    </ListItemIcon>
-                    <ListItemText primary={`${w.id}`} />
+                    </ModalStyledListItemIcon>
+                    <ModalStyledListItemText primary={`${w.id}`} />
                     <Chip
                       label="Installed"
                       color="success"
@@ -100,13 +94,13 @@ export function ModalWallet({
                       openInNewTab(w.installUrl);
                     }}
                   >
-                    <ListItemIcon>
+                    <ModalStyledListItemIcon>
                       {w.logo.src ? getConnectorImage(w.logo?.src) : null}
-                    </ListItemIcon>
-                    <ListItemText primary={`${w.name}`} />
+                    </ModalStyledListItemIcon>
+                    <ModalStyledListItemText primary={`${w.name}`} />
                     <Chip
                       label="Installation needed"
-                      color="primary"
+                      color="warning"
                       variant="outlined"
                       size="small"
                     />
