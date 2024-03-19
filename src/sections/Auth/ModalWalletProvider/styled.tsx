@@ -5,6 +5,8 @@ import {
   List,
   ListItemButton,
   ListItemButtonProps,
+  ListItemIcon,
+  ListItemText,
   ListProps,
   Typography,
   TypographyProps,
@@ -30,10 +32,18 @@ export const StyledConnectButton = styled(LoadingButton)<LoadingButtonProps>(
 
 export const ModalStyledList = styled(List)<ListProps>(() => ({
   margin: "0 auto",
-  width: "22rem",
+  width: "30rem",
   "&:hover": {
     borderRadius: "1.8rem",
   },
+}));
+
+export const ModalStyledListItemIcon = styled(ListItemIcon)<ListProps>(() => ({
+  minWidth: "2rem",
+}));
+
+export const ModalStyledListItemText = styled(ListItemText)<ListProps>(() => ({
+  fontSize: "1.1rem",
 }));
 
 export const ModalStyledListItem = styled(ListItemButton)<ListItemButtonProps>(
@@ -50,7 +60,6 @@ export const ModalStyledListItem = styled(ListItemButton)<ListItemButtonProps>(
 export const ModalTypography = styled(Typography)<TypographyProps>(() => ({
   textAlign: "center",
   fontWeight: "normal",
-  marginTop: "2rem",
   marginBottom: "1.5rem",
 }));
 
@@ -64,8 +73,8 @@ export const ModalStyled = styled(Box)<BoxProps>(() => ({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 680,
-  height: 500,
+  width: "fit-content",
+  height: "auto",
   textAlign: "justify",
   backgroundColor: "rgba(0, 0, 0, 1)",
   border: "2px solid #000",

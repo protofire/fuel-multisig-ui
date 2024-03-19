@@ -4,6 +4,7 @@ import { useMemo } from "react";
 
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
+import CopyButton from "@/sections/common/CopyButton";
 import { getConnectorImage } from "@/services/fuel/connectors/icons";
 import { truncateAddress } from "@/utils/formatString";
 
@@ -100,25 +101,36 @@ export function AccountSelect({
       }}
     >
       {accounts.map((a) => (
-        <StyledMenuItem
-          selected={currentAccount.address.formatted === a.address.formatted}
-          disabled={true}
-          key={a.address.formatted}
-          value={a.address.formatted}
-        >
-          <Stack
+        <>
+          <StyledMenuItem
+            selected={currentAccount.address.formatted === a.address.formatted}
+            disabled={true}
+            key={a.address.formatted}
+            value={a.address.formatted}
+          >
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Avatar>
+                <EmojiAvatarIcon address={a.address.hex} />
+              </Avatar>
+              <p>{truncateAddress(a.address.formatted)}</p>
+            </Stack>
+          </StyledMenuItem>
+          <Box
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              position: "absolute",
+              right: "0",
+              margin: "-2.7rem 0.3rem 0 0",
             }}
           >
-            <Avatar>
-              <EmojiAvatarIcon address={a.address.hex} />
-            </Avatar>
-            <p>{truncateAddress(a.address.formatted)}</p>
-          </Stack>
-        </StyledMenuItem>
+            <CopyButton text={a.address.formatted} />
+          </Box>
+        </>
       ))}
       <StyledMenuItem value={OPTION_FOR_DISCONNECTING}>
         <Stack
