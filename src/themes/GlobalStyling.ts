@@ -2,6 +2,10 @@ import { Theme } from "@mui/material/styles";
 
 const GlobalStyles = (theme: Theme) => {
   return {
+    a: {
+      textDecoration: "none",
+    },
+
     "#nprogress": {
       pointerEvents: "none",
       "& .bar": {
