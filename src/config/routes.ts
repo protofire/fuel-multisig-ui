@@ -1,6 +1,7 @@
 export const ROUTES = {
   Welcome: "/welcome",
-  New: "new",
+  App: "/app",
+  New: "/new",
 } as const;
 
 export type RouteValue = (typeof ROUTES)[keyof typeof ROUTES];
