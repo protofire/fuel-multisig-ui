@@ -54,22 +54,6 @@ export const MENU_ITEMS: NavLink[] = [
     target: true,
   },
   {
-    id: "docs",
-    title: "Transaction builder",
-    type: "item",
-    url: ROUTES.TxBuilder,
-    icon: icons.IconTxBuilder,
-    target: true,
-  },
-  {
-    id: "addressBook",
-    title: "Address book",
-    type: "item",
-    url: ROUTES.AddressBook,
-    icon: icons.Book,
-    target: true,
-  },
-  {
     id: "settings",
     title: "Settings",
     type: "item",
