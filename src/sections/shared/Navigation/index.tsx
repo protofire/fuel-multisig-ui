@@ -45,7 +45,7 @@ const NavItem = (props: NavLink & { currentPath: string }) => {
   const { title, icon: IconTag, url, currentPath } = props;
 
   return (
-    <NextLink href={"jue"}>
+    <NextLink href={url}>
       <MenuItemStyled LinkComponent={MuiLink} selected={currentPath === url}>
         <ListItemIcon>
           <IconTag />
