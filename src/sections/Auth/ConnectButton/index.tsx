@@ -2,9 +2,9 @@
 import * as React from "react";
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
+import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
+import { useRecentlyClicked } from "@/hooks/common/useRecentlyClicked";
 import { useGetBalance } from "@/hooks/useGetBalance";
-import { useModalBehaviour } from "@/hooks/useModalBehaviour";
-import { useRecentlyClicked } from "@/hooks/useRecentlyClicked";
 
 import { AccountSelect } from "../AccountSelect";
 import { ModalWallet } from "../ModalWalletProvider";
