@@ -34,7 +34,7 @@ export function AccountSelect({
   walletProvider,
   isLoading = false,
 }: Props) {
-  const currentAccount = useMemo(() => {
+  const accountSelected = useMemo(() => {
     return accounts.find((a) => a.address.formatted === accountConnected);
   }, [accounts, accountConnected]);
 
@@ -57,14 +57,17 @@ export function AccountSelect({
     }
     setAccount?.(newAccount);
   };
+  const selectedValue = accountSelected
+    ? accountSelected.address.formatted
+    : "";
 
-  if (isLoading || !currentAccount || !accounts)
+  if (isLoading || !accountSelected || !accounts) {
     return <AccountSelectSkeleton />;
+  }
 
   return (
     <StyledSelect
-      value={accountConnected}
-      placeholder="Select Account..."
+      value={selectedValue}
       onChange={_handleChange}
       renderValue={(value) => {
         return (
@@ -74,9 +77,9 @@ export function AccountSelect({
               alignItems: "center",
             }}
           >
-            {currentAccount && (
+            {accountSelected && (
               <Avatar>
-                <EmojiAvatarIcon address={currentAccount?.address.hex} />
+                <EmojiAvatarIcon address={accountSelected?.address.hex} />
               </Avatar>
             )}
             <Avatar
@@ -101,11 +104,10 @@ export function AccountSelect({
       }}
     >
       {accounts.map((a) => (
-        <>
+        <Box key={a.address.formatted}>
           <StyledMenuItem
-            selected={currentAccount.address.formatted === a.address.formatted}
+            selected={accountSelected.address.formatted === a.address.formatted}
             disabled={true}
-            key={a.address.formatted}
             value={a.address.formatted}
           >
             <Stack
@@ -130,7 +132,7 @@ export function AccountSelect({
           >
             <CopyButton text={a.address.formatted} />
           </Box>
-        </>
+        </Box>
       ))}
       <StyledMenuItem value={OPTION_FOR_DISCONNECTING}>
         <Stack
