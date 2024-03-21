@@ -38,3 +38,13 @@ export const shortNameLonger = (name: string, maxCharacters = 11): string => {
     return name;
   }
 };
+
+export const formatThreshold = ({
+  threshold,
+  owners,
+}: {
+  threshold: number | undefined;
+  owners: number | undefined;
+}) => {
+  return `${threshold || "-"} / ${owners || "-"}`;
+};
