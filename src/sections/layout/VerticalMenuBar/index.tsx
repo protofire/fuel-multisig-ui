@@ -8,6 +8,7 @@ import { Box } from "@mui/system";
 import { usePathname } from "next/navigation";
 
 import { useSettingsTheme } from "@/context/SettingsThemeConsumer";
+import { AccountInfoWidget } from "@/sections/AccountInfoWidget";
 import Navigation from "@/sections/shared/Navigation";
 
 const DEFAULT_WIDTH = 240;
@@ -50,7 +51,7 @@ export function VerticalMenuBar() {
         anchor="left"
         open={settings.navOpen}
       >
-        {/* <XsignerAccountInfoWidget /> */}
+        <AccountInfoWidget />
         <Navigation currentPath={pathname} />
       </DrawerStyled>
       <Box
