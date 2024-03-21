@@ -8,7 +8,7 @@ import { Box } from "@mui/system";
 import { usePathname } from "next/navigation";
 
 import { useSettingsTheme } from "@/context/SettingsThemeConsumer";
-import { AccountInfoWidget } from "@/sections/common/AccountInfoWidget";
+import { AccountInfoWidget } from "@/sections/AccountInfoWidget";
 import Navigation from "@/sections/shared/Navigation";
 
 const DEFAULT_WIDTH = 240;

@@ -1,15 +1,11 @@
 import { Avatar, Box, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
 
-//import { ChainColors, CHAINS_ALLOWED } from "@/config/chain";
 import { SignatoriesAccount } from "@/domain/SignatoriesAccount";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
+import CopyButton from "@/sections/common/CopyButton";
 import { formatThreshold, truncateAddress } from "@/utils/formatString";
 
-// import { useSetXsignerSelected } from "@/hooks/xsignerSelected/useSetXsignerSelected";
-// import { formatThreshold, truncateAddress } from "@/utils/formatString";
-import CopyButton from "../CopyButton";
-// import { SelectItems } from "./SelectItems";
 import { AccountInfoWrapper } from "./styled";
 import { SwitchUserAccount } from "./SwitchUserAccount";
 
@@ -74,10 +70,6 @@ export function AccountInfoUI({
               {truncateAddress(address, 4)}
             </Typography>
             <CopyButton text={address as string} />
-            {/* TODO 
-          <Typography color="white" fontWeight="bold">
-            124,09 AST
-          </Typography> */}
           </Box>
         </Box>
         {multisigAccounts && (
@@ -87,12 +79,7 @@ export function AccountInfoUI({
               closeModal={closeModal}
               openModal={openModal}
             />
-            {/* <SelectItems
-              xsigners={xsigners}
-              isOpen={isOpen}
-              closeModal={closeModal}
-              onClick={setXsigner}
-            /> */}
+            {/* TODO Select Items */}
           </Box>
         )}
         <Box>
