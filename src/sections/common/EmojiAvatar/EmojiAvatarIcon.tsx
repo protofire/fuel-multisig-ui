@@ -88,6 +88,7 @@ export const EmojiAvatarIcon: React.FC<EmojiAvatarIconProps> = ({
         textAnchor="middle"
         dominantBaseline="central"
         fill="url(#gradient1)"
+        filter="drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4))"
       >
         {memoizedValues.emoji}
       </text>
