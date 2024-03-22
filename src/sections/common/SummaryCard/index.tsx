@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, CardHeader, SxProps, Typography } from "@mui/material";
+import { Box, CardHeader, Skeleton, SxProps, Typography } from "@mui/material";
 
 import { SummaryCardStyled, TextSummary } from "./styled";
 
@@ -18,9 +18,21 @@ export const SummaryCard = ({
   caption,
   captionComponent,
   isLoading,
+  widthSkeleton,
   styles,
 }: SummaryCardProps) => {
-  const _captionComponent = isLoading ? <p>Loading</p> : captionComponent;
+  const _captionComponent = isLoading ? (
+    <Skeleton
+      animation="wave"
+      variant="rectangular"
+      width={120}
+      height={12}
+      // count={2}
+      // width={widthSkeleton}
+    />
+  ) : (
+    captionComponent
+  );
 
   return (
     <SummaryCardStyled border={false} sx={styles}>
