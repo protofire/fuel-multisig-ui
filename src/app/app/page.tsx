@@ -1,10 +1,30 @@
-import { Box } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+
+import { SummaryCardsView } from "@/sections/SummaryCardsView";
 
 export default function AppDashboardPage() {
   return (
-    <Box>
-      <p> Summary </p>
-    </Box>
+    <>
+      <Grid container spacing={3} mt={2}>
+        <SummaryCardsView />
+      </Grid>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          marginTop: "1rem",
+        }}
+      >
+        <Grid item xs={12} sm={12} md={12}>
+          <Typography variant="h3" color="primary">
+            Transaction queue
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12}>
+          <p> Table </p>
+        </Grid>
+      </Grid>
+    </>
   );
 }
 

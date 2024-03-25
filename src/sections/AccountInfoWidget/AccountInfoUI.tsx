@@ -4,6 +4,7 @@ import * as React from "react";
 import { SignatoriesAccount } from "@/domain/SignatoriesAccount";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
 import CopyButton from "@/sections/common/CopyButton";
+import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
 import { formatThreshold, truncateAddress } from "@/utils/formatString";
 
 import { AccountInfoWrapper } from "./styled";
@@ -43,7 +44,10 @@ export function AccountInfoUI({
             flexDirection="column"
             alignItems="center"
           >
-            <Avatar></Avatar>
+            <Avatar>
+              {/* TODO Add Igniters address */}
+              <EmojiAvatarIcon address="2121212" />
+            </Avatar>
             <Tooltip title="Threshold" arrow>
               <Box display="flex" flexDirection="column">
                 <Typography variant="caption" color="primary">

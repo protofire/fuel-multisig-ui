@@ -5,10 +5,10 @@ import { useMemo } from "react";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 import CopyButton from "@/sections/common/CopyButton";
+import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
 import { getConnectorImage } from "@/services/fuel/connectors/icons";
 import { truncateAddress } from "@/utils/formatString";
 
-import { EmojiAvatarIcon } from "../../common/EmojiAvatar/EmojiAvatarIcon";
 import { AccountSelectSkeleton } from "./AccountSelectSkeleton";
 import { StyledMenuItem, StyledSelect, StyledTypography } from "./styled";
 

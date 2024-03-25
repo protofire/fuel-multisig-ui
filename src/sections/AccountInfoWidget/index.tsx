@@ -2,7 +2,7 @@ import { AccountInfoUI } from "./AccountInfoUI";
 
 export function AccountInfoWidget() {
   //const { multisigSelected } = multisigSelected() || undefined;
-  const networkColor = "tomato" || undefined;
+  const networkColor = "#00F58C" || undefined;
   const networkName = "FUEL";
   // const { data } = useListSignersAccount({ networkId: network }) || undefined;
   const address =
