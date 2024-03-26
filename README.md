@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Igniters Multisig UI
+
+This repository is home to a user-friendly interface developed with Next.js for interacting with a Multi-Signature (MultiSig) smart contract within the Fuel Blockchain ecosystem. The smart contract, enables multiple parties to propose, approve, or reject transactions. These transactions are executed only when a predefined approval threshold is met. The UI is designed to offer an intuitive experience for managing owners, setting the approval threshold, and overseeing transactions, each uniquely identified. Our goal is to simplify the interaction with the MultiSig contract's complexities, making the Fuel Blockchain ecosystem more accessible and secure for DAOs and organizations.
+
+## 📋 Requirements
+
+To get this project up and running, you'll need:
+
+- [Node.js](https://nodejs.org/) (version 18 or newer)
+- [Yarn](https://yarnpkg.com/)
 
 ## Getting Started
 
-First, run the development server:
+### 🚀 Run App
+
+- Clone the repository to your local machine.
+
+#### Local Stack
+
+- Install the project dependencies with yarn. 
+Generate a `.env` file in the project's root directory by copying the variables from the `.env.example` file with the following command:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Start the app with `yarn dev`.
