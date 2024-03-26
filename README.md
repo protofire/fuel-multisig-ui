@@ -17,10 +17,4 @@ To get this project up and running, you'll need:
 
 #### Local Stack
 
-- Install the project dependencies with yarn. 
-Generate a `.env` file in the project's root directory by copying the variables from the `.env.example` file with the following command:
-
-```bash
-cp .env.example .env
-```
 - Start the app with `yarn dev`.
