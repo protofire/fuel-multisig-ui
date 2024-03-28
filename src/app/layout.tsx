@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 
+import { MAIN_COLOR } from "@/themes/palette";
+
 import MyApp from "./MyApp";
 
 export const metadata: Metadata = {
@@ -17,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextTopLoader />
+        <NextTopLoader color={MAIN_COLOR} />
         <MyApp>{children}</MyApp>
       </body>
     </html>

@@ -1,7 +1,9 @@
 "use client";
+
 import {
   useAccount,
   useAccounts,
+  useChain,
   useConnect,
   useDisconnect,
   useFuel,
@@ -18,6 +20,7 @@ import React, {
   useState,
 } from "react";
 
+import { ChainInfo } from "@/domain/ChainInfo";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 import {
@@ -31,11 +34,6 @@ type NetworkConnectionError =
   | "ACCOUNTS_NOT_FOUND";
 
 export type WalletType = FuelWalletLocked;
-type FuelConnectorExtended = {
-  _currentConnector?: {
-    name: FuelConnector["name"];
-  };
-};
 
 export interface NetworkConnectionContextType {
   isLoading: boolean;
@@ -45,6 +43,7 @@ export interface NetworkConnectionContextType {
   wallet: WalletType | undefined | null; // null when is loaded and to connected
   walletProviders: WalletProviderItem[];
   walletProviderConnected: WalletProviderItem | undefined;
+  chainInfo: ChainInfo | undefined;
   connectWallet: (connectorName: FuelConnector["name"]) => Promise<void>;
   disconnectWallet: () => void;
   setAccount?: (account: AccountWalletItem) => void;
@@ -76,9 +75,20 @@ export const NetworkConnectionProvider: React.FC<
     error: errorConnecting,
   } = useConnect();
   const { disconnect } = useDisconnect();
+  const { data: chainData } = useChain();
+  const [chainInfo, setChainInfo] = useState<ChainInfo | undefined>();
   const [walletProviderConnected, setWalletProviderConnected] = useState<
     WalletProviderItem | undefined
   >();
+
+  useEffect(() => {
+    if (!chainData) return;
+
+    setChainInfo({
+      name: chainData.name,
+      chainId: chainData.consensusParameters.chainId.toNumber(),
+    });
+  }, [chainData]);
 
   const _accounts = useMemo(() => {
     if (!accounts || !wallet) return [];
@@ -135,6 +145,7 @@ export const NetworkConnectionProvider: React.FC<
         accountConnected: account || undefined,
         isLoading: isLoadingWallet || isConnecting,
         error,
+        chainInfo,
         connectWallet,
         disconnectWallet,
       }}
