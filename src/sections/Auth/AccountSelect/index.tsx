@@ -1,9 +1,9 @@
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { Avatar, Box, SelectChangeEvent, Stack } from "@mui/material";
-import { useMemo } from "react";
 
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
+import { useAccountWalletItem } from "@/hooks/useGetWalletSelectedItem";
 import CopyButton from "@/sections/common/CopyButton";
 import { getConnectorImage } from "@/services/fuel/connectors/icons";
 import { truncateAddress } from "@/utils/formatString";
@@ -27,16 +27,13 @@ interface Props {
 
 export function AccountSelect({
   accounts,
-  accountConnected,
   setAccount,
   disconnectWallet,
   balance,
   walletProvider,
   isLoading = false,
 }: Props) {
-  const accountSelected = useMemo(() => {
-    return accounts.find((a) => a.address.formatted === accountConnected);
-  }, [accounts, accountConnected]);
+  const { accountWalletItem: accountSelected } = useAccountWalletItem();
 
   const _handleChange = (event: SelectChangeEvent<unknown>) => {
     const address = event.target.value as string;
