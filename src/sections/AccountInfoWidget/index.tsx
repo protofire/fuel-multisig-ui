@@ -1,8 +1,11 @@
+import { CHAINS_COLORS } from "@/config/chains";
+
 import { AccountInfoUI } from "./AccountInfoUI";
 
 export function AccountInfoWidget() {
   //const { multisigSelected } = multisigSelected() || undefined;
-  const networkColor = "#00F58C" || undefined;
+  //const networkColor = "#00F58C" || undefined;
+  const networkColor = (network && CHAINS_COLORS[network]) || undefined;
   const networkName = "FUEL";
   // const { data } = useListSignersAccount({ networkId: network }) || undefined;
   const address =
