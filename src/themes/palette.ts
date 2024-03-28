@@ -10,7 +10,7 @@ import { Settings } from "./types";
 // ==============================|| DEFAULT THEME - PALETTE  ||============================== //
 
 type LookSettings = Pick<Settings, "mode" | "skin">;
-const MAIN_COLOR = "#82ffdd"; // Minty green color
+export const MAIN_COLOR = "#82ffdd"; // Minty green color
 
 const Palette = ({ mode }: LookSettings): Theme => {
   const colors = presetPalettes;

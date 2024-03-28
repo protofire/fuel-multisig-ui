@@ -1,6 +1,7 @@
 "use client";
 import { CacheProvider } from "@emotion/react";
 
+import { InteractionErrorProvider } from "@/context/InteractionErrorContext";
 import { NetworkConnectionConfig } from "@/context/NetworkConnectionConfig";
 import {
   SettingsThemeConsumer,
@@ -16,15 +17,17 @@ export default function MyApp({ children }: { children: React.ReactNode }) {
   return (
     <CacheProvider value={clientSideEmotionCache}>
       <NetworkConnectionConfig>
-        <SettingsThemeConsumer>
-          {({ settings }) => (
-            <SettingsThemeProvider>
-              <ThemeCustomization settings={settings}>
-                {children}
-              </ThemeCustomization>
-            </SettingsThemeProvider>
-          )}
-        </SettingsThemeConsumer>
+        <InteractionErrorProvider>
+          <SettingsThemeConsumer>
+            {({ settings }) => (
+              <SettingsThemeProvider>
+                <ThemeCustomization settings={settings}>
+                  {children}
+                </ThemeCustomization>
+              </SettingsThemeProvider>
+            )}
+          </SettingsThemeConsumer>
+        </InteractionErrorProvider>
       </NetworkConnectionConfig>
     </CacheProvider>
   );
