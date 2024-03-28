@@ -1,10 +1,14 @@
 import { createContext, useContext } from "react";
 
+import { Owner } from "@/domain/MultisignatureAccount";
 import { UseFormReturn } from "@/hooks/common/useForm";
 import { ManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 
 export interface CreateAccountForm {
   walletName: string;
+  deployedMultisigAddress: string;
+  owners: Owner[];
+  threshold: number;
 }
 
 export interface CreateAccontData {

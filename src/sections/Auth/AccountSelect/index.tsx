@@ -66,6 +66,7 @@ export function AccountSelect({
     <StyledSelect
       value={selectedValue}
       onChange={_handleChange}
+      id="account-selected"
       renderValue={(value) => {
         return (
           <Box

@@ -35,7 +35,12 @@ export function MultisigCreationStep() {
   }, [setValue, accountConnected, accountWalletItem?.address.hex]);
 
   const _handleNext = () => {
-    deployContract().then((value) => handleNext());
+    deployContract().then((value) => {
+      if (value) {
+        setValue("deployedMultisigAddress", value);
+        handleNext();
+      }
+    });
   };
 
   return (
