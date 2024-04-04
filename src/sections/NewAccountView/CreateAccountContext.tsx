@@ -14,6 +14,7 @@ export interface CreateAccountForm {
 export interface CreateAccontData {
   inputFormManager: UseFormReturn<CreateAccountForm>;
   managerStep: ManagerActiveStep;
+  reset: () => void;
 }
 
 export const CreateAccountContext = createContext({} as CreateAccontData);

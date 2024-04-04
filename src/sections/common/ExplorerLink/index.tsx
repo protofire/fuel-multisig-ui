@@ -7,7 +7,7 @@ export interface ExplorerConfig {
   path: string;
 }
 
-interface ExplorerLinkProps {
+export interface ExplorerLinkProps {
   explorerConfig: ExplorerConfig;
   txHash?: string;
   sx?: SxProps<Theme>;

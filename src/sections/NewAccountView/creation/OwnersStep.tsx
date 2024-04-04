@@ -33,18 +33,17 @@ export function OwnersStep() {
     upStep: handleNext,
   } = managerStep;
   const {
-    handleSubmit,
     control,
     getValues,
     watch,
     setValue,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = inputFormManager;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "owners",
   });
-  const { deployedMultisigAddress, threshold } = getValues();
+  const { deployedMultisigAddress } = getValues();
 
   const ownersCount = watch("owners").length;
 
@@ -127,11 +126,6 @@ export function OwnersStep() {
                 <DeleteOutlineOutlinedIcon />
               </IconButton>
             </Box>
-            {/* {errors["owners"] && errors["owners"].length && (
-              <Typography variant="caption" color="red">
-                {errors["owners"][index]?.message}
-              </Typography>
-            )} */}
           </Box>
         ))}
         <Button

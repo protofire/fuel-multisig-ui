@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
@@ -47,6 +47,8 @@ export function CreateAccountStepper({
 }: CreateAccountFormProps) {
   const managerStep = useManagerActiveStep(steps.length);
   const formSteps = useMemo(() => transformSteps(steps), []);
+  const { draftMultisigAccount, setDeployedMultisig } =
+    useDraftMultisigDeployed();
   const inputFormManager = useForm<CreateAccountForm>({
     mode: "onBlur",
     defaultValues: {
@@ -56,8 +58,7 @@ export function CreateAccountStepper({
       threshold: 1,
     },
   });
-  const { draftMultisigAccount, setDeployedMultisig } =
-    useDraftMultisigDeployed();
+
   const { error, setError } = useInteractionError();
   const { deployedMultisigAddress, walletName } = inputFormManager.getValues();
 
@@ -78,6 +79,7 @@ export function CreateAccountStepper({
     walletName,
     networkId,
     setDeployedMultisig,
+    draftMultisigAccount,
   ]);
 
   useEffectOnceIf(() => {
@@ -91,11 +93,18 @@ export function CreateAccountStepper({
     managerStep.upStep();
   }, draftMultisigAccount?.address !== undefined && deployedMultisigAddress === "");
 
+  const reset = useCallback(() => {
+    setDeployedMultisig(null);
+    managerStep.resetSteps();
+    inputFormManager.reset();
+  }, [inputFormManager, managerStep, setDeployedMultisig]);
+
   return (
     <CreateAccountContext.Provider
       value={{
         managerStep,
         inputFormManager,
+        reset,
       }}
     >
       {error?.msg && (

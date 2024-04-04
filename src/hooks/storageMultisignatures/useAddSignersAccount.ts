@@ -23,7 +23,8 @@ export interface UseAddSignersAccount {
 export function useAddSignersAccount(): UseAddSignersAccount {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { multisignatureAccountsRepository } = useLocalDbContext();
+  const { multisignatureAccountsRepository, multisignatureSelectedRepository } =
+    useLocalDbContext();
 
   const save = useCallback(
     async (props: SaveXsignerProps): Promise<MultisignatureAccount | void> => {
@@ -33,7 +34,10 @@ export function useAddSignersAccount(): UseAddSignersAccount {
       try {
         await multisignatureAccountsRepository
           ?.addSignatoryAccount(account)
-          .finally(() => options?.onSuccess?.(account));
+          .finally(() => {
+            options?.onSuccess?.(account);
+            multisignatureSelectedRepository.saveAccount(account.address);
+          });
 
         return account;
       } catch (err) {

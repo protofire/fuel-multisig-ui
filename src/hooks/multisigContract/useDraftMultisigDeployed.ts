@@ -6,7 +6,7 @@ import {
   setLocalStorageState,
 } from "@/utils/localStorage";
 
-const MULTISIG_ITEM = "multisigId";
+const MULTISIG_ITEM = "draftDeployedMultisig";
 
 type DraftDeployedMultisig = Pick<
   MultisignatureAccount,
@@ -15,7 +15,9 @@ type DraftDeployedMultisig = Pick<
 
 export interface UseMultisigDeployedReturnType {
   draftMultisigAccount: DraftDeployedMultisig | null;
-  setDeployedMultisig: (value: DraftDeployedMultisig | undefined) => void;
+  setDeployedMultisig: (
+    value: DraftDeployedMultisig | undefined | null
+  ) => void;
 }
 
 export const useDraftMultisigDeployed = (): UseMultisigDeployedReturnType => {
@@ -26,15 +28,17 @@ export const useDraftMultisigDeployed = (): UseMultisigDeployedReturnType => {
       >(MULTISIG_ITEM, null)
     );
 
-  const _setContractAddress = (value: DraftDeployedMultisig | undefined) => {
+  const _setContractAddress = (
+    value: DraftDeployedMultisig | undefined | null
+  ) => {
     if (value === undefined) return;
 
     setDeployedMultisig(value);
   };
 
   useEffect(() => {
-    if (draftMultisigAccount !== null) {
-      setLocalStorageState(MULTISIG_ITEM, draftMultisigAccount);
+    if (draftMultisigAccount !== undefined) {
+      setLocalStorageState(MULTISIG_ITEM, draftMultisigAccount || "");
     }
   }, [draftMultisigAccount]);
 

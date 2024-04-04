@@ -1,18 +1,27 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 import { APP_NAME } from "@/config/app";
+import { ROUTES } from "@/config/routes";
+import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useSetupMultisig } from "@/hooks/multisigContract/useSetupMultisigContract";
+import { useAddSignersAccount } from "@/hooks/storageMultisignatures/useAddSignersAccount";
 import CopyButton from "@/sections/common/CopyButton";
+import { AccountSigner } from "@/sections/shared/AccountSigner";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { FlexCenterBox, StyledBox } from "@/sections/shared/BaseStepper/styled";
+import NetworkBadge from "@/sections/shared/NetworkBadge";
+import { FuelWalletIcon } from "@/services/fuel/connectors/icons/FuelWalletIcon";
+import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 import { useCreateAccountContext } from "../CreateAccountContext";
 
 export function ReviewStep() {
-  //   const theme = useTheme();
-  //   const { network } = usePolkadotContext();
-  //   const { logo, name: networkName } = getChain(network);
-  const { inputFormManager, managerStep } = useCreateAccountContext();
+  const { chainInfo } = useNetworkConnection();
+  const router = useRouter();
+  const chainName = chainInfo?.name || "";
+  const { inputFormManager, managerStep, reset } = useCreateAccountContext();
   const { activeStep, stepsLength, downStep: handleBack } = managerStep;
   const { getValues } = inputFormManager;
   const { threshold, owners, deployedMultisigAddress, walletName } =
@@ -20,15 +29,34 @@ export function ReviewStep() {
   const { setupMultisig, isLoading } = useSetupMultisig({
     contractId: deployedMultisigAddress,
   });
+  const { save } = useAddSignersAccount();
+  const ownersAccountWallet = useMemo(
+    () => owners.map((o) => toAccountWalletItem(o.address)),
+    [owners]
+  );
 
   const signAndSetup = () => {
     setupMultisig(
       threshold,
       owners.map((o) => o.address)
-    );
+    ).then((r) => {
+      save({
+        account: {
+          address: deployedMultisigAddress,
+          owners,
+          name: walletName,
+          networkId: chainInfo?.chainId as number,
+          threshold,
+        },
+        options: {
+          onSuccess: () => {
+            router.push(ROUTES.App);
+            reset();
+          },
+        },
+      });
+    });
   };
-
-  console.log("__wallet", deployedMultisigAddress);
 
   return (
     <Box>
@@ -42,13 +70,13 @@ export function ReviewStep() {
             <Typography variant="h6" width={100}>
               Network
             </Typography>
-            {/* <NetworkBadge
-              logo={logo.src}
-              description={logo.alt}
-              logoSize={{ width: 20, height: 20 }}
-              name={networkName}
-              showTooltip={false}
-            /> */}
+            <NetworkBadge
+              name={chainName}
+              description={chainName}
+              tooltipInfo="This network is the one that has been selected in the wallet provider"
+            >
+              <FuelWalletIcon />
+            </NetworkBadge>
           </FlexCenterBox>
           <FlexCenterBox>
             <Typography variant="h6" width={100}>
@@ -70,16 +98,15 @@ export function ReviewStep() {
             <Typography variant="h6" width={100}>
               Owners
             </Typography>
-            {/* <Typography component="div">
-              {owners.map((owner) => (
+            <Typography component="div">
+              {ownersAccountWallet.map((owner) => (
                 <AccountSigner
-                  key={owner.address}
-                  name={owner.name}
-                  address={owner.address}
+                  key={owner.address.hex}
+                  owner={owner}
                   truncateAmount={12}
                 />
               ))}
-            </Typography> */}
+            </Typography>
           </FlexCenterBox>
           <FlexCenterBox>
             <Typography variant="h6" width={100}>
@@ -97,6 +124,7 @@ export function ReviewStep() {
           stepsLength={stepsLength}
           handleBack={handleBack}
           handleNext={signAndSetup}
+          nextLabel={<>Sign and setup</>}
           nextButtonProps={{
             disabled: isLoading,
             isLoading: isLoading,
