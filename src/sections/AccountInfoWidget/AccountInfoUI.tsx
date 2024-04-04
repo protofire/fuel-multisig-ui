@@ -1,7 +1,7 @@
 import { Avatar, Box, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
 
-import { SignatoriesAccount } from "@/domain/SignatoriesAccount";
+import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
 import CopyButton from "@/sections/common/CopyButton";
 import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
@@ -10,11 +10,11 @@ import { formatThreshold, truncateAddress } from "@/utils/formatString";
 import { AccountInfoWrapper } from "./styled";
 import { SwitchUserAccount } from "./SwitchUserAccount";
 
-type Props = Partial<SignatoriesAccount> & {
+type Props = Partial<MultisignatureAccount> & {
   networkName: string;
   ownersCount: number | undefined;
   networkColor: string | undefined;
-  multisigAccounts?: SignatoriesAccount[];
+  multisigAccounts?: MultisignatureAccount[];
 };
 
 export function AccountInfoUI({

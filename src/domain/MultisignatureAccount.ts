@@ -3,7 +3,7 @@ export type Owner = {
   name: string;
 };
 
-export interface SignatoriesAccount {
+export interface MultisignatureAccount {
   address: string;
   name: string;
   networkId: number;

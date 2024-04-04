@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useState } from "react";
 
 export type ValidationFn<I, K extends keyof I> = (
-  value: I[K]
-) => string | void | Promise<string | void>;
+  value: I[K],
+  identifier?: number | string
+) => string | string[] | void | Promise<string | void>;
 
 type ValidationMap<T> = {
   [K in keyof T]?: Array<ValidationFn<T, K>>;
@@ -10,7 +11,7 @@ type ValidationMap<T> = {
 
 interface FormState<I> {
   values: I;
-  errors: Record<keyof I, string | null>;
+  errors: Record<keyof I, string | string[] | null>;
   touched: Record<keyof I, boolean>;
   isLoading: boolean;
 }
@@ -24,10 +25,14 @@ export interface UseFormReturn<T> {
     onChange: (e: React.BaseSyntheticEvent) => Promise<void>;
   };
   handleSubmit: (callback: (values: T) => void) => (e: React.FormEvent) => void;
-  errors: Record<keyof T, string | null>;
+  errors: Record<keyof T, string | string[] | null>;
   touched: Record<keyof T, boolean>;
   values: T;
-  setValue: <K extends keyof T>(name: K, value: T[K]) => Promise<void>;
+  setValue: <K extends keyof T>(
+    name: K,
+    value: T[K],
+    identifier?: string | number
+  ) => Promise<void>;
   isValid: boolean;
   isLoading: boolean;
   reset: (exceptions?: Partial<T>) => void;
@@ -36,7 +41,7 @@ export interface UseFormReturn<T> {
 export function useForm<T extends object>(initialValues: T): UseFormReturn<T> {
   const [formState, setFormState] = useState<FormState<T>>({
     values: initialValues,
-    errors: {} as Record<keyof T, string | null>,
+    errors: {} as Record<keyof T, string | string[] | null>,
     touched: {} as Record<keyof T, boolean>,
     isLoading: false,
   });
@@ -44,24 +49,46 @@ export function useForm<T extends object>(initialValues: T): UseFormReturn<T> {
   const fieldValidations: ValidationMap<T> = useMemo(() => ({}), []);
 
   const validateField = useCallback(
-    async <K extends keyof T>(name: K, value: T[K]) => {
-      setFormState((prevState) => ({ ...prevState, isLoading: true }));
-      const validations = fieldValidations[name];
+    async <K extends keyof T>(
+      name: K,
+      value: T[K],
+      identifier?: number | string
+    ) => {
+      if (Array.isArray(value)) {
+        const arrayErrors = await Promise.all(
+          value.map(async (item, index) => {
+            const validations = fieldValidations[name];
+            if (!validations) {
+              return null;
+            }
 
-      if (!validations) {
-        setFormState((prevState) => ({ ...prevState, isLoading: false }));
+            for (const validate of validations) {
+              const validationResult = await validate(item, index);
+              if (validationResult) {
+                return validationResult;
+              }
+            }
+
+            return null;
+          })
+        );
+
+        return arrayErrors;
+      } else {
+        const validations = fieldValidations[name];
+        if (!validations) {
+          return null;
+        }
+
+        for (const validate of validations) {
+          const validationResult = await validate(value, identifier);
+          if (validationResult) {
+            return validationResult;
+          }
+        }
+
         return null;
       }
-
-      for (const validate of validations) {
-        const validationResult = await validate(value);
-        if (validationResult) {
-          setFormState((prevState) => ({ ...prevState, isLoading: false }));
-          return validationResult;
-        }
-      }
-      setFormState((prevState) => ({ ...prevState, isLoading: false }));
-      return null;
     },
     [fieldValidations]
   );
@@ -72,7 +99,7 @@ export function useForm<T extends object>(initialValues: T): UseFormReturn<T> {
         ...initialValues,
         ...exceptions,
       },
-      errors: {} as Record<keyof T, string | null>,
+      errors: {} as Record<keyof T, string | string[] | null>,
       touched: {} as Record<keyof T, boolean>,
       isLoading: false,
     });
@@ -90,40 +117,44 @@ export function useForm<T extends object>(initialValues: T): UseFormReturn<T> {
     return !hasErrors && allFieldsTouched;
   }, [formState.errors, formState.touched]);
 
-  const register = <K extends keyof T>(
-    name: K,
-    validations: Array<ValidationFn<T, K>>
-  ) => {
-    fieldValidations[name] = validations;
+  const register = useCallback(
+    <K extends keyof T>(name: K, validations: Array<ValidationFn<T, K>>) => {
+      fieldValidations[name] = validations;
 
-    return {
-      value: formState.values[name],
-      onChange: async (e: React.BaseSyntheticEvent) => {
-        const newValue = e.target.value;
-        const error = await validateField(name, newValue);
+      return {
+        value: formState.values[name],
+        onChange: async (e: React.BaseSyntheticEvent) => {
+          const newValue = e.target.value;
+          const error = await validateField(name, newValue);
 
-        setFormState((prevState) => ({
-          ...prevState,
-          values: {
-            ...prevState.values,
-            [name]: newValue,
-          },
-          errors: {
-            ...prevState.errors,
-            [name]: error,
-          },
-          touched: {
-            ...prevState.touched,
-            [name]: true,
-          },
-        }));
-      },
-    };
-  };
+          setFormState((prevState) => ({
+            ...prevState,
+            values: {
+              ...prevState.values,
+              [name]: newValue,
+            },
+            errors: {
+              ...prevState.errors,
+              [name]: error,
+            },
+            touched: {
+              ...prevState.touched,
+              [name]: true,
+            },
+          }));
+        },
+      };
+    },
+    [fieldValidations, formState.values, validateField]
+  );
 
   const setValue = useCallback(
-    async <K extends keyof T>(name: K, value: T[K]) => {
-      const error = await validateField(name, value);
+    async <K extends keyof T>(
+      name: K,
+      value: T[K],
+      identifier?: number | string
+    ) => {
+      const error = await validateField(name, value, identifier);
 
       setFormState((prevState) => ({
         ...prevState,
@@ -134,6 +165,10 @@ export function useForm<T extends object>(initialValues: T): UseFormReturn<T> {
         errors: {
           ...prevState.errors,
           [name]: error,
+        },
+        touched: {
+          ...prevState.touched,
+          [name]: true,
         },
       }));
     },

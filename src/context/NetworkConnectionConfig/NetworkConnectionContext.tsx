@@ -24,7 +24,7 @@ import { ChainInfo } from "@/domain/ChainInfo";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 import {
-  toAccountSelect,
+  toAccountWalletItem,
   toWalletProvider,
 } from "@/services/fuel/connectors/transformer";
 
@@ -94,7 +94,7 @@ export const NetworkConnectionProvider: React.FC<
     if (!accounts || !wallet) return [];
 
     return accounts.map((address, index) =>
-      toAccountSelect(address as `fuel${string}`, `Acct. ${index + 1}`)
+      toAccountWalletItem(address as `fuel${string}`, `Acct. ${index + 1}`)
     );
   }, [accounts, wallet]);
 

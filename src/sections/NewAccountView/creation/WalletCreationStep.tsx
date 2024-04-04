@@ -1,15 +1,23 @@
-import { Box, Link, Typography } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect } from "react";
+import { Controller } from "react-hook-form";
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useDeployMultisigContract } from "@/hooks/multisigContract/useDeployMultisigContract";
+import { useDraftMultisigDeployed } from "@/hooks/multisigContract/useDraftMultisigDeployed";
 import { useAccountWalletItem } from "@/hooks/useGetWalletSelectedItem";
-import { TextFieldWithLoading } from "@/sections/common/muiExtended/TextFieldWithLoading/TextFieldWithLoading";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import NetworkBadge from "@/sections/shared/NetworkBadge";
 import { FuelWalletIcon } from "@/services/fuel/connectors/icons/FuelWalletIcon";
 import { generateHashName } from "@/services/fuel/getHashName";
-import { notEmpty } from "@/validations/string";
 
 import { useCreateAccountContext } from "../CreateAccountContext";
 
@@ -23,10 +31,17 @@ export function MultisigCreationStep() {
     downStep: handleBack,
     upStep: handleNext,
   } = managerStep;
-  const { register, errors, setValue } = inputFormManager;
+  const {
+    formState: { errors },
+    control,
+    setValue,
+    getValues,
+  } = inputFormManager;
   const { accountWalletItem } = useAccountWalletItem();
   const { deployContract, isLoading: isDeploying } =
     useDeployMultisigContract();
+  const { deployedMultisigAddress } = getValues();
+  const { setDeployedMultisig } = useDraftMultisigDeployed();
 
   useEffect(() => {
     if (!accountConnected || !accountWalletItem?.address.hex) return;
@@ -35,7 +50,17 @@ export function MultisigCreationStep() {
   }, [setValue, accountConnected, accountWalletItem?.address.hex]);
 
   const _handleNext = () => {
-    deployContract().then((value) => handleNext());
+    if (deployedMultisigAddress) {
+      handleNext();
+      return;
+    }
+
+    deployContract().then((value) => {
+      if (value) {
+        setValue("deployedMultisigAddress", value);
+        handleNext();
+      }
+    });
   };
 
   return (
@@ -53,16 +78,58 @@ export function MultisigCreationStep() {
           <FuelWalletIcon />
         </NetworkBadge>
       </Box>
-      <TextFieldWithLoading
-        id="walletName"
-        label="Multisig account name"
-        autoFocus
-        fullWidth
-        margin="normal"
-        {...register("walletName", [notEmpty])}
-        error={Boolean(errors["walletName"])}
-        helperText={errors["walletName"] ? errors["walletName"] : ""}
+      <Controller
+        name="walletName"
+        control={control}
+        rules={{ required: "Wallet name is required" }}
+        render={({ field }) => (
+          <TextField
+            id="walletName"
+            label="Multisig account name"
+            autoFocus
+            fullWidth
+            margin="normal"
+            error={Boolean(errors["walletName"])}
+            helperText={errors.walletName?.message}
+            {...field}
+          />
+        )}
       />
+      <Controller
+        name="deployedMultisigAddress"
+        control={control}
+        render={({ field }) =>
+          field.value ? (
+            <TextField
+              id="draft-deployed-address"
+              label="Draft account deployed address"
+              fullWidth
+              margin="normal"
+              disabled
+              {...field}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => {
+                        setDeployedMultisig(null);
+                        field.onChange("");
+                      }}
+                      edge="end"
+                      size="small"
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          ) : (
+            <></>
+          )
+        }
+      />
+
       <Box mt={4}>
         <Typography
           variant="caption"
@@ -78,14 +145,14 @@ export function MultisigCreationStep() {
           <Link href="#"> privacy policy.</Link>
         </Typography>
       </Box>
-      <Box p={5}>
+      <Box pt={5}>
         <NextBackButtonStepper
           activeStep={activeStep}
           stepsLength={stepsLength}
           handleBack={handleBack}
           handleNext={_handleNext}
           hiddenBack={activeStep === 0 ? true : false}
-          nextLabel={"Deploy →"}
+          nextLabel={deployedMultisigAddress ? "Next →" : "Deploy →"}
           nextButtonProps={{
             disabled: Boolean(errors["walletName"]),
             isLoading: isDeploying,

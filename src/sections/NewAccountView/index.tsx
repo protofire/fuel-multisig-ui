@@ -4,7 +4,7 @@ import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetwo
 import { FallbackSpinner } from "@/sections/common/FallbackSpinner";
 import { MainContentCard } from "@/sections/shared/MainContentCard";
 
-import { CreateAccountForm } from "./CreateAccounForm";
+import { CreateAccountStepper } from "./CreateAccounStepper";
 
 export default function NewAccountView() {
   const { accountConnected, chainInfo } = useNetworkConnection();
@@ -13,7 +13,7 @@ export default function NewAccountView() {
 
   return (
     <MainContentCard title="Create new Multisignature Account">
-      <CreateAccountForm chainId={chainInfo.chainId} />
+      <CreateAccountStepper chainId={chainInfo.chainId} />
     </MainContentCard>
   );
 }

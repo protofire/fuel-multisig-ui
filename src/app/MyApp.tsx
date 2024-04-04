@@ -2,6 +2,7 @@
 import { CacheProvider } from "@emotion/react";
 
 import { InteractionErrorProvider } from "@/context/InteractionErrorContext";
+import { LocalDbProvider } from "@/context/LocalDbContext";
 import { NetworkConnectionConfig } from "@/context/NetworkConnectionConfig";
 import {
   SettingsThemeConsumer,
@@ -17,17 +18,19 @@ export default function MyApp({ children }: { children: React.ReactNode }) {
   return (
     <CacheProvider value={clientSideEmotionCache}>
       <NetworkConnectionConfig>
-        <InteractionErrorProvider>
-          <SettingsThemeConsumer>
-            {({ settings }) => (
-              <SettingsThemeProvider>
-                <ThemeCustomization settings={settings}>
-                  {children}
-                </ThemeCustomization>
-              </SettingsThemeProvider>
-            )}
-          </SettingsThemeConsumer>
-        </InteractionErrorProvider>
+        <LocalDbProvider>
+          <InteractionErrorProvider>
+            <SettingsThemeConsumer>
+              {({ settings }) => (
+                <SettingsThemeProvider>
+                  <ThemeCustomization settings={settings}>
+                    {children}
+                  </ThemeCustomization>
+                </SettingsThemeProvider>
+              )}
+            </SettingsThemeConsumer>
+          </InteractionErrorProvider>
+        </LocalDbProvider>
       </NetworkConnectionConfig>
     </CacheProvider>
   );

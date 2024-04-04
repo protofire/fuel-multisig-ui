@@ -1,21 +1,44 @@
 /**
- * Truncates a given address or string to a specified length on both sides and adds ellipsis in the middle.
+ * Truncates a given string to show only the first `startLength` characters and the last `endLength` characters,
+ * with ellipsis in the middle if the string's length exceeds the sum of `startLength` and `endLength`.
+ * If the string is shorter than the sum of `startLength` and `endLength`, it returns the original string.
+ * Optionally, it can show ellipsis to indicate that the string is longer than the allowed limit.
+ *
+ * @param value The string to be truncated.
+ * @param startLength The number of characters to show at the start of the string.
+ * @param endLength The number of characters to show at the end of the string. Defaults to the same as `startLength` if not provided.
+ * @param showEllipsis Indicates whether to show ellipsis (...) when the string is truncated. Defaults to true.
+ * @returns The truncated string or the original string if its length is within the allowed limit.
  *
  * @example
  * // returns "0x123...cdef"
  * truncateAddress("0x1234567890abcdef", 3);
+ *
+ * @example
+ * // returns "0x123456...7890abcdef"
+ * truncateAddress("0x1234567890abcdef", 6, 6);
+ *
+ * @example
+ * // returns "0x1234567890abcdef"
+ * truncateAddress("0x1234567890abcdef", 10, 10, false);
  */
 export const truncateAddress = (
   value: string | undefined,
-  sideLength = 6
+  startLength = 6,
+  endLength = 6,
+  showEllipsis = true
 ): string => {
-  return value
-    ? value.length > sideLength * 2
-      ? `${value.substring(0, sideLength)}...${value.substring(
-          value.length - sideLength
-        )}`
-      : value
-    : "";
+  if (!value) return "";
+  const _endLength = endLength ?? startLength; // Use startLength if endLength is not provided
+  const totalLength = startLength + _endLength;
+
+  // Return the original value if it's shorter than the total length required to truncate
+  if (value.length <= totalLength) return value;
+
+  // Truncate the value if it's longer than the total length
+  const start = value.substring(0, startLength);
+  const end = value.substring(value.length - _endLength);
+  return showEllipsis ? `${start}...${end}` : `${start}${end}`;
 };
 
 /**
