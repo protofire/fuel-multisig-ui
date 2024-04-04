@@ -10,12 +10,14 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { Controller, useFieldArray } from "react-hook-form";
 
 import { APP_NAME } from "@/config/app";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useEffectOnceIf } from "@/hooks/common/useEffectOnceIf";
 import { FuelExplorerLink } from "@/sections/common/ExplorerLink/FuelExplorerLink";
 import { MonoTypography } from "@/sections/common/MonoTypography";
+import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { StyledBox } from "@/sections/shared/BaseStepper/styled";
 import { truncateAddress } from "@/utils/formatString";
 
@@ -30,8 +32,21 @@ export function OwnersStep() {
     downStep: handleBack,
     upStep: handleNext,
   } = managerStep;
-  const { register, errors, setValue, values } = inputFormManager;
-  const { owners, threshold } = values;
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    watch,
+    setValue,
+    formState: { errors, isValid },
+  } = inputFormManager;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "owners",
+  });
+  const { deployedMultisigAddress, threshold } = getValues();
+
+  const ownersCount = watch("owners").length;
 
   useEffectOnceIf(() => {
     setValue("owners", [
@@ -40,7 +55,17 @@ export function OwnersStep() {
         name: `Creator_${accountConnected?.slice(-4)}`,
       },
     ]);
-  }, owners.length === 0 && accountConnected !== undefined);
+  }, ownersCount === 0 && accountConnected !== undefined);
+
+  const addOwner = () => {
+    append({ name: `Signer ${ownersCount + 1}`, address: "" });
+  };
+
+  const _handleNext = () => {
+    if (isValid) {
+      handleNext();
+    }
+  };
 
   return (
     <Box>
@@ -48,8 +73,8 @@ export function OwnersStep() {
         Set the owner wallets of your {APP_NAME} Account{" "}
         {
           <MonoTypography variant="caption" sx={{ mr: "0.3rem" }}>
-            {truncateAddress(values.deployedMultisigAddress, 6, 4)}
-            <FuelExplorerLink hash={values.deployedMultisigAddress} />
+            {truncateAddress(deployedMultisigAddress, 6, 4)}
+            <FuelExplorerLink hash={deployedMultisigAddress} />
           </MonoTypography>
         }
         and how many need to confirm to execute a valid transaction.
@@ -62,36 +87,49 @@ export function OwnersStep() {
         }}
         mb={5}
       >
-        {owners.map((owner, index) => (
-          <Box key={`Signer-${index}`} mb={1} mt={2}>
+        {fields.map((field, index) => (
+          <Box key={field.id} mb={1} mt={2}>
             <Box display="flex" gap={1} alignItems="center" mb={1}>
-              <TextField
-                label="Owner name"
-                value={owner.name}
-                // onChange={(e) =>
-                //   handleOwnerChange(index, e.target.value, "name")
-                // }
+              <Controller
+                name={`owners.${index}.name`}
+                rules={{
+                  required: "Enter a name to identify it",
+                }}
+                control={control}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    label="Owner name"
+                    {...field}
+                    error={Boolean(fieldState.error)}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
               />
 
-              <TextField
-                fullWidth
-                label="Owner address"
-                value={owner.address}
-                // onChange={(e) =>
-                //   handleOwnerChange(index, e.target.value, "address")
-                // }
+              <Controller
+                name={`owners.${index}.address`}
+                control={control}
+                rules={{
+                  required: "Address is required.",
+                }}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    label="Owner address"
+                    fullWidth
+                    error={Boolean(fieldState.error)}
+                    helperText={fieldState.error?.message}
+                    {...field}
+                  />
+                )}
               />
 
-              <IconButton
-                disabled={index === 0}
-                // onClick={() => removeOwner(index)}
-              >
+              <IconButton disabled={index === 0} onClick={() => remove(index)}>
                 <DeleteOutlineOutlinedIcon />
               </IconButton>
             </Box>
-            {/* {errors[step][index]?.error && (
+            {/* {errors["owners"] && errors["owners"].length && (
               <Typography variant="caption" color="red">
-                {errors[step][index]?.message}
+                {errors["owners"][index]?.message}
               </Typography>
             )} */}
           </Box>
@@ -99,7 +137,7 @@ export function OwnersStep() {
         <Button
           variant="text"
           sx={{ justifyContent: "flex-start", width: "150px", fontSize: 14 }}
-          // onClick={addOwner}
+          onClick={addOwner}
         >
           + Add new owner
         </Button>
@@ -126,21 +164,39 @@ export function OwnersStep() {
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <Select
-            value={threshold}
-            onChange={(e) => setValue("threshold", Number(e.target.value))}
-          >
-            {owners.map((owner, index) => (
-              <MenuItem key={owner.name} value={index + 1}>
-                {index + 1}
-              </MenuItem>
-            ))}
-          </Select>
-          <Typography variant="body1">
-            out of {owners.length} owner(s)
-          </Typography>
+          <Controller
+            name="threshold"
+            control={control}
+            render={({ field }) => (
+              <Select
+                labelId="threshold-label"
+                {...field}
+                onChange={(e) => field.onChange(e)}
+              >
+                {fields.map((_, index) => (
+                  <MenuItem key={index} value={index + 1}>
+                    {index + 1}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+
+          <Typography variant="body1">out of {ownersCount} owner(s)</Typography>
         </Box>
       </StyledBox>
+      <Box pt={5}>
+        <NextBackButtonStepper
+          activeStep={activeStep}
+          stepsLength={stepsLength}
+          handleBack={handleBack}
+          handleNext={_handleNext}
+          nextButtonProps={{
+            disabled: !isValid,
+            isLoading: false,
+          }}
+        />
+      </Box>
     </Box>
   );
 }

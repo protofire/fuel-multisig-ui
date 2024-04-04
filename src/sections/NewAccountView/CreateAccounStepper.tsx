@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
+import { useForm } from "react-hook-form";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
 import { ChainInfo } from "@/domain/ChainInfo";
 import { useEffectOnceIf } from "@/hooks/common/useEffectOnceIf";
-import { useForm } from "@/hooks/common/useForm";
 import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 import { useDraftMultisigDeployed } from "@/hooks/multisigContract/useDraftMultisigDeployed";
 import { OwnersStep } from "@/sections/NewAccountView/creation/OwnersStep";
@@ -15,6 +15,7 @@ import {
   CreateAccountContext,
   CreateAccountForm,
 } from "./CreateAccountContext";
+import { ReviewStep } from "./creation/ReviewStep";
 
 interface CreateAccountFormProps {
   chainId: ChainInfo["chainId"];
@@ -33,6 +34,12 @@ const steps = [
     label: "Add owners and establishes required signatures",
     Component: OwnersStep,
   },
+  {
+    id: 2,
+    name: "Review",
+    label: "Confirm that the settings are correct",
+    Component: ReviewStep,
+  },
 ];
 
 export function CreateAccountStepper({
@@ -41,15 +48,18 @@ export function CreateAccountStepper({
   const managerStep = useManagerActiveStep(steps.length);
   const formSteps = useMemo(() => transformSteps(steps), []);
   const inputFormManager = useForm<CreateAccountForm>({
-    walletName: "",
-    deployedMultisigAddress: "",
-    owners: [],
-    threshold: 1,
+    mode: "onBlur",
+    defaultValues: {
+      owners: [],
+      walletName: "",
+      deployedMultisigAddress: "",
+      threshold: 1,
+    },
   });
   const { draftMultisigAccount, setDeployedMultisig } =
     useDraftMultisigDeployed();
   const { error, setError } = useInteractionError();
-  const { deployedMultisigAddress, walletName } = inputFormManager.values;
+  const { deployedMultisigAddress, walletName } = inputFormManager.getValues();
 
   useEffect(() => {
     if (
@@ -77,7 +87,7 @@ export function CreateAccountStepper({
       "deployedMultisigAddress",
       draftMultisigAccount.address
     );
-    inputFormManager.setValue("walletName", walletName);
+    inputFormManager.setValue("walletName", draftMultisigAccount.name);
     managerStep.upStep();
   }, draftMultisigAccount?.address !== undefined && deployedMultisigAddress === "");
 

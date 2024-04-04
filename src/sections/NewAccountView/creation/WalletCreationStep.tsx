@@ -1,15 +1,14 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Link, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
+import { Controller } from "react-hook-form";
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useDeployMultisigContract } from "@/hooks/multisigContract/useDeployMultisigContract";
 import { useAccountWalletItem } from "@/hooks/useGetWalletSelectedItem";
-import { TextFieldWithLoading } from "@/sections/common/muiExtended/TextFieldWithLoading/TextFieldWithLoading";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import NetworkBadge from "@/sections/shared/NetworkBadge";
 import { FuelWalletIcon } from "@/services/fuel/connectors/icons/FuelWalletIcon";
 import { generateHashName } from "@/services/fuel/getHashName";
-import { notEmpty } from "@/validations/string";
 
 import { useCreateAccountContext } from "../CreateAccountContext";
 
@@ -23,7 +22,13 @@ export function MultisigCreationStep() {
     downStep: handleBack,
     upStep: handleNext,
   } = managerStep;
-  const { register, errors, setValue } = inputFormManager;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+  } = inputFormManager;
   const { accountWalletItem } = useAccountWalletItem();
   const { deployContract, isLoading: isDeploying } =
     useDeployMultisigContract();
@@ -58,16 +63,24 @@ export function MultisigCreationStep() {
           <FuelWalletIcon />
         </NetworkBadge>
       </Box>
-      <TextFieldWithLoading
-        id="walletName"
-        label="Multisig account name"
-        autoFocus
-        fullWidth
-        margin="normal"
-        {...register("walletName", [notEmpty])}
-        error={Boolean(errors["walletName"])}
-        helperText={errors["walletName"] ? errors["walletName"] : ""}
+      <Controller
+        name="walletName"
+        control={control}
+        rules={{ required: "Wallet name is required" }}
+        render={({ field }) => (
+          <TextField
+            id="walletName"
+            label="Multisig account name"
+            autoFocus
+            fullWidth
+            margin="normal"
+            error={Boolean(errors["walletName"])}
+            helperText={errors.walletName?.message}
+            {...field}
+          />
+        )}
       />
+
       <Box mt={4}>
         <Typography
           variant="caption"
@@ -83,7 +96,7 @@ export function MultisigCreationStep() {
           <Link href="#"> privacy policy.</Link>
         </Typography>
       </Box>
-      <Box p={5}>
+      <Box pt={5}>
         <NextBackButtonStepper
           activeStep={activeStep}
           stepsLength={stepsLength}

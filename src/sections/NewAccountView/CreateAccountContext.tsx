@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
+import { UseFormReturn } from "react-hook-form";
 
 import { Owner } from "@/domain/MultisignatureAccount";
-import { UseFormReturn } from "@/hooks/common/useForm";
 import { ManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 
 export interface CreateAccountForm {

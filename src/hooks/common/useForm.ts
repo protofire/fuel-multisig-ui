@@ -54,23 +54,41 @@ export function useForm<T extends object>(initialValues: T): UseFormReturn<T> {
       value: T[K],
       identifier?: number | string
     ) => {
-      setFormState((prevState) => ({ ...prevState, isLoading: true }));
-      const validations = fieldValidations[name];
+      if (Array.isArray(value)) {
+        const arrayErrors = await Promise.all(
+          value.map(async (item, index) => {
+            const validations = fieldValidations[name];
+            if (!validations) {
+              return null;
+            }
 
-      if (!validations) {
-        setFormState((prevState) => ({ ...prevState, isLoading: false }));
+            for (const validate of validations) {
+              const validationResult = await validate(item, index);
+              if (validationResult) {
+                return validationResult;
+              }
+            }
+
+            return null;
+          })
+        );
+
+        return arrayErrors;
+      } else {
+        const validations = fieldValidations[name];
+        if (!validations) {
+          return null;
+        }
+
+        for (const validate of validations) {
+          const validationResult = await validate(value, identifier);
+          if (validationResult) {
+            return validationResult;
+          }
+        }
+
         return null;
       }
-
-      for (const validate of validations) {
-        const validationResult = await validate(value, identifier);
-        if (validationResult) {
-          setFormState((prevState) => ({ ...prevState, isLoading: false }));
-          return validationResult;
-        }
-      }
-      setFormState((prevState) => ({ ...prevState, isLoading: false }));
-      return null;
     },
     [fieldValidations]
   );
@@ -99,36 +117,36 @@ export function useForm<T extends object>(initialValues: T): UseFormReturn<T> {
     return !hasErrors && allFieldsTouched;
   }, [formState.errors, formState.touched]);
 
-  const register = <K extends keyof T>(
-    name: K,
-    validations: Array<ValidationFn<T, K>>
-  ) => {
-    fieldValidations[name] = validations;
+  const register = useCallback(
+    <K extends keyof T>(name: K, validations: Array<ValidationFn<T, K>>) => {
+      fieldValidations[name] = validations;
 
-    return {
-      value: formState.values[name],
-      onChange: async (e: React.BaseSyntheticEvent) => {
-        const newValue = e.target.value;
-        const error = await validateField(name, newValue);
+      return {
+        value: formState.values[name],
+        onChange: async (e: React.BaseSyntheticEvent) => {
+          const newValue = e.target.value;
+          const error = await validateField(name, newValue);
 
-        setFormState((prevState) => ({
-          ...prevState,
-          values: {
-            ...prevState.values,
-            [name]: newValue,
-          },
-          errors: {
-            ...prevState.errors,
-            [name]: error,
-          },
-          touched: {
-            ...prevState.touched,
-            [name]: true,
-          },
-        }));
-      },
-    };
-  };
+          setFormState((prevState) => ({
+            ...prevState,
+            values: {
+              ...prevState.values,
+              [name]: newValue,
+            },
+            errors: {
+              ...prevState.errors,
+              [name]: error,
+            },
+            touched: {
+              ...prevState.touched,
+              [name]: true,
+            },
+          }));
+        },
+      };
+    },
+    [fieldValidations, formState.values, validateField]
+  );
 
   const setValue = useCallback(
     async <K extends keyof T>(
