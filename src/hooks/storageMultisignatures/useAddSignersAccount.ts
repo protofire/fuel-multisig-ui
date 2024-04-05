@@ -48,7 +48,7 @@ export function useAddSignersAccount(): UseAddSignersAccount {
         setIsLoading(false);
       }
     },
-    [multisignatureAccountsRepository]
+    [multisignatureAccountsRepository, multisignatureSelectedRepository]
   );
 
   return { save, isLoading, error };
