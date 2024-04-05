@@ -3,7 +3,7 @@ import { Avatar, Box, SelectChangeEvent, Stack } from "@mui/material";
 
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
-import { useAccountWalletItem } from "@/hooks/useGetWalletSelectedItem";
+import { useAccountWalletItem } from "@/hooks/useGetProviderrWalletSelected";
 import CopyButton from "@/sections/common/CopyButton";
 import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
 import { getConnectorImage } from "@/services/fuel/connectors/icons";

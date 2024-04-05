@@ -1,19 +1,28 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { HowToReg } from "@mui/icons-material";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import { Box, Tooltip, Typography, useTheme } from "@mui/material";
+import React from "react";
 
 import { APP_NAME } from "@/config/app";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
+import { AccountSigner } from "@/sections/shared/AccountSigner";
 import NetworkBadge from "@/sections/shared/NetworkBadge";
 import { FuelWalletIcon } from "@/services/fuel/connectors/icons/FuelWalletIcon";
+import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
+import { formatThreshold } from "@/utils/formatString";
 
 interface Props {
-  multisigs: Array<MultisignatureAccount> | null;
+  multisigs: Array<MultisignatureAccount>;
   chainName: string;
+  clickAction: (account: MultisignatureAccount) => void;
 }
 
-export function MultisignatureAccountsTableUI({ multisigs, chainName }: Props) {
+export function MultisignatureAccountsTableUI({
+  multisigs,
+  chainName,
+  clickAction,
+}: Props) {
   const theme = useTheme();
-
-  if (!multisigs) return null;
 
   return (
     <Box
@@ -47,7 +56,7 @@ export function MultisignatureAccountsTableUI({ multisigs, chainName }: Props) {
         {multisigs.map((multisig) => (
           <Box key={multisig.address}>
             <Box
-              //   onClick={() => handleMultisigRedirect(multisig.address)}
+              onClick={() => clickAction(multisig)}
               display="flex"
               gap={8}
               alignItems="center"
@@ -62,11 +71,50 @@ export function MultisignatureAccountsTableUI({ multisigs, chainName }: Props) {
               pr={4}
             >
               <Box width={300}>
-                {/* <AccountSigner
-                  owner={multisig}
+                <AccountSigner
+                  owner={toAccountWalletItem(multisig.address)}
                   truncateAmount={16}
                   showLink={false}
-                /> */}
+                />
+              </Box>
+              <Box display="flex" alignItems="center" gap={1}>
+                <HowToReg
+                  sx={{
+                    fontSize: "1.4rem",
+                    color: theme.palette.primary.main,
+                  }}
+                />
+                <Tooltip title="You are the owner of this account." arrow>
+                  <Typography
+                    variant="body1"
+                    component="p"
+                    sx={{
+                      fontSize: "0.8rem",
+                      color: theme.palette.primary.main,
+                    }}
+                  >
+                    Owner
+                  </Typography>
+                </Tooltip>
+              </Box>
+              <Box>
+                <Tooltip title="Threshold" arrow>
+                  <Typography
+                    variant="body1"
+                    component="p"
+                    sx={{ fontSize: "0.8rem", color: "#aaaaaa" }}
+                  >
+                    {formatThreshold({
+                      threshold: multisig.threshold,
+                      owners: multisig.owners.length,
+                    })}
+                  </Typography>
+                </Tooltip>
+              </Box>
+              <Box>
+                <ArrowForwardIosRoundedIcon
+                  sx={{ fontSize: "1.2rem", color: "#4d4d4d" }}
+                />
               </Box>
             </Box>
           </Box>
