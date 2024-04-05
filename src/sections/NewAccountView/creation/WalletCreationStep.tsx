@@ -13,7 +13,7 @@ import { Controller } from "react-hook-form";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useDeployMultisigContract } from "@/hooks/multisigContract/useDeployMultisigContract";
 import { useDraftMultisigDeployed } from "@/hooks/multisigContract/useDraftMultisigDeployed";
-import { useAccountWalletItem } from "@/hooks/useGetWalletSelectedItem";
+import { useAccountWalletItem } from "@/hooks/useGetProviderrWalletSelected";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import NetworkBadge from "@/sections/shared/NetworkBadge";
 import { FuelWalletIcon } from "@/services/fuel/connectors/icons/FuelWalletIcon";
