@@ -2,35 +2,44 @@
 
 import { Grid } from "@mui/material";
 
+import { useBalanceMultisignatureSelected } from "@/hooks/multisignatureSelected/useBalanceMultisignatureSelected";
+import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import { SummaryCard } from "@/sections/common/SummaryCard";
 
 export function SummaryCardsView() {
+  const { balance, isFetching } = useBalanceMultisignatureSelected();
+  const { multisigSelected } = useMultisignatureAccountSelected();
+
   return (
     <>
       <Grid item xs={12} sm={6} md={3}>
         <SummaryCard
           captionTitle="Balance"
           widthSkeleton="60%"
-          caption="1 ETH"
-          isLoading={false}
+          caption={balance}
+          isLoading={isFetching}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <SummaryCard
           captionTitle="Tracked Tokens"
-          caption="2"
+          caption="-"
           widthSkeleton="60%"
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <SummaryCard
           captionTitle="Confirmations required"
-          caption="1"
+          caption={multisigSelected?.threshold.toString()}
           widthSkeleton="60%"
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
-        <SummaryCard captionTitle="Owners" caption="3" widthSkeleton="60%" />
+        <SummaryCard
+          captionTitle="Owners"
+          caption={multisigSelected?.owners.length.toString()}
+          widthSkeleton="60%"
+        />
       </Grid>
     </>
   );
