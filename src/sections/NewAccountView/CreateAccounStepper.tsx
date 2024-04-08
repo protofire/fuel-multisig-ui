@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
@@ -18,7 +18,7 @@ import {
 import { ReviewStep } from "./creation/ReviewStep";
 
 interface CreateAccountFormProps {
-  chainId: ChainInfo["chainId"];
+  chainInfo: ChainInfo;
 }
 
 const steps = [
@@ -42,9 +42,7 @@ const steps = [
   },
 ];
 
-export function CreateAccountStepper({
-  chainId: networkId,
-}: CreateAccountFormProps) {
+export function CreateAccountStepper({ chainInfo }: CreateAccountFormProps) {
   const managerStep = useManagerActiveStep(steps.length);
   const formSteps = useMemo(() => transformSteps(steps), []);
   const { draftMultisigAccount, setDeployedMultisig } =
@@ -60,27 +58,7 @@ export function CreateAccountStepper({
   });
 
   const { error, setError } = useInteractionError();
-  const { deployedMultisigAddress, walletName } = inputFormManager.getValues();
-
-  useEffect(() => {
-    if (
-      deployedMultisigAddress &&
-      deployedMultisigAddress !== draftMultisigAccount?.address
-    ) {
-      setDeployedMultisig({
-        address: deployedMultisigAddress,
-        name: walletName,
-        networkId,
-      });
-    }
-  }, [
-    draftMultisigAccount?.address,
-    deployedMultisigAddress,
-    walletName,
-    networkId,
-    setDeployedMultisig,
-    draftMultisigAccount,
-  ]);
+  const { deployedMultisigAddress } = inputFormManager.getValues();
 
   useEffectOnceIf(() => {
     if (!draftMultisigAccount) return;
@@ -94,10 +72,12 @@ export function CreateAccountStepper({
   }, draftMultisigAccount?.address !== undefined && deployedMultisigAddress === "");
 
   const reset = useCallback(() => {
+    inputFormManager.reset();
     setDeployedMultisig(null);
     managerStep.resetSteps();
-    inputFormManager.reset();
   }, [inputFormManager, managerStep, setDeployedMultisig]);
+
+  if (!chainInfo) return null;
 
   return (
     <CreateAccountContext.Provider
@@ -105,6 +85,7 @@ export function CreateAccountStepper({
         managerStep,
         inputFormManager,
         reset,
+        chainInfo,
       }}
     >
       {error?.msg && (

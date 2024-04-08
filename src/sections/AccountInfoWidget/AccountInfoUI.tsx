@@ -5,6 +5,7 @@ import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
 import CopyButton from "@/sections/common/CopyButton";
 import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
+import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 import { formatThreshold, truncateAddress } from "@/utils/formatString";
 
 import { AccountInfoWrapper } from "./styled";
@@ -27,6 +28,7 @@ export function AccountInfoUI({
   multisigAccounts,
 }: Props) {
   const { isOpen, closeModal, openModal } = useModalBehaviour();
+  const walletItem = toAccountWalletItem(address as `fuel${string}`);
 
   return (
     <AccountInfoWrapper networkcolor={networkColor}>
@@ -45,8 +47,7 @@ export function AccountInfoUI({
             alignItems="center"
           >
             <Avatar>
-              {/* TODO Add Igniters address */}
-              <EmojiAvatarIcon address="2121212" />
+              <EmojiAvatarIcon address={walletItem.address.hex} />
             </Avatar>
             <Tooltip title="Threshold" arrow>
               <Box display="flex" flexDirection="column">
