@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import { UseFormReturn } from "react-hook-form";
 
+import { ChainInfo } from "@/domain/ChainInfo";
 import { Owner } from "@/domain/MultisignatureAccount";
 import { ManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 
@@ -15,6 +16,7 @@ export interface CreateAccontData {
   inputFormManager: UseFormReturn<CreateAccountForm>;
   managerStep: ManagerActiveStep;
   reset: () => void;
+  chainInfo: ChainInfo;
 }
 
 export const CreateAccountContext = createContext({} as CreateAccontData);

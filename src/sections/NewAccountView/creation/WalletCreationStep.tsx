@@ -22,9 +22,9 @@ import { generateHashName } from "@/services/fuel/getHashName";
 import { useCreateAccountContext } from "../CreateAccountContext";
 
 export function MultisigCreationStep() {
-  const { chainInfo, accountConnected } = useNetworkConnection();
-  const chainName = chainInfo?.name || "";
-  const { inputFormManager, managerStep } = useCreateAccountContext();
+  const { accountConnected } = useNetworkConnection();
+  const { inputFormManager, managerStep, chainInfo } =
+    useCreateAccountContext();
   const {
     activeStep,
     stepsLength,
@@ -40,7 +40,7 @@ export function MultisigCreationStep() {
   const { accountWalletItem } = useAccountWalletItem();
   const { deployContract, isLoading: isDeploying } =
     useDeployMultisigContract();
-  const { deployedMultisigAddress } = getValues();
+  const { deployedMultisigAddress, walletName } = getValues();
   const { setDeployedMultisig } = useDraftMultisigDeployed();
 
   useEffect(() => {
@@ -57,6 +57,11 @@ export function MultisigCreationStep() {
 
     deployContract().then((value) => {
       if (value) {
+        setDeployedMultisig({
+          address: deployedMultisigAddress,
+          name: walletName,
+          networkId: chainInfo.chainId,
+        });
         setValue("deployedMultisigAddress", value);
         handleNext();
       }
@@ -70,9 +75,9 @@ export function MultisigCreationStep() {
           You are on
         </Typography>
         <NetworkBadge
-          name={chainName}
+          name={chainInfo.name}
           logoSize={{ width: 20, height: 20 }}
-          description={chainName}
+          description={chainInfo.name}
           tooltipInfo="This network is the one that has been selected in the wallet provider"
         >
           <FuelWalletIcon />

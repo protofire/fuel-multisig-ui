@@ -4,7 +4,6 @@ import { useMemo } from "react";
 
 import { APP_NAME } from "@/config/app";
 import { ROUTES } from "@/config/routes";
-import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useSetupMultisig } from "@/hooks/multisigContract/useSetupMultisigContract";
 import { useAddSignersAccount } from "@/hooks/storageMultisignatures/useAddSignersAccount";
 import CopyButton from "@/sections/common/CopyButton";
@@ -18,10 +17,9 @@ import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 import { useCreateAccountContext } from "../CreateAccountContext";
 
 export function ReviewStep() {
-  const { chainInfo } = useNetworkConnection();
   const router = useRouter();
-  const chainName = chainInfo?.name || "";
-  const { inputFormManager, managerStep, reset } = useCreateAccountContext();
+  const { inputFormManager, managerStep, reset, chainInfo } =
+    useCreateAccountContext();
   const { activeStep, stepsLength, downStep: handleBack } = managerStep;
   const { getValues } = inputFormManager;
   const { threshold, owners, deployedMultisigAddress, walletName } =
@@ -45,7 +43,7 @@ export function ReviewStep() {
           address: deployedMultisigAddress,
           owners,
           name: walletName,
-          networkId: chainInfo?.chainId as number,
+          networkId: chainInfo.chainId,
           threshold,
         },
         options: {
@@ -71,8 +69,8 @@ export function ReviewStep() {
               Network
             </Typography>
             <NetworkBadge
-              name={chainName}
-              description={chainName}
+              name={chainInfo.name}
+              description={chainInfo.name}
               tooltipInfo="This network is the one that has been selected in the wallet provider"
             >
               <FuelWalletIcon />

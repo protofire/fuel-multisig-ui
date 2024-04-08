@@ -13,7 +13,7 @@ export default function NewAccountView() {
 
   return (
     <MainContentCard title="Create new Multisignature Account">
-      <CreateAccountStepper chainId={chainInfo.chainId} />
+      <CreateAccountStepper chainInfo={chainInfo} />
     </MainContentCard>
   );
 }
