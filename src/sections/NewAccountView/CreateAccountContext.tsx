@@ -17,6 +17,7 @@ export interface CreateAccontData {
   managerStep: ManagerActiveStep;
   reset: () => void;
   chainInfo: ChainInfo;
+  accountsCount: number;
 }
 
 export const CreateAccountContext = createContext({} as CreateAccontData);

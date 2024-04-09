@@ -23,7 +23,7 @@ import { useCreateAccountContext } from "../CreateAccountContext";
 
 export function MultisigCreationStep() {
   const { accountConnected } = useNetworkConnection();
-  const { inputFormManager, managerStep, chainInfo } =
+  const { inputFormManager, managerStep, chainInfo, accountsCount } =
     useCreateAccountContext();
   const {
     activeStep,
@@ -46,8 +46,16 @@ export function MultisigCreationStep() {
   useEffect(() => {
     if (!accountConnected || !accountWalletItem?.address.hex) return;
 
-    setValue("walletName", generateHashName(accountWalletItem?.address.hex));
-  }, [setValue, accountConnected, accountWalletItem?.address.hex]);
+    setValue(
+      "walletName",
+      generateHashName(`${accountWalletItem?.address.hex}${accountsCount}`)
+    );
+  }, [
+    setValue,
+    accountConnected,
+    accountWalletItem?.address.hex,
+    accountsCount,
+  ]);
 
   const _handleNext = () => {
     if (deployedMultisigAddress) {
