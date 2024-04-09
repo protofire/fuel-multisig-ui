@@ -8,14 +8,15 @@ import Link from "next/link";
 import { APP_NAME } from "@/config/app";
 import { LOGO_APP, LOGO_NETWORK } from "@/config/images";
 import { ROUTES } from "@/config/routes";
-import { useListSignersAccount } from "@/hooks/storageMultisignatures/useListSignersAccount";
+import { useByOwnerSignersAccount } from "@/hooks/storageMultisignatures/useByOwnerSignersAccount";
 import { MainContentCard } from "@/sections/shared/MainContentCard";
 
 import { MultisignatureAccountsTable } from "./MultisignatureAccountsTable";
 
 export function WelcomeCard() {
   const theme = useTheme();
-  const { multisigs, isLoading: isLoadingMultisigs } = useListSignersAccount();
+  const { multisigs, isLoading: isLoadingMultisigs } =
+    useByOwnerSignersAccount();
 
   return (
     <>
@@ -101,7 +102,7 @@ export function WelcomeCard() {
           </Box>
         </Box>
       </MainContentCard>
-      {isLoadingMultisigs ? (
+      {isLoadingMultisigs && multisigs !== null ? (
         <Box display="flex" alignItems="center" justifyContent="center" p={2}>
           <CircularProgress size={50} color="primary" />
         </Box>

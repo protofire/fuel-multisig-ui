@@ -581,10 +581,10 @@
     chalk "4"
     cli-table "^0.3.11"
 
-"@fuel-wallet/react@^0.15.2":
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/@fuel-wallet/react/-/react-0.15.2.tgz#939eaffd57b02b7362e8163c99dd7a999baceb9b"
-  integrity sha512-cJPidiRSSZM2jV4bHgvQl7EOTnNde7Lx7+49Hxs7hr53eleS5Otd8yY3grgWDWL0D4wiSLZkrUM+U2SH9ScENg==
+"@fuel-wallet/react@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@fuel-wallet/react/-/react-0.16.1.tgz#3ca825c96e32d48285f98a51e1413099a86d1763"
+  integrity sha512-0VJ5JDulIG5OF/bBdPgXuakIbiJ86cbryDkMjbAPRjsSgW/3J+j9KDzn0WevZxmOG7b/msvf60OHq9Q3tIrnOA==
   dependencies:
     "@radix-ui/react-dialog" "^1.0.5"
     "@tanstack/react-query" "^4.36.1"
