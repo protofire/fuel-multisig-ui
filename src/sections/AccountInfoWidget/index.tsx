@@ -9,13 +9,6 @@ export function AccountInfoWidget() {
   const chainName = chainInfo?.name || "";
   const networkColor =
     (chainInfo && CHAINS_COLORS[chainName]) || CHAINS_COLORS["Unknown"];
-  // const address =
-  //   "fuel1zxcfw65d5nx3y7ghd9f5q6jxgsmn40se73el58292xcer78kx2nseeyx0e" ||
-  //   "-" ||
-  //   undefined;
-  // const name = "my-fancy-wallet" || undefined;
-  // const threshold = 1;
-  // const ownersCount = 2;
   const { multisigSelected } = useMultisignatureAccountSelected();
 
   if (!multisigSelected) return null;
