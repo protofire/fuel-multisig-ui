@@ -19,7 +19,7 @@ import { ReviewStep } from "./creation/ReviewStep";
 
 interface CreateAccountFormProps {
   chainInfo: ChainInfo;
-  accountsCount: number | undefined;
+  accountsCount: number;
 }
 
 const steps = [

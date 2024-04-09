@@ -19,7 +19,7 @@ export default function NewAccountView() {
     <MainContentCard title="Create new Multisignature Account">
       <CreateAccountStepper
         chainInfo={chainInfo}
-        accountsCount={multisigs?.length || 0}
+        accountsCount={Array.isArray(multisigs) ? multisigs.length : 0}
       />
     </MainContentCard>
   );
