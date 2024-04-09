@@ -19,6 +19,7 @@ import { ReviewStep } from "./creation/ReviewStep";
 
 interface CreateAccountFormProps {
   chainInfo: ChainInfo;
+  accountsCount: number;
 }
 
 const steps = [
@@ -42,7 +43,10 @@ const steps = [
   },
 ];
 
-export function CreateAccountStepper({ chainInfo }: CreateAccountFormProps) {
+export function CreateAccountStepper({
+  chainInfo,
+  accountsCount,
+}: CreateAccountFormProps) {
   const managerStep = useManagerActiveStep(steps.length);
   const formSteps = useMemo(() => transformSteps(steps), []);
   const { draftMultisigAccount, setDeployedMultisig } =
@@ -86,6 +90,7 @@ export function CreateAccountStepper({ chainInfo }: CreateAccountFormProps) {
         inputFormManager,
         reset,
         chainInfo,
+        accountsCount,
       }}
     >
       {error?.msg && (
