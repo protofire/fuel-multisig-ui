@@ -1,18 +1,14 @@
+"use client";
 import { Link, Stack, Tooltip, Typography } from "@mui/material";
 import React from "react";
 
+import { APP_VERSION } from "@/config/environment";
+import { isBetaVersion } from "@/utils/version";
+
 import { FooterContainer } from "./styled";
 
-function isBetaVersion(_version: string): boolean {
-  const betaRegex = /-beta|-alpha|-rc/;
-
-  return betaRegex.test(_version);
-}
-
-const version = "1.0.0";
-
 export const Footer: React.FC = () => {
-  const isBeta = isBetaVersion(version);
+  const isBeta = isBetaVersion(APP_VERSION);
 
   return (
     <FooterContainer>
@@ -24,7 +20,7 @@ export const Footer: React.FC = () => {
           <Typography variant="caption">Beta version</Typography>
         </Tooltip>
       )}
-      {version && (
+      {APP_VERSION && (
         <Typography variant="caption">
           <Stack display={"flex"} direction={"row"}>
             UI: &nbsp;
@@ -34,7 +30,7 @@ export const Footer: React.FC = () => {
               rel="noopener noreferrer"
               href="https://github.com/protofire/fuel-multisig-ui"
             >
-              v{version}
+              v{APP_VERSION}
             </Link>
           </Stack>
         </Typography>

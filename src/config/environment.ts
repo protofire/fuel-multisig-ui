@@ -3,4 +3,4 @@ export const IS_DEVELOPMENT =
   process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" ||
   process.env.NEXT_PUBLIC_VERCEL_ENV === "development";
 
-export const APP_VERSION = process.env.APP_VERSION;
+export const APP_VERSION = process.env.APP_VERSION || "-";
