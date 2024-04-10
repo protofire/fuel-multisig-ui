@@ -99,14 +99,25 @@ export const NetworkConnectionProvider: React.FC<
     );
   }, [accounts, wallet]);
 
-  useEffect(() => {
-    setWalletProviderConnected(undefined);
+  // useEffect(() => {
+  //   setWalletProviderConnected(undefined);
 
-    if (isConnected) {
-      const connector = fuel.currentConnector();
-      connector && setWalletProviderConnected(toWalletProvider(connector));
-    }
-  }, [fuel, isConnected]);
+  //   if (isConnected) {
+  //     const connector = fuel.currentConnector();
+  //     connector && setWalletProviderConnected(toWalletProvider(connector));
+  //   }
+  // }, [fuel, isConnected]);
+
+  useEffect(() => {
+    const handleConnect = (event: unknown) => {
+      console.log("Connected to Fuel wallet:", event);
+    };
+
+    fuel.on(fuel.events.connection, handleConnect);
+    return () => {
+      fuel.off(fuel.events.connection, handleConnect);
+    };
+  }, [fuel]);
 
   useEffect(() => {
     if (!fuel) return;

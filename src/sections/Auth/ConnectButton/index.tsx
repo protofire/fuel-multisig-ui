@@ -24,7 +24,7 @@ export const ConnectButton: React.FC = () => {
   } = useNetworkConnection();
   const { formatted, isLoading: isLoadingBalance } = useGetBalance();
 
-  console.log("__acccountConnected", accountConnected, walletProviderConnected);
+  // console.log("__acccountConnected", accountConnected, walletProviderConnected);
   if (accountConnected && walletProviderConnected)
     return (
       <AccountSelect
