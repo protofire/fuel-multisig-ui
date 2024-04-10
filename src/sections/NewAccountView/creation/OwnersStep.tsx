@@ -20,6 +20,7 @@ import { MonoTypography } from "@/sections/common/MonoTypography";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { StyledBox } from "@/sections/shared/BaseStepper/styled";
 import { truncateAddress } from "@/utils/formatString";
+import { isValidAddress } from "@/validations/blockchain";
 
 import { useCreateAccountContext } from "../CreateAccountContext";
 
@@ -110,6 +111,14 @@ export function OwnersStep() {
                 control={control}
                 rules={{
                   required: "Address is required.",
+                  validate: {
+                    validAddress: (value) => {
+                      const error = isValidAddress(value);
+                      if (error) return error;
+
+                      return true;
+                    },
+                  },
                 }}
                 render={({ field, fieldState }) => (
                   <TextField
