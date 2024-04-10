@@ -75,7 +75,7 @@ export const NetworkConnectionProvider: React.FC<
     error: errorConnecting,
   } = useConnect();
   const { disconnect } = useDisconnect();
-  const { data: chainData } = useChain();
+  const { chain: chainData } = useChain();
   const [chainInfo, setChainInfo] = useState<ChainInfo | undefined>();
   const [walletProviderConnected, setWalletProviderConnected] = useState<
     WalletProviderItem | undefined
