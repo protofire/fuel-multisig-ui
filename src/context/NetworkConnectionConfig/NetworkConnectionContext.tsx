@@ -81,6 +81,7 @@ export const NetworkConnectionProvider: React.FC<
     WalletProviderItem | undefined
   >();
 
+  console.log("__acccountConnected", account, "accounts", accounts);
   useEffect(() => {
     if (!chainData) return;
 
