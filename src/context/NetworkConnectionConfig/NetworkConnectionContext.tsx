@@ -75,7 +75,7 @@ export const NetworkConnectionProvider: React.FC<
     error: errorConnecting,
   } = useConnect();
   const { disconnect } = useDisconnect();
-  const { data: chainData } = useChain();
+  const { chain: chainData } = useChain();
   const [chainInfo, setChainInfo] = useState<ChainInfo | undefined>();
   const [walletProviderConnected, setWalletProviderConnected] = useState<
     WalletProviderItem | undefined
@@ -99,12 +99,10 @@ export const NetworkConnectionProvider: React.FC<
   }, [accounts, wallet]);
 
   useEffect(() => {
-    setWalletProviderConnected(undefined);
+    if (!isConnected) return;
 
-    if (isConnected) {
-      const connector = fuel.currentConnector();
-      connector && setWalletProviderConnected(toWalletProvider(connector));
-    }
+    const connector = fuel.currentConnector();
+    connector && setWalletProviderConnected(toWalletProvider(connector));
   }, [fuel, isConnected]);
 
   useEffect(() => {
@@ -131,6 +129,7 @@ export const NetworkConnectionProvider: React.FC<
 
   const disconnectWallet = async () => {
     if (!isConnected) return;
+    setWalletProviderConnected(undefined);
 
     disconnect();
   };
