@@ -13,7 +13,7 @@ type AssetTabsProps = {
   options: string[];
   children: React.ReactNode;
   onChange?: (newValue: number) => void;
-  rightComponent: React.ReactNode;
+  rightComponent?: React.ReactNode;
 };
 
 function CustomTabPanel(props: TabPanelProps) {

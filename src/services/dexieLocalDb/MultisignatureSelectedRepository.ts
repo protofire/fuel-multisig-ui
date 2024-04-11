@@ -14,7 +14,7 @@ export class MultisignatureSelectedRepository
     return getLocalStorageState(this.storageKey, null);
   }
 
-  saveAccount(account: MultisignatureAccount["address"]): void {
+  saveAccount(account: MultisignatureAccount["address"] | ""): void {
     setLocalStorageState(this.storageKey, account);
   }
 }

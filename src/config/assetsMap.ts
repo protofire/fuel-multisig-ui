@@ -1,7 +1,9 @@
 export interface AssetInfo {
   assetId: string;
-  assetSymbol?: string;
-  assetDecimals?: number;
+  name?: string;
+  symbol?: string;
+  imageUrl?: string;
+  decimals?: number;
 }
 
 export const BASE_ASSET_ID =
@@ -10,7 +12,7 @@ export const BASE_ASSET_ID =
 export const assetsMap: Record<string, AssetInfo> = {
   [BASE_ASSET_ID]: {
     assetId: BASE_ASSET_ID,
-    assetSymbol: "ETH",
-    assetDecimals: 9,
+    symbol: "ETH",
+    decimals: 9,
   },
 };

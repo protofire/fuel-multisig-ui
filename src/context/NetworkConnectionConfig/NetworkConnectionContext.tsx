@@ -21,8 +21,10 @@ import React, {
 } from "react";
 
 import { ChainInfo } from "@/domain/ChainInfo";
+import { WalletConnectionEvents } from "@/domain/events/WalletConnectionEvents";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
+import { useSaveMultisignatureSelected } from "@/hooks/multisignatureSelected/useSaveMultisignatureSelected";
 import {
   toAccountWalletItem,
   toWalletProvider,
@@ -80,6 +82,7 @@ export const NetworkConnectionProvider: React.FC<
   const [walletProviderConnected, setWalletProviderConnected] = useState<
     WalletProviderItem | undefined
   >();
+  const { save } = useSaveMultisignatureSelected();
 
   useEffect(() => {
     if (!chainData) return;
@@ -130,6 +133,8 @@ export const NetworkConnectionProvider: React.FC<
   const disconnectWallet = async () => {
     if (!isConnected) return;
     setWalletProviderConnected(undefined);
+    save("");
+    document.dispatchEvent(new CustomEvent(WalletConnectionEvents.disconnect));
 
     disconnect();
   };
