@@ -1,9 +1,13 @@
 import { isB256, isBech32 } from "fuels";
 
 export function isValidAddress(address: string): string | undefined {
-  if (!(isBech32(address) || isB256(address))) {
-    return "Invalid address format";
+  const error = "Invalid address format";
+
+  if (isBech32(address)) {
+    return;
+  } else if (isB256(address)) {
+    return;
   }
 
-  return undefined;
+  return error;
 }
