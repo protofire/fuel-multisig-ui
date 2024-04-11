@@ -21,6 +21,7 @@ import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackBut
 import { StyledBox } from "@/sections/shared/BaseStepper/styled";
 import { truncateAddress } from "@/utils/formatString";
 import { isValidAddress } from "@/validations/blockchain";
+import { isAddressDuplicated } from "@/validations/owners";
 
 import { useCreateAccountContext } from "../CreateAccountContext";
 
@@ -114,6 +115,16 @@ export function OwnersStep() {
                   validate: {
                     validAddress: (value) => {
                       const error = isValidAddress(value);
+                      if (error) return error;
+
+                      return true;
+                    },
+                    unique: (value) => {
+                      const error = isAddressDuplicated(
+                        value,
+                        index,
+                        watch("owners")
+                      );
                       if (error) return error;
 
                       return true;
