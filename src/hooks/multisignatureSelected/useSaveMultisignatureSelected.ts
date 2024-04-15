@@ -5,7 +5,7 @@ import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { customReportError } from "@/utils/error";
 
 export interface UseSaveMultisignatureSelectedReturn {
-  save: (multisigAccount: MultisignatureAccount) => void;
+  save: (multisigAccount: MultisignatureAccount | "") => void;
   isLoading: boolean;
   error: string | null;
 }
@@ -16,9 +16,13 @@ export function useSaveMultisignatureSelected(): UseSaveMultisignatureSelectedRe
   const { multisignatureSelectedRepository } = useLocalDbContext();
 
   const save = useCallback(
-    (multisigAccount: MultisignatureAccount): void => {
-      setIsLoading(true);
+    (multisigAccount: MultisignatureAccount | ""): void => {
+      if (multisigAccount === "") {
+        multisignatureSelectedRepository.saveAccount("");
+        return;
+      }
 
+      setIsLoading(true);
       try {
         multisignatureSelectedRepository.saveAccount(multisigAccount.address);
 

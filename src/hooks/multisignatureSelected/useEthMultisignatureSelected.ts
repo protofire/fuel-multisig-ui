@@ -9,7 +9,7 @@ export interface UseBalanceMultisignatureSelected {
   balance: string | undefined;
 }
 
-export function useBalanceMultisignatureSelected() {
+export function useEthMultisignatureSelected() {
   const [contractId, setContractId] = useState<string | undefined>();
   const [balance, setBalance] = useState<string | undefined>();
   const { multisignatureSelectedRepository } = useLocalDbContext();

@@ -1,6 +1,6 @@
 import { BN } from "fuels";
 
-import { AssetInfo } from "@/config/assetsMap";
+import { AssetInfo } from "@/domain/AssetInfo";
 
 interface Options {
   significantFigures?: number;
@@ -13,8 +13,7 @@ export const irregularToDecimal = (
   options: Options
 ): number | undefined => {
   const { assetInfo } = options;
-  const decimals =
-    assetInfo?.assetDecimals !== undefined ? assetInfo.assetDecimals : 0;
+  const decimals = assetInfo?.decimals !== undefined ? assetInfo.decimals : 0;
 
   if (!decimals || !amount) return;
   if (decimals === undefined || amount === undefined) return;
@@ -41,7 +40,7 @@ export const irregularToDecimalFormatted = (
       ? decimalAmount.toString()
       : decimalAmount.toFixed(options?.significantFigures).toString();
 
-  const symbol = assetInfo?.assetSymbol ? assetInfo.assetSymbol : "";
+  const symbol = assetInfo?.symbol ? assetInfo.symbol : "";
 
   return `${formattedVal} ${symbol}`;
 };
@@ -51,7 +50,7 @@ export const decimalToIrregular = (
   amount: number,
   options: Options | undefined
 ): bigint | undefined => {
-  const decimals = options?.assetInfo?.assetDecimals || 0;
+  const decimals = options?.assetInfo?.decimals || 0;
   if (!decimals) return;
 
   const convertedValue = BigInt(amount * 10 ** decimals);
