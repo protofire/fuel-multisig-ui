@@ -14,10 +14,10 @@ export type Column = {
   id: string;
   label: string;
   align?: "left" | "right" | "center";
-  render?: (value: string | number) => React.ReactNode;
+  render?: (value: string | number, row: Row) => React.ReactNode;
 };
 
-type Row = {
+export type Row = {
   [key: string]: string | number;
 };
 
@@ -86,7 +86,9 @@ export function GenericTable({ columns, rows, action }: GenericTableProps) {
                       key={column.id}
                       align={column.align || "left"}
                     >
-                      {column.render ? column.render(value) : String(value)}
+                      {column.render
+                        ? column.render(value, row)
+                        : String(value)}
                     </StyledTableCell>
                   );
                 }

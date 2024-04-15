@@ -1,6 +1,6 @@
 import { BN } from "fuels";
 
-import { AssetInfo } from "@/config/assetsMap";
+import { AssetInfo } from "@/domain/AssetInfo";
 
 interface Options {
   significantFigures?: number;
@@ -13,8 +13,7 @@ export const irregularToDecimal = (
   options: Options
 ): number | undefined => {
   const { assetInfo } = options;
-  const decimals =
-    assetInfo?.decimals !== undefined ? assetInfo.decimals : 0;
+  const decimals = assetInfo?.decimals !== undefined ? assetInfo.decimals : 0;
 
   if (!decimals || !amount) return;
   if (decimals === undefined || amount === undefined) return;
