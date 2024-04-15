@@ -1,30 +1,59 @@
-import { useAssets, useBalance } from "@fuel-wallet/react";
 import { CoinQuantity } from "fuels";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { assetByContractId } from "@/config/assetsMap";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
+import { AssetAmount } from "@/domain/ui/AssetAmount";
+import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
 
-import { useBalanceMultisignatureSelected } from "./useBalanceMultisignatureSelected";
 import { useMultisignatureAccountSelected } from "./useMultisignatureAccountSelected";
 
-export function useAssetsBalance() {
-  const { accountConnected, isLoading, wallet } = useNetworkConnection();
-  const { assets } = useAssets();
-  console.log("__assets", assets);
-  const { balance: ethBalance, isFetching: isFetchingEth } =
-    useBalanceMultisignatureSelected();
-  const { balance } = useBalance({ address: accountConnected });
+interface UseAssetsBalanceReturn {
+  balances: AssetAmount[] | undefined;
+  isLoading: boolean;
+}
+
+export function useAssetsBalance(): UseAssetsBalanceReturn {
+  const [isLoading, setIsLoading] = useState(false);
+  const { wallet } = useNetworkConnection();
   const { multisigSelected } = useMultisignatureAccountSelected();
-  const [balances, setBalances] = useState<CoinQuantity[]>();
+  const [balances, setBalances] = useState<AssetAmount[]>();
+
+  const _setCoinsBalances = useCallback(
+    (coinsBalance: CoinQuantity[] | undefined) => {
+      if (!coinsBalance?.length) return;
+
+      const _balances = coinsBalance.map((coinQuantity): AssetAmount => {
+        const assetInfo = assetByContractId(coinQuantity.assetId);
+
+        const formatted = irregularToDecimalFormatted(coinQuantity.amount, {
+          significantFigures: 4,
+          assetInfo,
+        });
+
+        return {
+          ...assetInfo,
+          amountFormatted: formatted || "-",
+          amount: coinQuantity.amount,
+        };
+      }, []);
+
+      setBalances(_balances);
+    },
+    []
+  );
 
   useEffect(() => {
     if (!multisigSelected?.address) return;
 
-    const getBalances = async () =>
-      await wallet?.provider.getBalances(multisigSelected?.address);
+    setIsLoading(true);
+    const _getBalances = async () =>
+      await wallet?.provider.getBalances(multisigSelected.address);
 
-    getBalances().then((balances) => setBalances(balances));
-  }, [multisigSelected?.address, wallet?.provider]);
+    _getBalances()
+      .then(_setCoinsBalances)
+      .finally(() => setIsLoading(false));
+  }, [_setCoinsBalances, multisigSelected?.address, wallet?.provider]);
 
-  return { balance, balances };
+  return { balances, isLoading };
 }

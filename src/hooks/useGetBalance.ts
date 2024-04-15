@@ -2,8 +2,9 @@ import { useBalance } from "@fuel-wallet/react";
 import { BN } from "fuels";
 import { useEffect, useMemo, useState } from "react";
 
-import { AssetInfo, assetsMap, BASE_ASSET_ID } from "@/config/assetsMap";
+import { assetsMap, BASE_ASSET_ID } from "@/config/assetsMap";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
+import { AssetInfo } from "@/domain/AssetInfo";
 import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
 
 interface UseGetBalanceReturn {

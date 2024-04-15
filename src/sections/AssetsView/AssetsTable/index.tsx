@@ -1,5 +1,5 @@
 "use client";
-import { Box } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import { useState } from "react";
 
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
@@ -18,10 +18,7 @@ const columns: Column[] = [
 
 export const AssetsTable: React.FC = () => {
   const [assetType, setAssetType] = useState<AssetsType>("token");
-  const { balance, balances } = useAssetsBalance();
-
-  console.log("__NativeBalance", balance);
-  console.log("__balances", balances);
+  const { balances, isLoading } = useAssetsBalance();
 
   const handleChange = (newValue: number) => {
     setAssetType(assetsTypeKeys[newValue]);
@@ -30,13 +27,19 @@ export const AssetsTable: React.FC = () => {
   return (
     <Box sx={{ width: "100%" }}>
       <AssetTabs options={Object.values(assetsTypeMap)} onChange={handleChange}>
-        <GenericTable
-          columns={columns}
-          rows={[]}
-          action={function (row: { [key: string]: string | number }): void {
-            throw new Error("Function not implemented.");
-          }}
-        />
+        {isLoading ? (
+          <GenericTable
+            columns={columns}
+            rows={[]}
+            action={function (row: { [key: string]: string | number }): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
+        ) : (
+          <Box mt={2}>
+            <Skeleton variant="rounded" />
+          </Box>
+        )}
       </AssetTabs>
     </Box>
   );
