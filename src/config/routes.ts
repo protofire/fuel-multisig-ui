@@ -2,7 +2,7 @@ export const ROUTES = {
   Welcome: "/welcome",
   App: "/app",
   New: "/new",
-  Assets: "/assets",
+  Assets: "/app/assets",
   Transactions: "/transactions",
   Settings: "/settings",
 } as const;

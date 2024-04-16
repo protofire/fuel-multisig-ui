@@ -15,7 +15,6 @@ export const irregularToDecimal = (
   const { assetInfo } = options;
   const decimals = assetInfo?.decimals !== undefined ? assetInfo.decimals : 0;
 
-  if (!decimals || !amount) return;
   if (decimals === undefined || amount === undefined) return;
 
   const base = new BN(10).pow(new BN(decimals));
@@ -33,7 +32,10 @@ export const irregularToDecimalFormatted = (
 ): string | undefined => {
   const { assetInfo } = options;
   const decimalAmount = irregularToDecimal(amount, options);
-  if (decimalAmount === undefined) return;
+
+  if (decimalAmount === undefined) {
+    return;
+  }
 
   const formattedVal =
     options?.significantFigures === undefined
