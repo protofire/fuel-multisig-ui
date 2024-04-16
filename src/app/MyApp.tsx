@@ -1,6 +1,7 @@
 "use client";
 import { CacheProvider } from "@emotion/react";
 
+import { BreadcrumbProvider } from "@/context/BreadcrumbContext";
 import { InteractionErrorProvider } from "@/context/InteractionErrorContext";
 import { LocalDbProvider } from "@/context/LocalDbContext";
 import { NetworkConnectionConfig } from "@/context/NetworkConnectionConfig";
@@ -24,7 +25,7 @@ export default function MyApp({ children }: { children: React.ReactNode }) {
               {({ settings }) => (
                 <SettingsThemeProvider>
                   <ThemeCustomization settings={settings}>
-                    {children}
+                    <BreadcrumbProvider>{children}</BreadcrumbProvider>
                   </ThemeCustomization>
                 </SettingsThemeProvider>
               )}

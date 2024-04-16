@@ -14,8 +14,8 @@ import {
 import { styled } from "@mui/material/styles";
 import NextLink from "next/link";
 
-// import { usePathname } from "next/navigation";
-// import { ROUTES } from "@/config/routes";
+import { ROUTES } from "@/config/routes";
+
 import { MENU_ITEMS, NavLink } from "./NavLink";
 
 export const MenuItemStyled = styled(MuiMenuItem)<ButtonProps>(({ theme }) => ({
@@ -57,12 +57,12 @@ const NavItem = (props: NavLink & { currentPath: string }) => {
 };
 
 const Navigation = ({ currentPath }: { currentPath: string }) => {
-  /*  const router = usePathname(); */
   return (
     <Stack direction="column" spacing={2}>
       <Box display="flex" m={0.5}>
         <Button
-          /* onClick={() => router.redirect(ROUTES.New)} */
+          href={ROUTES.NewTx}
+          LinkComponent={NextLink}
           color="primary"
           variant="contained"
           sx={{ width: "100%", margin: "0.2rem 0.8rem" }}
