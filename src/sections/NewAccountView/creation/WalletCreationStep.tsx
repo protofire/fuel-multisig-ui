@@ -1,3 +1,4 @@
+import { useConnectUI } from "@fuels/react";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
   Box,
@@ -42,6 +43,7 @@ export function MultisigCreationStep() {
     useDeployMultisigContract();
   const { deployedMultisigAddress, walletName } = getValues();
   const { setDeployedMultisig } = useDraftMultisigDeployed();
+  const { connect } = useConnectUI();
 
   useEffect(() => {
     if (!accountConnected || !accountWalletItem?.address.hex) return;
