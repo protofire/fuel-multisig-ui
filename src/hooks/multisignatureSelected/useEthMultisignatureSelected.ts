@@ -13,7 +13,12 @@ export function useEthMultisignatureSelected() {
   const [contractId, setContractId] = useState<string | undefined>();
   const [balance, setBalance] = useState<string | undefined>();
   const { multisignatureSelectedRepository } = useLocalDbContext();
-  const { balance: _balance, isFetching } = useBalance({ address: contractId });
+  const {
+    balance: _balance,
+    isFetching,
+    isLoading,
+  } = useBalance({ address: contractId });
+  const _isLoading = isFetching || isLoading;
 
   useEffect(() => {
     const accountSelected = multisignatureSelectedRepository.getAccount();
@@ -31,5 +36,5 @@ export function useEthMultisignatureSelected() {
     setBalance(_formatted);
   }, [_balance]);
 
-  return { balance, isFetching };
+  return { balance, isFetching: _isLoading };
 }

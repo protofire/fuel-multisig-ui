@@ -2,6 +2,7 @@
 
 import { Grid } from "@mui/material";
 
+import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
 import { useEthMultisignatureSelected } from "@/hooks/multisignatureSelected/useEthMultisignatureSelected";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import { SummaryCard } from "@/sections/common/SummaryCard";
@@ -9,6 +10,7 @@ import { SummaryCard } from "@/sections/common/SummaryCard";
 export function SummaryCardsView() {
   const { balance, isFetching } = useEthMultisignatureSelected();
   const { multisigSelected } = useMultisignatureAccountSelected();
+  const { balances } = useAssetsBalance();
 
   return (
     <>
@@ -23,7 +25,7 @@ export function SummaryCardsView() {
       <Grid item xs={12} sm={6} md={3}>
         <SummaryCard
           captionTitle="Tracked Tokens"
-          caption="-"
+          caption={balances?.length.toString() || "0"}
           widthSkeleton="60%"
         />
       </Grid>

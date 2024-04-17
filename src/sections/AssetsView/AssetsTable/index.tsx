@@ -2,8 +2,10 @@
 import { Box, Skeleton, Stack } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { ROUTES } from "@/config/routes";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
 import { Column, GenericTable, Row } from "@/sections/common/GenericTable";
 
@@ -43,14 +45,11 @@ const columns: Column[] = [
 export const AssetsTable: React.FC = () => {
   const [assetType, setAssetType] = useState<AssetsType>("token");
   const { balances, isLoading } = useAssetsBalance();
+  const router = useRouter();
 
   const handleChange = (newValue: number) => {
     setAssetType(assetsTypeKeys[newValue]);
   };
-
-  // useCallback(() => {
-
-  // }, [balances])
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -63,8 +62,10 @@ export const AssetsTable: React.FC = () => {
           <GenericTable
             columns={columns}
             rows={balances as unknown as Row[]}
-            action={function (row: { [key: string]: string | number }): void {
-              alert("This function is WIP 🚧");
+            action={() => {
+              if (assetType === "token") {
+                router.push(ROUTES.TransferAsset);
+              }
             }}
           />
         )}

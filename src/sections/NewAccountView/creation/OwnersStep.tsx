@@ -20,7 +20,7 @@ import { MonoTypography } from "@/sections/common/MonoTypography";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { StyledBox } from "@/sections/shared/BaseStepper/styled";
 import { truncateAddress } from "@/utils/formatString";
-import { isValidAddress } from "@/validations/blockchain";
+import { validateAddress } from "@/validations/blockchain";
 import { isAddressDuplicated } from "@/validations/owners";
 
 import { useCreateAccountContext } from "../CreateAccountContext";
@@ -114,7 +114,7 @@ export function OwnersStep() {
                   required: "Address is required.",
                   validate: {
                     validAddress: (value) => {
-                      const error = isValidAddress(value);
+                      const error = validateAddress(value);
                       if (error) return error;
 
                       return true;

@@ -1,7 +1,7 @@
 import { Owner } from "@/domain/MultisignatureAccount";
 import { toB256 } from "@/services/fuel/transformers/address";
 
-import { isValidAddress } from "./blockchain";
+import { validateAddress } from "./blockchain";
 
 export const validateOwners = (owner: Owner[]): string | void => {
   let error = "";
@@ -11,7 +11,7 @@ export const validateOwners = (owner: Owner[]): string | void => {
     error = "address should be provided complete";
   } else if (!_owner.name && _owner.address) {
     error = "name should be provided complete";
-  } else if (isValidAddress(_owner.address)) {
+  } else if (validateAddress(_owner.address)) {
     error = "address should be valid";
   }
 

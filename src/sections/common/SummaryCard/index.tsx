@@ -21,18 +21,17 @@ export const SummaryCard = ({
   widthSkeleton,
   styles,
 }: SummaryCardProps) => {
-  const _captionComponent = isLoading ? (
-    <Skeleton
-      animation="wave"
-      variant="rectangular"
-      width={120}
-      height={12}
-      // count={2}
-      // width={widthSkeleton}
-    />
-  ) : (
-    captionComponent
-  );
+  const _captionComponent =
+    isLoading || (caption === undefined && !captionComponent) ? (
+      <Skeleton
+        animation="wave"
+        variant="rectangular"
+        width={120}
+        height={"2rem"}
+      />
+    ) : (
+      captionComponent
+    );
 
   return (
     <SummaryCardStyled border={false} sx={styles}>
