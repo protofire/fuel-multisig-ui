@@ -1,7 +1,9 @@
-import { Box, TextField } from "@mui/material";
+import { Box } from "@mui/material";
 import { Controller } from "react-hook-form";
 
-import { isValidAddress } from "@/validations/blockchain";
+import { InputAddress } from "@/sections/common/muiExtended/InputAddress";
+import { InputAmountWithMax } from "@/sections/common/muiExtended/InputAmountWithMax";
+import { validateAddress } from "@/validations/blockchain";
 
 import { useTransferAssetContext } from "../TransferAssetContext";
 
@@ -15,7 +17,7 @@ export function FormTransferAsset() {
   } = inputFormManager;
 
   return (
-    <Box>
+    <Box display="block" alignItems="center" flexDirection="column" gap={1}>
       <Controller
         name="recipientAddress"
         control={control}
@@ -23,7 +25,7 @@ export function FormTransferAsset() {
           required: "Recipient address is required",
           validate: {
             validAddress: (value) => {
-              const error = isValidAddress(value);
+              const error = validateAddress(value);
               if (error) return error;
 
               return true;
@@ -31,10 +33,10 @@ export function FormTransferAsset() {
           },
         }}
         render={({ field }) => {
-          console.log("__field", field);
           return (
-            <TextField
+            <InputAddress
               {...field}
+              variant="outlined"
               label={"Recipient Address *"}
               autoFocus
               fullWidth
@@ -46,25 +48,18 @@ export function FormTransferAsset() {
         }}
       />
 
-      <TextField
-        label={"Recipient Address *"}
-        // value={to}
-        // onChange={(e) => {
-        //   isInputDirty.current.address = true;
-        //   setField("to", e.target.value);
-        // }}
-        autoFocus
-        fullWidth
-        margin="normal"
-        // error={!!errors[0] && errors[0] !== initialErrorValue}
-        // helperText={errors[0] !== initialErrorValue && errors[0]}
-        // InputProps={{
-        //   startAdornment: (
-        //     <Avatar>
-        //       <Identicon value={to} size={32} theme="polkadot" />
-        //     </Avatar>
-        //   ),
-      />
+      <Box display="flex" alignItems="center" gap={4}>
+        <InputAmountWithMax
+          label="Amount *"
+          variant="outlined"
+          // value={inputValue}
+          // maxValue={maxAmount || ""}
+          // defaultValue="0"
+          // onValueChange={handleValueChange}
+          // error={!!errors[1] && errors[1] !== initialErrorValue}
+          // helperText={errors[1] !== initialErrorValue && errors[1]}
+        />
+      </Box>
     </Box>
   );
 }

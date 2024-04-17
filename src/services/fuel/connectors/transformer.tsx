@@ -3,13 +3,15 @@ import { FuelConnector, isBech32, toB256 } from "fuels";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 
+export function getHexFromAddress(address: string) {
+  return isBech32(address) ? toB256(address as `fuel${string}`) : address;
+}
+
 export function toAccountWalletItem(
   defaultAddress: string,
   name?: string
 ): AccountWalletItem {
-  const hex = isBech32(defaultAddress)
-    ? toB256(defaultAddress as `fuel${string}`)
-    : defaultAddress;
+  const hex = getHexFromAddress(defaultAddress);
 
   return {
     address: { formatted: defaultAddress, hex },

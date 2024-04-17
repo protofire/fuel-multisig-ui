@@ -73,7 +73,10 @@ export function BaseStepper({
           </Stepper>
         </Box>
       )}
-      <Box sx={{ background: theme.palette.grey.A100 }} width={2 / 3}>
+      <Box
+        sx={{ borderColor: "red", background: theme.palette.grey.A100 }}
+        width={displayStepLabel ? 2 / 3 : "100%"}
+      >
         <Box p={5} mr={8}>
           {steps[activeStep]?.label && (
             <Typography variant="h4">{steps[activeStep].label}</Typography>
