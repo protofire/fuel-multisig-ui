@@ -1,19 +1,31 @@
 "use client";
-import { FuelProvider } from "@fuel-wallet/react";
+import {
+  FueletWalletConnector,
+  FuelWalletConnector,
+  FuelWalletDevelopmentConnector,
+} from "@fuels/connectors";
+import { FuelProvider } from "@fuels/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
-
-import { IS_DEVELOPMENT } from "@/config/environment";
 
 import { NetworkConnectionProvider } from "./NetworkConnectionContext";
 
+const queryClient = new QueryClient();
+
 export function NetworkConnectionConfig({ children }: PropsWithChildren) {
   return (
-    <FuelProvider
-      fuelConfig={{
-        devMode: IS_DEVELOPMENT,
-      }}
-    >
-      <NetworkConnectionProvider>{children}</NetworkConnectionProvider>
-    </FuelProvider>
+    <QueryClientProvider client={queryClient}>
+      <FuelProvider
+        fuelConfig={{
+          connectors: [
+            new FuelWalletConnector(),
+            new FuelWalletDevelopmentConnector(),
+            new FueletWalletConnector(),
+          ],
+        }}
+      >
+        <NetworkConnectionProvider>{children}</NetworkConnectionProvider>
+      </FuelProvider>
+    </QueryClientProvider>
   );
 }

@@ -9,8 +9,8 @@ import {
   useFuel,
   useIsConnected,
   useWallet,
-} from "@fuel-wallet/react";
-import { FuelConnector, FuelWalletLocked } from "@fuel-wallet/sdk";
+} from "@fuels/react";
+import { Account, FuelConnector } from "fuels";
 import React, {
   createContext,
   ReactNode,
@@ -35,7 +35,7 @@ type NetworkConnectionError =
   | "WALLET_NOT_DETECTED"
   | "ACCOUNTS_NOT_FOUND";
 
-export type WalletType = FuelWalletLocked;
+export type WalletType = Account;
 
 export interface NetworkConnectionContextType {
   isLoading: boolean;
@@ -71,11 +71,7 @@ export const NetworkConnectionProvider: React.FC<
   const { account } = useAccount();
   const { accounts } = useAccounts();
   const { fuel } = useFuel();
-  const {
-    connect,
-    isLoading: isConnecting,
-    error: errorConnecting,
-  } = useConnect();
+  const { connect, error: errorConnecting, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const { chain: chainData } = useChain();
   const [chainInfo, setChainInfo] = useState<ChainInfo | undefined>();
@@ -147,7 +143,7 @@ export const NetworkConnectionProvider: React.FC<
         wallet,
         accounts: _accounts,
         accountConnected: account || undefined,
-        isLoading: isLoadingWallet || isConnecting,
+        isLoading: isLoadingWallet || isPending,
         error,
         chainInfo,
         connectWallet,

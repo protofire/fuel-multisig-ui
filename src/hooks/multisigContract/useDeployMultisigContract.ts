@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
-import { FuelMultisigAbi__factory } from "@/services/contracts/multisig";
+import { FuelMultisigAbi__factory } from "@/services/contracts/multisig/contracts/factories/FuelMultisigAbi__factory";
 import bytecode from "@/services/contracts/multisig/contracts/FuelMultisigAbi.hex";
 import { getErrorMessage } from "@/utils/error";
 
@@ -27,11 +27,14 @@ export function useDeployMultisigContract(): UseDeployMultisigContractReturn {
 
     setLoading(true);
     try {
+      const gasPrice = wallet.provider.getGasConfig().minGasPrice;
+      const gasMax = wallet.provider.getGasConfig().maxGasPerTx;
       const factory = await FuelMultisigAbi__factory.deployContract(
         bytecode,
         wallet,
         {
-          gasPrice: wallet.provider.getGasConfig().minGasPrice,
+          gasPrice,
+          maxFee: gasMax,
         }
       );
 

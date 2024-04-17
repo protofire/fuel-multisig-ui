@@ -1,4 +1,4 @@
-import { useBalance } from "@fuel-wallet/react";
+import { useBalance } from "@fuels/react";
 import { BN } from "fuels";
 import { useEffect, useMemo, useState } from "react";
 

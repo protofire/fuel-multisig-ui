@@ -1,4 +1,4 @@
-import { useBalance } from "@fuel-wallet/react";
+import { useBalance } from "@fuels/react";
 import { useEffect, useState } from "react";
 
 import { assetsMap, BASE_ASSET_ID } from "@/config/assetsMap";
