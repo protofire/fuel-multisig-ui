@@ -1,4 +1,5 @@
 import { Avatar, TextField, TextFieldProps } from "@mui/material";
+import React from "react";
 
 import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
 import { getHexFromAddress } from "@/services/fuel/connectors/transformer";
@@ -20,13 +21,16 @@ function AddressAvatar({ value }: Pick<Props, "value">) {
   );
 }
 
-export function InputAddress({ value, ...rest }: Props) {
-  return (
-    <TextField
-      {...rest}
-      InputProps={{
-        startAdornment: <AddressAvatar value={value} />,
-      }}
-    />
-  );
-}
+export const InputAddress = React.forwardRef<HTMLDivElement, Props>(
+  function RefInputAddres({ value, ...rest }, ref) {
+    return (
+      <TextField
+        ref={ref}
+        {...rest}
+        InputProps={{
+          startAdornment: <AddressAvatar value={value} />,
+        }}
+      />
+    );
+  }
+);

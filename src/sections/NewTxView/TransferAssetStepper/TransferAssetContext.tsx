@@ -5,6 +5,8 @@ import { ManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 
 export interface TransferAssetForm {
   recipientAddress: string;
+  amount: string;
+  assetId: string;
 }
 
 export interface TransferStepperState {

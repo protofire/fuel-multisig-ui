@@ -14,7 +14,7 @@ interface UseAssetsBalanceReturn {
 }
 
 export function useAssetsBalance(): UseAssetsBalanceReturn {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { wallet } = useNetworkConnection();
   const { multisigSelected } = useMultisignatureAccountSelected();
   const [balances, setBalances] = useState<AssetAmount[]>();

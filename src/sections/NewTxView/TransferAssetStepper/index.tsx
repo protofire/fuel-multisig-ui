@@ -18,6 +18,8 @@ export function TransferAssetStepper() {
     mode: "onBlur",
     defaultValues: {
       recipientAddress: "",
+      amount: "",
+      assetId: "",
     },
   });
 
