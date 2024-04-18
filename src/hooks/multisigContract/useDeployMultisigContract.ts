@@ -33,10 +33,9 @@ export function useDeployMultisigContract(): UseDeployMultisigContractReturn {
     try {
       const gasPrice = wallet.provider.getGasConfig().minGasPrice;
       const gasMax = wallet.provider.getGasConfig().maxGasPerTx;
-      const hex = Uint8Array.from(Buffer.from(bytecode.slice(2), "hex"));
 
       const factory = await FuelMultisigAbi__factory.deployContract(
-        hex,
+        bytecode,
         wallet,
         {
           gasPrice,

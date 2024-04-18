@@ -1,5 +1,4 @@
 "use client";
-import { useConnectUI } from "@fuels/react";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -18,7 +17,6 @@ export function WelcomeCard() {
   const theme = useTheme();
   const { multisigs, isLoading: isLoadingMultisigs } =
     useByOwnerSignersAccount();
-  const { connect } = useConnectUI();
 
   return (
     <>
@@ -111,7 +109,6 @@ export function WelcomeCard() {
       ) : (
         <MultisignatureAccountsTable multisigs={multisigs} />
       )}
-      <Button onClick={() => connect()}>NewConnect</Button>
     </>
   );
 }
