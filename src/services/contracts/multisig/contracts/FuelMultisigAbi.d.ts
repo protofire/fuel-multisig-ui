@@ -4,7 +4,7 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.79.0
+  Fuels version: 0.81.0
   Forc version: 0.49.3
   Fuel-Core version: 0.22.1
 */
@@ -44,14 +44,24 @@ export type InternalContractCallParamsInput = { forwarded_gas: BigNumberish, sin
 export type InternalContractCallParamsOutput = { forwarded_gas: BN, single_value_type_arg: boolean, transfer_params: TransferParamsOutput };
 export type MultisigInitializedInput = { contract_id: ContractIdInput, threshold: BigNumberish, owners: Vec<IdentityInput> };
 export type MultisigInitializedOutput = { contract_id: ContractIdOutput, threshold: number, owners: Vec<IdentityOutput> };
+export type OwnerAddedInput = { owner: IdentityInput };
+export type OwnerAddedOutput = { owner: IdentityOutput };
 export type RawBytesInput = { ptr: BigNumberish, cap: BigNumberish };
 export type RawBytesOutput = { ptr: BN, cap: BN };
 export type TransactionInput = { tx_id: BigNumberish, to: IdentityInput, valid_until: BigNumberish, tx_parameters: InternalTransactionParametersInput };
 export type TransactionOutput = { tx_id: BN, to: IdentityOutput, valid_until: BN, tx_parameters: InternalTransactionParametersOutput };
 export type TransactionApprovedInput = { tx_id: BigNumberish, owner: IdentityInput };
 export type TransactionApprovedOutput = { tx_id: BN, owner: IdentityOutput };
+export type TransactionCancelledInput = { tx_id: BigNumberish };
+export type TransactionCancelledOutput = { tx_id: BN };
+export type TransactionExecutedInput = { tx_id: BigNumberish };
+export type TransactionExecutedOutput = { tx_id: BN };
 export type TransactionProposedInput = { tx_id: BigNumberish, to: IdentityInput, transaction_parameters: TransactionParametersInput };
 export type TransactionProposedOutput = { tx_id: BN, to: IdentityOutput, transaction_parameters: TransactionParametersOutput };
+export type TransactionRejectedInput = { tx_id: BigNumberish, owner: IdentityInput };
+export type TransactionRejectedOutput = { tx_id: BN, owner: IdentityOutput };
+export type TransactionRemovedInput = { tx_id: BigNumberish };
+export type TransactionRemovedOutput = { tx_id: BN };
 export type TransferParamsInput = { asset_id: AssetIdInput, value: Option<BigNumberish> };
 export type TransferParamsOutput = { asset_id: AssetIdOutput, value: Option<BN> };
 
