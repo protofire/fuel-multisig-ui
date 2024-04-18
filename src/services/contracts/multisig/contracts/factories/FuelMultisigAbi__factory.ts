@@ -39,12 +39,12 @@ const _abi = {
       "components": [
         {
           "name": "Address",
-          "type": 11,
+          "type": 10,
           "typeArguments": null
         },
         {
           "name": "ContractId",
-          "type": 15,
+          "type": 14,
           "typeArguments": null
         }
       ],
@@ -56,12 +56,12 @@ const _abi = {
       "components": [
         {
           "name": "Call",
-          "type": 16,
+          "type": 15,
           "typeArguments": null
         },
         {
           "name": "Transfer",
-          "type": 25,
+          "type": 22,
           "typeArguments": null
         }
       ],
@@ -194,12 +194,12 @@ const _abi = {
       "components": [
         {
           "name": "Call",
-          "type": 14,
+          "type": 13,
           "typeArguments": null
         },
         {
           "name": "Transfer",
-          "type": 25,
+          "type": 22,
           "typeArguments": null
         }
       ],
@@ -219,12 +219,6 @@ const _abi = {
     },
     {
       "typeId": 10,
-      "type": "str",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 11,
       "type": "struct Address",
       "components": [
         {
@@ -236,7 +230,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 12,
+      "typeId": 11,
       "type": "struct AssetId",
       "components": [
         {
@@ -248,39 +242,39 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 13,
+      "typeId": 12,
       "type": "struct Bytes",
       "components": [
         {
           "name": "buf",
-          "type": 18,
+          "type": 17,
           "typeArguments": null
         },
         {
           "name": "len",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 14,
+      "typeId": 13,
       "type": "struct ContractCallParams",
       "components": [
         {
           "name": "calldata",
-          "type": 13,
+          "type": 12,
           "typeArguments": null
         },
         {
           "name": "forwarded_gas",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         },
         {
           "name": "function_selector",
-          "type": 13,
+          "type": 12,
           "typeArguments": null
         },
         {
@@ -290,14 +284,14 @@ const _abi = {
         },
         {
           "name": "transfer_params",
-          "type": 25,
+          "type": 22,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 15,
+      "typeId": 14,
       "type": "struct ContractId",
       "components": [
         {
@@ -309,12 +303,12 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 16,
+      "typeId": 15,
       "type": "struct InternalContractCallParams",
       "components": [
         {
           "name": "forwarded_gas",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         },
         {
@@ -324,29 +318,29 @@ const _abi = {
         },
         {
           "name": "transfer_params",
-          "type": 25,
+          "type": 22,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 17,
+      "typeId": 16,
       "type": "struct MultisigInitialized",
       "components": [
         {
           "name": "contract_id",
-          "type": 15,
+          "type": 14,
           "typeArguments": null
         },
         {
           "name": "threshold",
-          "type": 29,
+          "type": 26,
           "typeArguments": null
         },
         {
           "name": "owners",
-          "type": 26,
+          "type": 23,
           "typeArguments": [
             {
               "name": "",
@@ -359,7 +353,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 18,
+      "typeId": 17,
       "type": "struct RawBytes",
       "components": [
         {
@@ -369,14 +363,14 @@ const _abi = {
         },
         {
           "name": "cap",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 19,
+      "typeId": 18,
       "type": "struct RawVec",
       "components": [
         {
@@ -386,7 +380,7 @@ const _abi = {
         },
         {
           "name": "cap",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         }
       ],
@@ -395,12 +389,12 @@ const _abi = {
       ]
     },
     {
-      "typeId": 20,
+      "typeId": 19,
       "type": "struct Transaction",
       "components": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         },
         {
@@ -410,7 +404,7 @@ const _abi = {
         },
         {
           "name": "valid_until",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         },
         {
@@ -422,12 +416,12 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 21,
+      "typeId": 20,
       "type": "struct TransactionApproved",
       "components": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         },
         {
@@ -439,24 +433,12 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 22,
-      "type": "struct TransactionExecuted",
-      "components": [
-        {
-          "name": "tx_id",
-          "type": 27,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 23,
+      "typeId": 21,
       "type": "struct TransactionProposed",
       "components": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         },
         {
@@ -473,24 +455,12 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 24,
-      "type": "struct TransactionRemoved",
-      "components": [
-        {
-          "name": "tx_id",
-          "type": 27,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 25,
+      "typeId": 22,
       "type": "struct TransferParams",
       "components": [
         {
           "name": "asset_id",
-          "type": 12,
+          "type": 11,
           "typeArguments": null
         },
         {
@@ -499,7 +469,7 @@ const _abi = {
           "typeArguments": [
             {
               "name": "",
-              "type": 28,
+              "type": 25,
               "typeArguments": null
             }
           ]
@@ -508,12 +478,12 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 26,
+      "typeId": 23,
       "type": "struct Vec",
       "components": [
         {
           "name": "buf",
-          "type": 19,
+          "type": 18,
           "typeArguments": [
             {
               "name": "",
@@ -524,7 +494,7 @@ const _abi = {
         },
         {
           "name": "len",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         }
       ],
@@ -533,19 +503,19 @@ const _abi = {
       ]
     },
     {
-      "typeId": 27,
+      "typeId": 24,
       "type": "u256",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 28,
+      "typeId": 25,
       "type": "u64",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 29,
+      "typeId": 26,
       "type": "u8",
       "components": null,
       "typeParameters": null
@@ -580,7 +550,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -604,7 +574,7 @@ const _abi = {
       "inputs": [
         {
           "name": "threshold",
-          "type": 29,
+          "type": 26,
           "typeArguments": null
         }
       ],
@@ -628,12 +598,12 @@ const _abi = {
       "inputs": [
         {
           "name": "threshold",
-          "type": 29,
+          "type": 26,
           "typeArguments": null
         },
         {
           "name": "owners_list",
-          "type": 26,
+          "type": 23,
           "typeArguments": [
             {
               "name": "",
@@ -663,7 +633,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -692,7 +662,7 @@ const _abi = {
         },
         {
           "name": "tx_validity_duration",
-          "type": 28,
+          "type": 25,
           "typeArguments": null
         },
         {
@@ -704,7 +674,7 @@ const _abi = {
       "name": "propose_tx",
       "output": {
         "name": "",
-        "type": 27,
+        "type": 24,
         "typeArguments": null
       },
       "attributes": [
@@ -721,7 +691,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -769,7 +739,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -794,11 +764,11 @@ const _abi = {
       "name": "get_active_tx_ids",
       "output": {
         "name": "",
-        "type": 26,
+        "type": 23,
         "typeArguments": [
           {
             "name": "",
-            "type": 27,
+            "type": 24,
             "typeArguments": null
           }
         ]
@@ -817,7 +787,7 @@ const _abi = {
       "name": "get_next_tx_id",
       "output": {
         "name": "",
-        "type": 27,
+        "type": 24,
         "typeArguments": null
       },
       "attributes": [
@@ -834,7 +804,7 @@ const _abi = {
       "name": "get_owners",
       "output": {
         "name": "",
-        "type": 26,
+        "type": 23,
         "typeArguments": [
           {
             "name": "",
@@ -857,7 +827,7 @@ const _abi = {
       "name": "get_threshold",
       "output": {
         "name": "",
-        "type": 29,
+        "type": 26,
         "typeArguments": null
       },
       "attributes": [
@@ -873,7 +843,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -884,7 +854,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 20,
+            "type": 19,
             "typeArguments": null
           }
         ]
@@ -902,7 +872,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         },
         {
@@ -936,7 +906,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -947,7 +917,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 29,
+            "type": 26,
             "typeArguments": null
           }
         ]
@@ -965,7 +935,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -976,7 +946,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 13,
+            "type": 12,
             "typeArguments": null
           }
         ]
@@ -994,7 +964,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -1005,7 +975,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 13,
+            "type": 12,
             "typeArguments": null
           }
         ]
@@ -1023,7 +993,7 @@ const _abi = {
       "inputs": [
         {
           "name": "tx_id",
-          "type": 27,
+          "type": 24,
           "typeArguments": null
         }
       ],
@@ -1034,7 +1004,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 29,
+            "type": 26,
             "typeArguments": null
           }
         ]
@@ -1117,7 +1087,7 @@ const _abi = {
       "logId": 5,
       "loggedType": {
         "name": "",
-        "type": 21,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1173,7 +1143,7 @@ const _abi = {
       "logId": 12,
       "loggedType": {
         "name": "",
-        "type": 17,
+        "type": 16,
         "typeArguments": []
       }
     },
@@ -1197,87 +1167,7 @@ const _abi = {
       "logId": 15,
       "loggedType": {
         "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 16,
-      "loggedType": {
-        "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 17,
-      "loggedType": {
-        "name": "",
-        "type": 24,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 18,
-      "loggedType": {
-        "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 19,
-      "loggedType": {
-        "name": "",
-        "type": 10,
-        "typeArguments": null
-      }
-    },
-    {
-      "logId": 20,
-      "loggedType": {
-        "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 21,
-      "loggedType": {
-        "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 22,
-      "loggedType": {
-        "name": "",
-        "type": 22,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 23,
-      "loggedType": {
-        "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 24,
-      "loggedType": {
-        "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 25,
-      "loggedType": {
-        "name": "",
-        "type": 23,
+        "type": 21,
         "typeArguments": []
       }
     }

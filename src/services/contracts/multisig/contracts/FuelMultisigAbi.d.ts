@@ -50,12 +50,8 @@ export type TransactionInput = { tx_id: BigNumberish, to: IdentityInput, valid_u
 export type TransactionOutput = { tx_id: BN, to: IdentityOutput, valid_until: BN, tx_parameters: InternalTransactionParametersOutput };
 export type TransactionApprovedInput = { tx_id: BigNumberish, owner: IdentityInput };
 export type TransactionApprovedOutput = { tx_id: BN, owner: IdentityOutput };
-export type TransactionExecutedInput = { tx_id: BigNumberish };
-export type TransactionExecutedOutput = { tx_id: BN };
 export type TransactionProposedInput = { tx_id: BigNumberish, to: IdentityInput, transaction_parameters: TransactionParametersInput };
 export type TransactionProposedOutput = { tx_id: BN, to: IdentityOutput, transaction_parameters: TransactionParametersOutput };
-export type TransactionRemovedInput = { tx_id: BigNumberish };
-export type TransactionRemovedOutput = { tx_id: BN };
 export type TransferParamsInput = { asset_id: AssetIdInput, value: Option<BigNumberish> };
 export type TransferParamsOutput = { asset_id: AssetIdOutput, value: Option<BN> };
 
