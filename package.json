@@ -25,7 +25,7 @@
     "@mui/material-nextjs": "^5.15.11",
     "@tanstack/react-query": "5.28.9",
     "dexie": "^4.0.1",
-    "fuels": "0.79.0",
+    "fuels": "0.81.0",
     "next": "14.1.1",
     "nextjs-toploader": "^1.6.6",
     "polished": "^4.3.1",
