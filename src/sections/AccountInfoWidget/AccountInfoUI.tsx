@@ -1,8 +1,10 @@
-import { Avatar, Box, Tooltip, Typography } from "@mui/material";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import { Avatar, Box, IconButton, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
+import { useToggleAddressFormat } from "@/hooks/useToggleAddressFormat";
 import CopyButton from "@/sections/common/CopyButton";
 import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
@@ -29,6 +31,8 @@ export function AccountInfoUI({
 }: Props) {
   const { isOpen, closeModal, openModal } = useModalBehaviour();
   const walletItem = toAccountWalletItem(address as `fuel${string}`);
+  const { toggleAddressFormat, isb256Address, currentAddress } =
+    useToggleAddressFormat({ walletItem });
 
   return (
     <AccountInfoWrapper networkcolor={networkColor}>
@@ -72,9 +76,21 @@ export function AccountInfoUI({
               </Box>
             </Tooltip>
             <Typography color="white" variant="caption">
-              {truncateAddress(address, 4)}
+              {truncateAddress(currentAddress, 4)}
             </Typography>
-            <CopyButton text={address as string} />
+            <CopyButton text={currentAddress as string} />
+            <Tooltip
+              title={
+                isb256Address
+                  ? "Convert to fuel bech32 format"
+                  : "Convert to b256 format"
+              }
+              placement="top"
+            >
+              <IconButton size="small" onClick={toggleAddressFormat}>
+                <ChangeCircleIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Box>
         {multisigAccounts && (
