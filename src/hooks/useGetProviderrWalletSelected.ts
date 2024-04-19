@@ -10,7 +10,7 @@ export function useAccountWalletItem(): UseAccountWalletItemReturn {
   const { accountConnected, accounts } = useNetworkConnection();
 
   const accountWalletItem = useMemo(() => {
-    return accounts.find((a) => a.address.formatted === accountConnected);
+    return accounts.find((a) => a.address.bech32 === accountConnected);
   }, [accounts, accountConnected]);
 
   return { accountWalletItem };

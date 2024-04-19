@@ -99,7 +99,7 @@ export function ReviewStep() {
             <Typography component="div">
               {ownersAccountWallet.map((owner) => (
                 <AccountSigner
-                  key={owner.address.hex}
+                  key={owner.address.b256}
                   owner={owner}
                   truncateAmount={12}
                 />

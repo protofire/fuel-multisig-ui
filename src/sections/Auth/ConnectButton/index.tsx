@@ -1,4 +1,5 @@
 "use client";
+import { Box } from "@mui/material";
 import * as React from "react";
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
@@ -8,6 +9,7 @@ import { useGetBalance } from "@/hooks/useGetBalance";
 
 import { AccountSelect } from "../AccountSelect";
 import { ModalWallet } from "../ModalWalletProvider";
+import { AddressFormatSwitch } from "./AddressFormatSwitch.tsx";
 import { StyledConnectButton } from "./styled";
 
 export const ConnectButton: React.FC = () => {
@@ -26,15 +28,18 @@ export const ConnectButton: React.FC = () => {
 
   if (accountConnected && walletProviderConnected)
     return (
-      <AccountSelect
-        accountConnected={accountConnected}
-        accounts={accounts}
-        disconnectWallet={disconnectWallet}
-        balance={formatted}
-        isLoading={isLoading}
-        isLoadingBalance={isLoadingBalance}
-        walletProvider={walletProviderConnected}
-      />
+      <Box display="flex">
+        <AddressFormatSwitch />
+        <AccountSelect
+          accountConnected={accountConnected}
+          accounts={accounts}
+          disconnectWallet={disconnectWallet}
+          balance={formatted}
+          isLoading={isLoading}
+          isLoadingBalance={isLoadingBalance}
+          walletProvider={walletProviderConnected}
+        />
+      </Box>
     );
 
   return (

@@ -46,16 +46,16 @@ export function MultisigCreationStep() {
   const { connect } = useConnectUI();
 
   useEffect(() => {
-    if (!accountConnected || !accountWalletItem?.address.hex) return;
+    if (!accountConnected || !accountWalletItem?.address.b256) return;
 
     setValue(
       "walletName",
-      generateHashName(`${accountWalletItem?.address.hex}${accountsCount}`)
+      generateHashName(`${accountWalletItem?.address.b256}${accountsCount}`)
     );
   }, [
     setValue,
     accountConnected,
-    accountWalletItem?.address.hex,
+    accountWalletItem?.address.b256,
     accountsCount,
   ]);
 

@@ -1,5 +1,7 @@
 import { isB256, isBech32 } from "fuels";
 
+import { customReportError } from "@/utils/error";
+
 export function validateAddress(address: string): string | undefined {
   const error = "Invalid address format";
 
@@ -10,7 +12,7 @@ export function validateAddress(address: string): string | undefined {
       return;
     }
   } catch (e) {
-    console.error(e);
+    customReportError(e);
   }
 
   return error;

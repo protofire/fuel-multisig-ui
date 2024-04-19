@@ -14,7 +14,7 @@ export function toAccountWalletItem(
   const hex = getHexFromAddress(defaultAddress);
 
   return {
-    address: { formatted: defaultAddress, hex },
+    address: { bech32: defaultAddress, b256: hex },
     ...(name ? { name } : null),
   };
 }
