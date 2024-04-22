@@ -24,17 +24,17 @@ export function AccountSigner({
   return (
     <Box pb={1} display="flex" alignItems="center">
       <Avatar>
-        <EmojiAvatarIcon address={address.hex} />
+        <EmojiAvatarIcon address={address.b256} />
       </Avatar>
 
       <Box marginLeft={1}>
         <Typography fontSize={14}>{name}</Typography>
         <Typography display="flex" alignItems="center" component="div">
           <Typography fontSize={12}>
-            {truncateAddress(address.formatted, truncateAmount)}
+            {truncateAddress(address.bech32, truncateAmount)}
           </Typography>
-          {showCopy && <CopyButton text={address.formatted} />}
-          {showLink && <FuelExplorerLink hash={address.hex} path="account" />}
+          {showCopy && <CopyButton text={address.bech32} />}
+          {showLink && <FuelExplorerLink hash={address.b256} path="account" />}
         </Typography>
       </Box>
     </Box>

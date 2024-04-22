@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
+import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
 import CopyButton from "@/sections/common/CopyButton";
 import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
@@ -30,6 +31,10 @@ export function AccountInfoUI({
   const { isOpen, closeModal, openModal } = useModalBehaviour();
   const walletItem = toAccountWalletItem(address as `fuel${string}`);
 
+  const { addressFormatted } = useAddressInFormatPicked({
+    accountWallet: walletItem,
+  });
+
   return (
     <AccountInfoWrapper networkcolor={networkColor}>
       <Box
@@ -47,7 +52,7 @@ export function AccountInfoUI({
             alignItems="center"
           >
             <Avatar>
-              <EmojiAvatarIcon address={walletItem.address.hex} />
+              <EmojiAvatarIcon address={walletItem.address.b256} />
             </Avatar>
             <Tooltip title="Threshold" arrow>
               <Box display="flex" flexDirection="column">
@@ -72,9 +77,9 @@ export function AccountInfoUI({
               </Box>
             </Tooltip>
             <Typography color="white" variant="caption">
-              {truncateAddress(address, 4)}
+              {truncateAddress(addressFormatted, 4)}
             </Typography>
-            <CopyButton text={address as string} />
+            <CopyButton text={addressFormatted} />
           </Box>
         </Box>
         {multisigAccounts && (

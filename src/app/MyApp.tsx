@@ -2,6 +2,7 @@
 import { CacheProvider } from "@emotion/react";
 
 import { BreadcrumbProvider } from "@/context/BreadcrumbContext";
+import { FormatAccountWalletItemProvider } from "@/context/FormatAccountWalletItem";
 import { InteractionErrorProvider } from "@/context/InteractionErrorContext";
 import { LocalDbProvider } from "@/context/LocalDbContext";
 import { NetworkConnectionConfig } from "@/context/NetworkConnectionConfig";
@@ -21,15 +22,17 @@ export default function MyApp({ children }: { children: React.ReactNode }) {
       <NetworkConnectionConfig>
         <LocalDbProvider>
           <InteractionErrorProvider>
-            <SettingsThemeConsumer>
-              {({ settings }) => (
-                <SettingsThemeProvider>
-                  <ThemeCustomization settings={settings}>
-                    <BreadcrumbProvider>{children}</BreadcrumbProvider>
-                  </ThemeCustomization>
-                </SettingsThemeProvider>
-              )}
-            </SettingsThemeConsumer>
+            <FormatAccountWalletItemProvider>
+              <SettingsThemeConsumer>
+                {({ settings }) => (
+                  <SettingsThemeProvider>
+                    <ThemeCustomization settings={settings}>
+                      <BreadcrumbProvider>{children}</BreadcrumbProvider>
+                    </ThemeCustomization>
+                  </SettingsThemeProvider>
+                )}
+              </SettingsThemeConsumer>
+            </FormatAccountWalletItemProvider>
           </InteractionErrorProvider>
         </LocalDbProvider>
       </NetworkConnectionConfig>
