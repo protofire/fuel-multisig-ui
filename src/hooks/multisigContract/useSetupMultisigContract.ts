@@ -2,7 +2,7 @@ import { FunctionInvocationResult } from "fuels";
 import { useCallback, useEffect, useState } from "react";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
-import { toIdentityInput } from "@/services/contracts/transformers/toInputIdentity";
+import { toIdentityInputs } from "@/services/contracts/transformers/toInputIdentity";
 import { getErrorMessage } from "@/utils/error";
 
 import { useGetMultisigContract } from "./useGetMultisigContract";
@@ -33,7 +33,7 @@ export function useSetupMultisig({
 
       setError(undefined);
       setIsLoading(true);
-      const _usersIdentity = toIdentityInput(users);
+      const _usersIdentity = toIdentityInputs(users);
       try {
         const cost = await contract.functions
           .constructor(threshold, _usersIdentity)

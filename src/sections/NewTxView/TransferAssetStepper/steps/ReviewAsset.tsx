@@ -1,9 +1,12 @@
 import { Avatar, Box, Typography } from "@mui/material";
+import BigNumber from "bignumber.js";
 import Image from "next/image";
 
 import { useDelay } from "@/hooks/common/useDelay";
+import { useProposeTransaction } from "@/hooks/multisigContract/useProposeTransaction";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
+import { toIdentityInput } from "@/services/contracts/transformers/toInputIdentity";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 import { FlexCenterBox, StyledBox, TypographyBodyStyled } from "../styled";
@@ -13,8 +16,22 @@ export function ReviewAsset() {
   const { inputFormManager, managerStep } = useTransferAssetContext();
   const { activeStep, stepsLength, upStep, downStep } = managerStep;
   const { getValues } = inputFormManager;
-  const { recipientAddress, asset, amount } = getValues();
+  const { recipientAddress, asset, amount, assetId } = getValues();
   const { isDelayFinished } = useDelay(500);
+  const { proposeTransaction, isLoading } = useProposeTransaction();
+
+  const signAndSend = () => {
+    const _amount = new BigNumber(amount)
+      .multipliedBy(BigNumber(10).pow(asset?.decimals ?? 0))
+      .toString();
+    proposeTransaction({
+      to: toIdentityInput(recipientAddress),
+      params: {
+        asset_id: { value: assetId },
+        value: _amount,
+      },
+    });
+  };
 
   if (!asset)
     return (
@@ -83,11 +100,11 @@ export function ReviewAsset() {
           activeStep={activeStep}
           stepsLength={stepsLength}
           handleBack={downStep}
-          handleNext={upStep}
+          handleNext={signAndSend}
           nextLabel={<>Sign and send</>}
           nextButtonProps={{
-            disabled: !isDelayFinished,
-            isLoading: !isDelayFinished,
+            disabled: !isDelayFinished || isLoading,
+            isLoading: !isDelayFinished || isLoading,
           }}
         />
       </Box>
