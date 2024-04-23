@@ -30,6 +30,7 @@ export const InputAddress = React.forwardRef<HTMLDivElement, Props>(
         InputProps={{
           startAdornment: <AddressAvatar value={value} />,
         }}
+        value={value}
       />
     );
   }

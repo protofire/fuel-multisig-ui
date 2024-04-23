@@ -3,7 +3,7 @@ export const ROUTES = {
   App: "/app",
   New: "/new",
   NewTx: "/app/new-transaction",
-  TransferAsset: "/app/new-transaction/asset",
+  SendAsset: "/app/new-transaction/send-asset",
   Assets: "/app/assets",
   Transactions: "/transactions",
   Settings: "/settings",

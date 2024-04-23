@@ -20,8 +20,8 @@ export function NewTxView() {
             captionComponent={
               <CaptionComponent
                 icon={<Toll color="primary" sx={{ fontSize: "3rem" }} />}
-                textButton="Send tokens"
-                href={ROUTES.TransferAsset}
+                textButton="Send asset"
+                href={ROUTES.SendAsset}
               />
             }
           />

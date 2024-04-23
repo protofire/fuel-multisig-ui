@@ -64,7 +64,7 @@ export const AssetsTable: React.FC = () => {
             rows={balances as unknown as Row[]}
             action={() => {
               if (assetType === "token") {
-                router.push(ROUTES.TransferAsset);
+                router.push(ROUTES.SendAsset);
               }
             }}
           />

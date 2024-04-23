@@ -7,9 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
+import { useDelay } from "@/hooks/common/useDelay";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
 import { InputAddress } from "@/sections/common/muiExtended/InputAddress";
 import { InputAmountWithMax } from "@/sections/common/muiExtended/InputAmountWithMax";
@@ -17,6 +18,26 @@ import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackBut
 import { validateAddress } from "@/validations/blockchain";
 
 import { useTransferAssetContext } from "../TransferAssetContext";
+
+function FormTransferSkeleton() {
+  return (
+    <Box display={"flex"} flexDirection="column" gap={3}>
+      <Skeleton
+        animation="wave"
+        variant="rounded"
+        width={"20rem"}
+        height={60}
+      />
+      <Skeleton
+        animation="wave"
+        variant="rounded"
+        width={"20rem"}
+        height={60}
+        sx={{ marginBottom: "5rem" }}
+      />
+    </Box>
+  );
+}
 
 export function FormTransferAsset() {
   const { inputFormManager, managerStep } = useTransferAssetContext();
@@ -28,14 +49,30 @@ export function FormTransferAsset() {
     getValues,
   } = inputFormManager;
   const { balances, isLoading } = useAssetsBalance();
+  const { assetId } = getValues();
+  const { isDelayFinished } = useDelay(500);
+  const amountMaxText = useMemo(() => {
+    if (!balances) return "0";
+
+    const assetSelected = balances.find(
+      (assetBalance) => assetBalance.assetId === assetId
+    );
+    const amountSplitted = assetSelected?.amountFormatted.split(" ");
+
+    return amountSplitted ? amountSplitted[0] : "0";
+  }, [assetId, balances]);
 
   useEffect(() => {
     if (!balances || !balances.length) return;
 
-    setValue("assetId", balances[0].assetId);
+    const _defaultAsset = balances[0];
+    setValue("assetId", _defaultAsset.assetId);
+    setValue("asset", _defaultAsset);
   }, [balances, setValue]);
 
-  if (isLoading || balances === undefined) {
+  if (isLoading || !isDelayFinished) return <FormTransferSkeleton />;
+
+  if (Array.isArray(balances) && balances.length === 0) {
     return (
       <Box
         display="flex"
@@ -44,27 +81,18 @@ export function FormTransferAsset() {
         gap={1}
         p={2}
       >
-        {balances === undefined ? (
-          <Typography>There are not assets to transfer.</Typography>
-        ) : (
-          <>
-            <Skeleton
-              animation="wave"
-              variant="rounded"
-              width={"20rem"}
-              height={60}
-            />
-            <Skeleton
-              animation="wave"
-              variant="rounded"
-              width={"20rem"}
-              height={60}
-            />
-          </>
-        )}
+        <Typography>There are not assets to transfer.</Typography>
       </Box>
     );
   }
+
+  const handleMax = (amountMax: string) => {
+    setValue("amount", amountMax ? amountMax : "0", {
+      shouldTouch: true,
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  };
 
   return (
     <Box display="flex" alignItems="center" flexDirection="column" gap={1}>
@@ -88,7 +116,6 @@ export function FormTransferAsset() {
               {...field}
               variant="outlined"
               label={"Recipient Address *"}
-              autoFocus
               fullWidth
               margin="normal"
               error={Boolean(errors["recipientAddress"])}
@@ -113,6 +140,7 @@ export function FormTransferAsset() {
                 variant="outlined"
                 error={Boolean(errors["amount"])}
                 helperText={errors.amount?.message}
+                onClickMax={() => handleMax(amountMaxText)}
               />
             );
           }}
@@ -128,9 +156,22 @@ export function FormTransferAsset() {
               <Select
                 {...field}
                 labelId="assetId-tx-asset"
-                onChange={(e) => field.onChange(e)}
+                onChange={(e) => {
+                  const _assetId = e.target.value;
+                  balances &&
+                    setValue(
+                      "asset",
+                      balances.find(
+                        (assetBalance) => assetBalance.assetId === _assetId
+                      )
+                    );
+
+                  field.onChange(e);
+                  handleMax("0");
+                }}
+                sx={{ height: "3.7rem" }}
               >
-                {balances.length === 0 ? (
+                {!balances ? (
                   <MenuItem value="">No Asset</MenuItem>
                 ) : (
                   balances?.map((asset) => {
