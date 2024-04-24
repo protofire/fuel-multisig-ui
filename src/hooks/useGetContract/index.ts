@@ -24,7 +24,7 @@ export function useGetContract<T>({
     useState<UseGetContractReturn<T>["contract"]>(undefined);
 
   useEffect(() => {
-    if (wallet) {
+    if (wallet && contractId) {
       const newContract = contractAbiFactory.connect(contractId, wallet);
       setContract(newContract);
     } else {

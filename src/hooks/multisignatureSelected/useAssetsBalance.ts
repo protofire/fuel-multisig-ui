@@ -21,7 +21,10 @@ export function useAssetsBalance(): UseAssetsBalanceReturn {
 
   const _setCoinsBalances = useCallback(
     (coinsBalance: CoinQuantity[] | undefined) => {
-      if (!coinsBalance?.length) return;
+      if (!coinsBalance?.length) {
+        setBalances([]);
+        return;
+      }
 
       const _balances = coinsBalance.map((coinQuantity): AssetAmount => {
         const assetInfo = assetByContractId(coinQuantity.assetId);

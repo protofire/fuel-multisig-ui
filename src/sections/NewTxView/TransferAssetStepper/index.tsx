@@ -15,7 +15,7 @@ export function TransferAssetStepper() {
   const managerStep = useManagerActiveStep(STEPS.length);
   const formSteps = useMemo(() => transformSteps(STEPS), []);
   const inputFormManager = useForm<TransferAssetForm>({
-    mode: "onBlur",
+    mode: "all",
     defaultValues: {
       recipientAddress: "",
       amount: "",

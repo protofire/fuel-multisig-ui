@@ -1,12 +1,14 @@
 import { createContext, useContext } from "react";
 import { UseFormReturn } from "react-hook-form";
 
+import { AssetAmount } from "@/domain/ui/AssetAmount";
 import { ManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 
 export interface TransferAssetForm {
   recipientAddress: string;
   amount: string;
   assetId: string;
+  asset?: AssetAmount;
 }
 
 export interface TransferStepperState {
