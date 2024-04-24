@@ -59,3 +59,16 @@ export const decimalToIrregular = (
 
   return convertedValue;
 };
+
+/**
+ * Converts a TAI64 timestamp (BN object) to a JavaScript Date object.
+ */
+export function tai64ToDate(tai64: BN): Date {
+  // TAI64 to UNIX: TAI64 is approximately 10 seconds before the UNIX epoch
+  const tenSeconds = new BN(10);
+  const secondsSinceUnixEpoch = tai64.sub(tenSeconds);
+
+  const millisecondsSinceUnixEpoch = secondsSinceUnixEpoch.toNumber() * 1000;
+
+  return new Date(millisecondsSinceUnixEpoch);
+}

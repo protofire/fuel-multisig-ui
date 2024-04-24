@@ -43,9 +43,9 @@ export function useSetupMultisig({
           .constructor(threshold, _usersIdentity)
           .txParams({
             gasPrice: cost.gasPrice,
-            gasLimit: cost.gasUsed.mul(1.1),
+            gasLimit: cost.gasUsed,
           })
-          .call();
+          .dryRun();
 
         return result;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
