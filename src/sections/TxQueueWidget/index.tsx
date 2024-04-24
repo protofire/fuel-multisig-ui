@@ -2,7 +2,7 @@
 
 import { Skeleton, Typography } from "@mui/material";
 
-import { useGetTransactionQueue } from "@/hooks/multisigContract/useGetTxIdList";
+import { useGetTransactionQueue } from "@/hooks/multisigContract/useGetTransactionsList";
 
 import { NoItems, StyledList, TxQueueWidgetStyled } from "./styled";
 
