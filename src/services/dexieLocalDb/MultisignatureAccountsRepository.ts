@@ -41,8 +41,8 @@ export class MultisignaturesAccountsDatabase
   }
 
   async deleteSignatoryAccount(
-    address: string,
-    networkId: ChainId
+    networkId: ChainId,
+    address: string
   ): Promise<void> {
     const deleteKey = [networkId as unknown as string, address];
     return this.db.signatoriesAccounts.delete(deleteKey);
