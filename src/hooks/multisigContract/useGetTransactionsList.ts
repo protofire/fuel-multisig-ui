@@ -2,6 +2,10 @@ import { BigNumberish } from "fuels";
 import { useCallback, useEffect, useState } from "react";
 
 import { TransactionOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
+import {
+  toTxQueueItem,
+  TransactionDisplayInfo,
+} from "@/services/contracts/transformers/toTxQueueItem";
 import { getErrorMessage } from "@/utils/error";
 
 import { useMultisignatureAccountSelected } from "../multisignatureSelected/useMultisignatureAccountSelected";
@@ -47,7 +51,7 @@ export function useGetTransactionQueue() {
   const [isLoading, setIsLoading] = useState(true);
   const { getTxIdList, contract } = useGetTxIdList();
   const [transactionData, setTransactionData] = useState<
-    TransactionOutput[] | undefined
+    TransactionDisplayInfo[] | undefined
   >();
 
   const getTransactionQueue = useCallback(async () => {
@@ -67,11 +71,11 @@ export function useGetTransactionQueue() {
         })
       );
 
-      setTransactionData(
-        transactions
-          .map((t) => t?.value)
-          .filter((t): t is TransactionOutput => t !== undefined)
-      );
+      const _filtered = transactions
+        .map((t) => t?.value)
+        .filter((t): t is TransactionOutput => t !== undefined);
+
+      setTransactionData(_filtered.map((i) => toTxQueueItem(i)));
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {

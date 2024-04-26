@@ -1,15 +1,26 @@
 "use client";
 
-import { Skeleton, Typography } from "@mui/material";
+import { Skeleton } from "@mui/material";
+import Link from "next/link";
 
+import { ROUTES } from "@/config/routes";
 import { useGetTransactionQueue } from "@/hooks/multisigContract/useGetTransactionsList";
+import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 
-import { NoItems, StyledList, TxQueueWidgetStyled } from "./styled";
+import {
+  NoItems,
+  StyledButton,
+  StyledList,
+  TxQueueWidgetStyled,
+} from "./styled";
+import { TxQueueWidgetItem } from "./TxQueueWidgetItem";
 
 export function TxQueueWidget() {
   const { transactionData, isLoading, error } = useGetTransactionQueue();
   const unavailableData = !transactionData || transactionData.length === 0;
+  const { multisigSelected } = useMultisignatureAccountSelected();
 
+  console.log("__transactionData", transactionData);
   return (
     <TxQueueWidgetStyled border={false}>
       {unavailableData ? (
@@ -23,11 +34,20 @@ export function TxQueueWidget() {
           </NoItems>
         </StyledList>
       ) : (
-        <StyledList>
-          {transactionData.map((t, i) => (
-            <Typography key={t.tx_id.toString()}>{i}</Typography>
-          ))}
-        </StyledList>
+        <>
+          <StyledList>
+            {transactionData.map((_data, i) => (
+              <TxQueueWidgetItem
+                key={_data.id}
+                data={_data}
+                owners={multisigSelected?.owners.length || 1}
+              />
+            ))}
+          </StyledList>
+          <StyledButton LinkComponent={Link} href={ROUTES.Transactions}>
+            View All
+          </StyledButton>
+        </>
       )}
     </TxQueueWidgetStyled>
   );

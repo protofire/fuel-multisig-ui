@@ -45,14 +45,14 @@ export const MENU_ITEMS: NavLink[] = [
     icon: icons.IconAssets,
     target: true,
   },
-  // {
-  //   id: "transactions",
-  //   title: "Transactions",
-  //   type: "item",
-  //   url: ROUTES.Transactions,
-  //   icon: icons.ImportExport,
-  //   target: true,
-  // },
+  {
+    id: "transactions",
+    title: "Transactions",
+    type: "item",
+    url: ROUTES.Transactions,
+    icon: icons.ImportExport,
+    target: true,
+  },
   // {
   //   id: "settings",
   //   title: "Settings",
