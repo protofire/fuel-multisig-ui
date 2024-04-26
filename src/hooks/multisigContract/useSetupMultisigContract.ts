@@ -1,4 +1,4 @@
-import { InvocationCallResult } from "fuels";
+import { FunctionInvocationResult } from "fuels";
 import { useCallback, useEffect, useState } from "react";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
@@ -15,7 +15,7 @@ interface UseSetupMultisigReturn {
   setupMultisig: (
     threshold: number,
     users: string[]
-  ) => Promise<InvocationCallResult<void> | undefined>;
+  ) => Promise<FunctionInvocationResult<void> | undefined>;
   isLoading: boolean;
 }
 
@@ -23,6 +23,7 @@ export function useSetupMultisig({
   contractId,
 }: Props): UseSetupMultisigReturn {
   const [error, setError] = useState<string | undefined>();
+  // const [errorDecoy, setErrorDecoy] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const { setError: setGlobalError } = useInteractionError();
   const { contract } = useGetMultisigContract({ contractId });
@@ -45,7 +46,7 @@ export function useSetupMultisig({
             gasPrice: cost.gasPrice,
             gasLimit: cost.gasUsed,
           })
-          .dryRun();
+          .call();
 
         return result;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

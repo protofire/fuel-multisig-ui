@@ -38,7 +38,7 @@ export function ReviewStep() {
       threshold,
       owners.map((o) => o.address)
     ).then((result) => {
-      if (!result) return;
+      // if (!result) return;
 
       save({
         account: {
