@@ -1,4 +1,4 @@
-import { FunctionInvocationResult } from "fuels";
+import { InvocationCallResult } from "fuels";
 import { useCallback, useEffect, useState } from "react";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
@@ -15,7 +15,7 @@ interface UseSetupMultisigReturn {
   setupMultisig: (
     threshold: number,
     users: string[]
-  ) => Promise<FunctionInvocationResult<void, void> | undefined>;
+  ) => Promise<InvocationCallResult<void> | undefined>;
   isLoading: boolean;
 }
 
