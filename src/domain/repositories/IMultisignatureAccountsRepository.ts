@@ -19,4 +19,6 @@ export interface IMultisignatureAccountsRepository {
   updateSignatoriesAccountsInBatch(
     accounts: MultisignatureAccount[]
   ): Promise<void>;
+
+  deleteSignatoryAccount(networkId: ChainId, addressId: string): Promise<void>;
 }

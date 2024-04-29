@@ -71,3 +71,14 @@ export const formatThreshold = ({
 }) => {
   return `${threshold || "-"} / ${owners || "-"}`;
 };
+
+export const formatDate = (inputDate: Date) => {
+  const date = new Date(inputDate);
+  return date.toLocaleString("en-US", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  });
+};

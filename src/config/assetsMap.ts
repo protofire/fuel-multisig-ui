@@ -13,7 +13,10 @@ export const assetsMap: Record<string, AssetInfo> = {
   },
 };
 
-export function assetByContractId(assetId: string): AssetInfo {
+export function assetByContractId(
+  assetId: string,
+  props?: Partial<AssetInfo>
+): AssetInfo {
   if (assetId in assetsMap) {
     return assetsMap[assetId];
   }
@@ -23,5 +26,6 @@ export function assetByContractId(assetId: string): AssetInfo {
     symbol: "UNKNOWN",
     decimals: 0,
     name: `Unknown_${assetId.slice(-5)}`,
+    ...props,
   };
 }

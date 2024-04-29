@@ -1,6 +1,7 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import { SummaryCardsView } from "@/sections/SummaryCardsView";
+import { TxQueueWidget } from "@/sections/TxQueueWidget";
 
 export default function AppDashboardPage() {
   return (
@@ -15,15 +16,14 @@ export default function AppDashboardPage() {
           marginTop: "1rem",
         }}
       >
-        {/* TODO */}
-        {/* <Grid item xs={12} sm={12} md={12}>
+        <Grid item xs={12} sm={12} md={12}>
           <Typography variant="h3" color="primary">
             Transaction queue
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
-          <p> Table </p>
-        </Grid> */}
+          <TxQueueWidget />
+        </Grid>
       </Grid>
     </>
   );

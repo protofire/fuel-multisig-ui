@@ -15,7 +15,7 @@ interface UseSetupMultisigReturn {
   setupMultisig: (
     threshold: number,
     users: string[]
-  ) => Promise<FunctionInvocationResult<void, void> | undefined>;
+  ) => Promise<FunctionInvocationResult<void> | undefined>;
   isLoading: boolean;
 }
 
@@ -23,6 +23,7 @@ export function useSetupMultisig({
   contractId,
 }: Props): UseSetupMultisigReturn {
   const [error, setError] = useState<string | undefined>();
+  const [errorDecoy, setErrorDecoy] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const { setError: setGlobalError } = useInteractionError();
   const { contract } = useGetMultisigContract({ contractId });
@@ -35,17 +36,36 @@ export function useSetupMultisig({
       setIsLoading(true);
       const _usersIdentity = toIdentityInputs(users);
       try {
-        const cost = await contract.functions
-          .constructor(threshold, _usersIdentity)
-          .getTransactionCost();
-
         const result = await contract.functions
           .constructor(threshold, _usersIdentity)
-          .txParams({
-            gasPrice: cost.gasPrice,
-            gasLimit: cost.gasUsed.mul(1.1),
-          })
-          .call();
+          .call()
+          .then((_result) => _result)
+          .catch(async (errorCallreason) => {
+            // Skip struct data size false positive error when dryRun display AlreadyInitialized
+            const msg = getErrorMessage(errorCallreason);
+            if (
+              typeof msg === "string" &&
+              msg.includes("Invalid struct data size")
+            ) {
+              try {
+                return await contract.functions
+                  .constructor(threshold, _usersIdentity)
+                  .dryRun();
+              } catch (errorDryRun) {
+                const dryRunMsg = getErrorMessage(errorDryRun);
+
+                if (
+                  typeof msg === "string" &&
+                  dryRunMsg.includes("AlreadyInitialized")
+                ) {
+                  console.dir(errorCallreason, { depth: null });
+                  return errorCallreason;
+                }
+              }
+            }
+
+            throw Error(msg);
+          });
 
         return result;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

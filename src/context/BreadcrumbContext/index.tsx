@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useState } from "react";
 
+import { createNotImplementedWarning } from "@/utils/error";
+
 interface BreadCrumbTitle {
   name: string;
   href: string;
@@ -12,9 +14,8 @@ interface BreadCrumbTitleState {
 
 const BreadcrumbContext = createContext<BreadCrumbTitleState>({
   breadcrumbs: [],
-  addBreadcrumb(path) {
-    console.log("__notImplemented", path);
-  },
+  addBreadcrumb: (_path: string) =>
+    createNotImplementedWarning("addBreadCrumb"),
 });
 
 export function BreadcrumbProvider({ children }: React.PropsWithChildren) {

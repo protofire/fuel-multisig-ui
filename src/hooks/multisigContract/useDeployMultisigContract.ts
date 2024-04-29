@@ -31,14 +31,12 @@ export function useDeployMultisigContract(): UseDeployMultisigContractReturn {
 
     setLoading(true);
     try {
-      const gasPrice = wallet.provider.getGasConfig().minGasPrice;
       const gasMax = wallet.provider.getGasConfig().maxGasPerTx;
 
       const factory = await FuelMultisigAbi__factory.deployContract(
         bytecode,
         wallet,
         {
-          gasPrice,
           maxFee: gasMax,
         }
       );

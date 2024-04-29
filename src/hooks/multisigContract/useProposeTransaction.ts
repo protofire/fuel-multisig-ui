@@ -48,7 +48,7 @@ export function useProposeTransaction() {
           })
           .call();
 
-        console.log("__response", response);
+        return response;
       } catch (e) {
         const msg = getErrorMessage(e);
         const defaultMsg = "An error has ocurred while trying to propose tx";

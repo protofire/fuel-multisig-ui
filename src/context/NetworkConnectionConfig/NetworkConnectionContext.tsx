@@ -29,6 +29,7 @@ import {
   toAccountWalletItem,
   toWalletProvider,
 } from "@/services/fuel/connectors/transformer";
+import { getErrorMessage } from "@/utils/error";
 
 type NetworkConnectionError =
   | "FAILED_TO_CONNECT"
@@ -119,7 +120,8 @@ export const NetworkConnectionProvider: React.FC<
       try {
         connect(connectorName);
       } catch (err) {
-        console.log("error connecting: ", err);
+        const msg = getErrorMessage(err);
+        console.error("error connecting: ", msg);
         setError("FAILED_TO_CONNECT");
       }
     },

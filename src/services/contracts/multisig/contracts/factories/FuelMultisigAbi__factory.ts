@@ -72,11 +72,6 @@ const _abi = {
       "type": "enum MultisigError",
       "components": [
         {
-          "name": "GenericError",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
           "name": "MaxOwnersReached",
           "type": 0,
           "typeArguments": null
@@ -163,6 +158,11 @@ const _abi = {
         },
         {
           "name": "TransactionExpired",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "MaxTransactionsReached",
           "type": 0,
           "typeArguments": null
         }
@@ -408,6 +408,18 @@ const _abi = {
     },
     {
       "typeId": 21,
+      "type": "struct ThresholdChanged",
+      "components": [
+        {
+          "name": "new_threshold",
+          "type": 32,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 22,
       "type": "struct Transaction",
       "components": [
         {
@@ -434,7 +446,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 22,
+      "typeId": 23,
       "type": "struct TransactionApproved",
       "components": [
         {
@@ -445,18 +457,6 @@ const _abi = {
         {
           "name": "owner",
           "type": 3,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 23,
-      "type": "struct TransactionCancelled",
-      "components": [
-        {
-          "name": "tx_id",
-          "type": 30,
           "typeArguments": null
         }
       ],
@@ -925,7 +925,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 21,
+            "type": 22,
             "typeArguments": null
           }
         ]
@@ -1198,7 +1198,7 @@ const _abi = {
       "logId": 10,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 23,
         "typeArguments": []
       }
     },
@@ -1238,7 +1238,7 @@ const _abi = {
       "logId": 15,
       "loggedType": {
         "name": "",
-        "type": 5,
+        "type": 21,
         "typeArguments": []
       }
     },
@@ -1254,7 +1254,7 @@ const _abi = {
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 17,
+        "type": 5,
         "typeArguments": []
       }
     },
@@ -1294,7 +1294,7 @@ const _abi = {
       "logId": 22,
       "loggedType": {
         "name": "",
-        "type": 27,
+        "type": 17,
         "typeArguments": []
       }
     },
@@ -1310,8 +1310,8 @@ const _abi = {
       "logId": 24,
       "loggedType": {
         "name": "",
-        "type": 10,
-        "typeArguments": null
+        "type": 5,
+        "typeArguments": []
       }
     },
     {
@@ -1334,7 +1334,7 @@ const _abi = {
       "logId": 27,
       "loggedType": {
         "name": "",
-        "type": 24,
+        "type": 27,
         "typeArguments": []
       }
     },
@@ -1358,8 +1358,8 @@ const _abi = {
       "logId": 30,
       "loggedType": {
         "name": "",
-        "type": 25,
-        "typeArguments": []
+        "type": 10,
+        "typeArguments": null
       }
     },
     {
@@ -1382,7 +1382,7 @@ const _abi = {
       "logId": 33,
       "loggedType": {
         "name": "",
-        "type": 5,
+        "type": 24,
         "typeArguments": []
       }
     },
@@ -1406,7 +1406,7 @@ const _abi = {
       "logId": 36,
       "loggedType": {
         "name": "",
-        "type": 26,
+        "type": 5,
         "typeArguments": []
       }
     },
@@ -1414,7 +1414,7 @@ const _abi = {
       "logId": 37,
       "loggedType": {
         "name": "",
-        "type": 5,
+        "type": 25,
         "typeArguments": []
       }
     },
@@ -1438,7 +1438,7 @@ const _abi = {
       "logId": 40,
       "loggedType": {
         "name": "",
-        "type": 27,
+        "type": 5,
         "typeArguments": []
       }
     },
@@ -1446,7 +1446,23 @@ const _abi = {
       "logId": 41,
       "loggedType": {
         "name": "",
-        "type": 23,
+        "type": 5,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 42,
+      "loggedType": {
+        "name": "",
+        "type": 5,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 43,
+      "loggedType": {
+        "name": "",
+        "type": 26,
         "typeArguments": []
       }
     }

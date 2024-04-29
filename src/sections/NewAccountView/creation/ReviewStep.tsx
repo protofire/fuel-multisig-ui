@@ -33,11 +33,13 @@ export function ReviewStep() {
     [owners]
   );
 
-  const signAndSetup = () => {
+  const _signAndSetup = () => {
     setupMultisig(
       threshold,
       owners.map((o) => o.address)
-    ).then((r) => {
+    ).then((result) => {
+      if (!result) return;
+
       save({
         account: {
           address: deployedMultisigAddress,
@@ -121,7 +123,7 @@ export function ReviewStep() {
           activeStep={activeStep}
           stepsLength={stepsLength}
           handleBack={handleBack}
-          handleNext={signAndSetup}
+          handleNext={_signAndSetup}
           nextLabel={<>Sign and setup</>}
           nextButtonProps={{
             disabled: isLoading,
