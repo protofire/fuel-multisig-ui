@@ -20,7 +20,6 @@ export function TxQueueWidget() {
   const unavailableData = !transactionData || transactionData.length === 0;
   const { multisigSelected } = useMultisignatureAccountSelected();
 
-  console.log("__transactionData", transactionData);
   return (
     <TxQueueWidgetStyled border={false}>
       {unavailableData ? (
