@@ -1,20 +1,38 @@
-import { FuelConnector, isBech32, toB256 } from "fuels";
+import { FuelConnector, isBech32, toB256, toBech32 } from "fuels";
 
-import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
+import {
+  AccountAddress,
+  AccountWalletItem,
+} from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 
+export function getAccountWallet(walletAddress: string): AccountAddress {
+  const b256 = isBech32(walletAddress)
+    ? toB256(walletAddress as `fuel${string}`)
+    : walletAddress;
+
+  const bech32 = isBech32(walletAddress)
+    ? walletAddress
+    : toBech32(walletAddress);
+
+  return {
+    bech32,
+    b256,
+  };
+}
+
 export function getHexFromAddress(address: string) {
-  return isBech32(address) ? toB256(address as `fuel${string}`) : address;
+  return getAccountWallet(address).b256;
 }
 
 export function toAccountWalletItem(
   defaultAddress: string,
   name?: string
 ): AccountWalletItem {
-  const hex = getHexFromAddress(defaultAddress);
+  const accountWallet = getAccountWallet(defaultAddress);
 
   return {
-    address: { bech32: defaultAddress, b256: hex },
+    address: accountWallet,
     ...(name ? { name } : null),
   };
 }
