@@ -16,7 +16,8 @@ interface Props {
 }
 
 export const TxQueueWidgetItem = ({ data, owners }: Props) => {
-  const { image, typeName, validUntil, txMsg, to, valueAmount } = data;
+  const { image, typeName, validUntil, txMsg, to, valueAmount, approvalCount } =
+    data;
   return (
     <ListItemtyled>
       <StyledBox sx={{ width: "100%" }}>
@@ -42,7 +43,7 @@ export const TxQueueWidgetItem = ({ data, owners }: Props) => {
           {typeName !== "Transfer" && typeName !== "Call" ? `+` : "-"}
           {valueAmount}
           <span>
-            {"?"}/{owners}
+            {approvalCount}/{owners}
           </span>
         </StyledValueBox>
       </StyledBox>

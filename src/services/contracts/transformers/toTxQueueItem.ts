@@ -20,6 +20,8 @@ export interface TransferProposed {
 export interface TransactionDisplayInfo extends TransferProposed {
   image: string;
   txMsg: string;
+  approvalCount?: number;
+  rejectionCount?: number;
 }
 
 export const emptyDisplayInfo = {
