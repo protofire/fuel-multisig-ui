@@ -13,10 +13,18 @@ import {
 interface Props {
   data: TransactionDisplayInfo;
   owners: number;
+  isB256Activated?: boolean;
 }
 
-export const TxQueueWidgetItem = ({ data, owners }: Props) => {
-  const { image, typeName, validUntil, txMsg, to, valueAmount } = data;
+export const TxQueueWidgetItem = ({
+  data,
+  owners,
+  isB256Activated = false,
+}: Props) => {
+  const { image, typeName, validUntil, txMsg, to, valueAmount, approvalCount } =
+    data;
+  const _to = isB256Activated ? to?.b256 : to?.bech32;
+
   return (
     <ListItemtyled>
       <StyledBox sx={{ width: "100%" }}>
@@ -34,7 +42,7 @@ export const TxQueueWidgetItem = ({ data, owners }: Props) => {
             <p>
               {txMsg}
               {": "}
-              {truncateAddress(to, 12)}
+              {truncateAddress(_to, 12)}
             </p>
           </StyledStack>
         </StyledBox>
@@ -42,7 +50,7 @@ export const TxQueueWidgetItem = ({ data, owners }: Props) => {
           {typeName !== "Transfer" && typeName !== "Call" ? `+` : "-"}
           {valueAmount}
           <span>
-            {"?"}/{owners}
+            {approvalCount}/{owners}
           </span>
         </StyledValueBox>
       </StyledBox>

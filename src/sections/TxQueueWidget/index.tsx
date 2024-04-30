@@ -4,7 +4,8 @@ import { Skeleton } from "@mui/material";
 import Link from "next/link";
 
 import { ROUTES } from "@/config/routes";
-import { useGetTransactionQueue } from "@/hooks/multisigContract/useGetTransactionsList";
+import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
+import { useGetTransactionQueue } from "@/hooks/multisigContract/transactions/useGetTransactionQueue";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 
 import {
@@ -19,6 +20,7 @@ export function TxQueueWidget() {
   const { transactionData, isLoading, error } = useGetTransactionQueue();
   const unavailableData = !transactionData || transactionData.length === 0;
   const { multisigSelected } = useMultisignatureAccountSelected();
+  const { isB256Activated } = useFormatAccountWalletItem();
 
   return (
     <TxQueueWidgetStyled border={false}>
@@ -34,15 +36,18 @@ export function TxQueueWidget() {
         </StyledList>
       ) : (
         <>
-          <StyledList>
-            {transactionData.map((_data, i) => (
-              <TxQueueWidgetItem
-                key={_data.id}
-                data={_data}
-                owners={multisigSelected?.owners.length || 1}
-              />
-            ))}
-          </StyledList>
+          {multisigSelected && (
+            <StyledList>
+              {transactionData.map((_data) => (
+                <TxQueueWidgetItem
+                  key={_data.id}
+                  isB256Activated={isB256Activated}
+                  data={_data}
+                  owners={multisigSelected.owners.length}
+                />
+              ))}
+            </StyledList>
+          )}
           <StyledButton LinkComponent={Link} href={ROUTES.Transactions}>
             View All
           </StyledButton>

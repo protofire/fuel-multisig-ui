@@ -1,6 +1,8 @@
 import { assetByContractId } from "@/config/assetsMap";
 import { TX_TYPE_IMG } from "@/config/images";
+import { AccountAddress } from "@/domain/ui/AccountSelectItem";
 import { TransactionOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
+import { getAccountWallet } from "@/services/fuel/connectors/transformer";
 import {
   irregularToDecimalFormatted,
   tai64ToDate,
@@ -8,7 +10,7 @@ import {
 
 export interface TransferProposed {
   id: string;
-  to: string | undefined;
+  to: AccountAddress | undefined;
   validUntil: Date;
   typeName: "Transfer" | "Call";
   assetAddress: string | undefined;
@@ -20,6 +22,8 @@ export interface TransferProposed {
 export interface TransactionDisplayInfo extends TransferProposed {
   image: string;
   txMsg: string;
+  approvalCount?: number;
+  rejectionCount?: number;
 }
 
 export const emptyDisplayInfo = {
@@ -56,7 +60,9 @@ export function toTxQueueItem(
   const _result = {
     ...transfer,
     id: transactionOutput.tx_id.toString(),
-    to: transactionOutput.to.Address?.value,
+    to: transactionOutput.to.Address
+      ? getAccountWallet(transactionOutput.to.Address.value)
+      : undefined,
     validUntil: tai64ToDate(transactionOutput.valid_until),
   };
 
