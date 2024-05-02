@@ -59,22 +59,3 @@ export const decimalToIrregular = (
 
   return convertedValue;
 };
-
-/**
- * Converts a TAI64 timestamp (BN object) to a JavaScript Date object.
- */
-export function tai64ToDate(tai64: BN): Date {
-  // TAI64 to UNIX: Adjust to align TAI64 with the Unix epoch
-  const adjustment = new BN("9223372036854775808"); // 0x8000000000000000
-  const nanosecondsPerMillisecond = new BN(1000000);
-
-  const tai64BigInt = BigInt(tai64.toString());
-
-  // Adjust TAI64 and convert from nanoseconds to milliseconds
-  const unixTimestampMillis =
-    (tai64BigInt - BigInt(adjustment.toString())) /
-    BigInt(nanosecondsPerMillisecond.toString());
-
-  // Convert from milliseconds to seconds for the Date constructor that expects milliseconds since the Unix epoch
-  return new Date(Number(unixTimestampMillis) * 1000);
-}
