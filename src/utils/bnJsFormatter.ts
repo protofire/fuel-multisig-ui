@@ -1,4 +1,4 @@
-import { BN, DateTime } from "fuels";
+import { BN } from "fuels";
 
 import { AssetInfo } from "@/domain/AssetInfo";
 
