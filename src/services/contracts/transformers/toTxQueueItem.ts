@@ -3,15 +3,15 @@ import { TX_TYPE_IMG } from "@/config/images";
 import { AccountAddress } from "@/domain/ui/AccountSelectItem";
 import { TransactionOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { getAccountWallet } from "@/services/fuel/connectors/transformer";
+import { DateTime } from "fuels";
 import {
   irregularToDecimalFormatted,
-  tai64ToDate,
 } from "@/utils/bnJsFormatter";
 
 export interface TransferProposed {
   id: string;
   to: AccountAddress | undefined;
-  validUntil: Date;
+  validUntil: DateTime;
   typeName: "Transfer" | "Call";
   assetAddress: string | undefined;
   assetValue: string | undefined;
@@ -63,7 +63,7 @@ export function toTxQueueItem(
     to: transactionOutput.to.Address
       ? getAccountWallet(transactionOutput.to.Address.value)
       : undefined,
-    validUntil: tai64ToDate(transactionOutput.valid_until),
+    validUntil: DateTime.fromTai64(transactionOutput.valid_until.toString()),
   };
 
   return _result;
