@@ -1,5 +1,6 @@
 export const ROUTES = {
   Welcome: "/welcome",
+  Connect: "/connect",
   App: "/app",
   New: "/new",
   NewTx: "/app/new-transaction",
