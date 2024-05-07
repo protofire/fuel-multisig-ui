@@ -9,20 +9,18 @@ import { WalletConnectionEvents } from "@/domain/events/WalletConnectionEvents";
 import { useRedirectComparison } from "@/hooks/common/useRedirectComparison";
 import { MainContentCard } from "@/sections/shared/MainContentCard";
 
-export function getTextInstructions(route: string) {
-  if (route === ROUTES.New) {
-    return "To create a new account";
-  } else {
-    return "To interact with the app.";
-  }
-}
-export function ConnectWalletPage() {
+export default function ConnectWalletPage() {
   const [instructions, setInstructions] = useState<string | undefined>();
   const theme = useTheme();
 
   useRedirectComparison({
     redirectUrls: [ROUTES.New],
-    onMatch: (route) => setInstructions(getTextInstructions(route)),
+    onMatch: (route) =>
+      setInstructions(
+        route === ROUTES.New
+          ? "To create a new account"
+          : "To interact with the app."
+      ),
   });
 
   const disptachConnect = () => {
@@ -55,5 +53,3 @@ export function ConnectWalletPage() {
     </MainContentCard>
   );
 }
-
-export default ConnectWalletPage;
