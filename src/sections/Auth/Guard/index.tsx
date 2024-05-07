@@ -18,10 +18,14 @@ export const Guard = ({
       <ConnectionGuard
         fallback={<FallbackSpinner text="Checking wallet connection" />}
       >
-        <Suspense fallback={<FallbackSpinner />}>{children}</Suspense>
+        {children}
       </ConnectionGuard>
     );
   }
 
-  return <WalletStatusRedirectGuard>{children}</WalletStatusRedirectGuard>;
+  return (
+    <WalletStatusRedirectGuard>
+      <Suspense fallback={<FallbackSpinner />}>{children}</Suspense>
+    </WalletStatusRedirectGuard>
+  );
 };
