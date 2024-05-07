@@ -3,6 +3,8 @@ import Box, { BoxProps } from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Image from "next/image";
 
+import { APP_NAME } from "@/config/app";
+
 interface Props extends BoxProps {
   text?: string;
 }
@@ -21,7 +23,12 @@ export const FallbackSpinner = (props: Props) => {
         ...sx,
       }}
     >
-      <Image src="/favicon.ico" alt="Multisig Logo" width={30} height={30} />
+      <Image
+        src="/favicon.ico"
+        alt={`${APP_NAME} Logo`}
+        width={30}
+        height={30}
+      />
       <CircularProgress disableShrink sx={{ mt: 6 }} />
       {text ? (
         <Box

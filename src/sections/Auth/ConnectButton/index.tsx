@@ -3,8 +3,10 @@ import { Box } from "@mui/material";
 import * as React from "react";
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
+import { WalletConnectionEvents } from "@/domain/events/WalletConnectionEvents";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
 import { useRecentlyClicked } from "@/hooks/common/useRecentlyClicked";
+import { useEventListenerCallback } from "@/hooks/useEventListenerCallback";
 import { useGetBalance } from "@/hooks/useGetBalance";
 
 import { AccountSelect } from "../AccountSelect";
@@ -25,6 +27,10 @@ export const ConnectButton: React.FC = () => {
     walletProviderConnected,
   } = useNetworkConnection();
   const { formatted, isLoading: isLoadingBalance } = useGetBalance();
+
+  useEventListenerCallback(WalletConnectionEvents.onConnectWallet, () =>
+    openModal()
+  );
 
   if (accountConnected && walletProviderConnected)
     return (
