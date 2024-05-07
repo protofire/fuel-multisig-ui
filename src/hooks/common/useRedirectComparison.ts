@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
 type RedirectComparisonOptions = {
@@ -29,12 +29,12 @@ export const useRedirectComparison = ({
   onMatch,
   onNoMatch,
 }: RedirectComparisonOptions): void => {
-  const router = useRouter();
+  const params = useParams();
 
   useEffect(() => {
-    if (!router.query.redirect) return;
+    if (!params) return;
 
-    const redirectPath = router.query.redirect;
+    const redirectPath = params.redirect;
     const matchedRedirect = redirectUrls.find((url) => {
       return url === redirectPath;
     });
@@ -44,5 +44,5 @@ export const useRedirectComparison = ({
     } else if (onNoMatch) {
       onNoMatch(redirectUrls);
     }
-  }, [redirectUrls, onMatch, onNoMatch, router.query.redirect]);
+  }, [redirectUrls, onMatch, onNoMatch, params]);
 };

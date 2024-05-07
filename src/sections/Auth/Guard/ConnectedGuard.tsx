@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactElement, ReactNode, useEffect } from "react";
 
 import { DELAY_UNTIL_READ_WALLETS } from "@/config/app";
@@ -13,32 +13,28 @@ interface ConnectionGuardProps {
 
 const ROUTES_TO_CHECK = routeValues.filter((r) => r !== ROUTES.Connect);
 
-function _getRedirectQuery(initialRoute: string) {
+function _getRedirectQuery(initialRoute: string): string {
   if (ROUTES_TO_CHECK.includes(initialRoute as RouteValue)) {
-    return {
-      query: {
-        redirect: `${encodeURIComponent(initialRoute)}`,
-      },
-    };
+    return `?redirect=${encodeURIComponent(initialRoute)}`;
   }
 
-  return null;
+  return "";
 }
 
 export function ConnectionGuard({ children, fallback }: ConnectionGuardProps) {
   const { accountConnected } = useNetworkConnection();
   const router = useRouter();
-  const initialRoute = router.asPath ?? ROUTES.Welcome;
+  const pathname = usePathname();
+  const initialRoute = pathname ?? ROUTES.Welcome;
   const isDelayFinished = useDelay(DELAY_UNTIL_READ_WALLETS);
 
   useEffect(() => {
-    if (!router.isReady) return;
+    if (!router) return;
 
     if (!accountConnected && isDelayFinished) {
-      router.push({
-        pathname: `${ROUTES.Connect}`,
-        ..._getRedirectQuery(initialRoute),
-      });
+      const queryParams = _getRedirectQuery(initialRoute);
+
+      router.push(`${ROUTES.Connect}${queryParams}`);
     }
   }, [accountConnected, initialRoute, isDelayFinished, router]);
 

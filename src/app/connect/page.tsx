@@ -1,3 +1,4 @@
+"use client";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
