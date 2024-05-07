@@ -1,5 +1,8 @@
 "use client";
+import { Suspense } from "react";
+
 import { Guard } from "@/sections/Auth/Guard";
+import { FallbackSpinner } from "@/sections/common/FallbackSpinner";
 import { BasicLayout } from "@/sections/layout/BasicLayout";
 
 export default function ConnectLayout({
@@ -9,7 +12,9 @@ export default function ConnectLayout({
 }) {
   return (
     <Guard connectedWalletRequired={false}>
-      <BasicLayout>{children}</BasicLayout>
+      <BasicLayout>
+        <Suspense fallback={<FallbackSpinner />}>{children}</Suspense>
+      </BasicLayout>
     </Guard>
   );
 }

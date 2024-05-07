@@ -24,8 +24,8 @@ export const Guard = ({
   }
 
   return (
-    <WalletStatusRedirectGuard>
-      <Suspense fallback={<FallbackSpinner />}>{children}</Suspense>
-    </WalletStatusRedirectGuard>
+    <Suspense fallback={<FallbackSpinner text="Checking for redirection" />}>
+      <WalletStatusRedirectGuard>{children}</WalletStatusRedirectGuard>
+    </Suspense>
   );
 };
