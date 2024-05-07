@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, Suspense } from "react";
 
 import { FallbackSpinner } from "@/sections/common/FallbackSpinner";
 
@@ -18,7 +18,7 @@ export const Guard = ({
       <ConnectionGuard
         fallback={<FallbackSpinner text="Checking wallet connection" />}
       >
-        {children}
+        <Suspense fallback={<FallbackSpinner />}>{children}</Suspense>
       </ConnectionGuard>
     );
   }
