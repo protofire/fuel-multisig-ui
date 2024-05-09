@@ -1,6 +1,7 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
+  AccordionDetails,
   AccordionSummary,
   Box,
   Grid,
@@ -21,7 +22,7 @@ interface Props {
 }
 
 export function TxDetailItem({ txData, isB256Activated = false }: Props) {
-  const { image, typeName, to, validUntil, status } = txData;
+  const { image, typeName, to, validUntil, status, signMathOperation } = txData;
   const _to = isB256Activated ? to?.b256 : to?.bech32;
   const _validUntil = formatDate(validUntil);
 
@@ -86,7 +87,7 @@ export function TxDetailItem({ txData, isB256Activated = false }: Props) {
           </StyledGrid>
           <StyledGrid item xs={2} sm={2} md={2}>
             <Typography>
-              {typeName !== "Transfer" && typeName !== "Call" ? `+` : "-"}
+              {signMathOperation}
               {`${txData.valueAmount}`}
             </Typography>
           </StyledGrid>
@@ -106,6 +107,9 @@ export function TxDetailItem({ txData, isB256Activated = false }: Props) {
           </StyledGrid>
         </Grid>
       </AccordionSummary>
+      <AccordionDetails sx={{ backgroundColor: "#201A1B", padding: "0px" }}>
+        <Box sx={{ flexGrow: 1, display: "flex" }}></Box>
+      </AccordionDetails>
     </Accordion>
   );
 }
