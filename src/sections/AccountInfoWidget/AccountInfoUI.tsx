@@ -4,8 +4,8 @@ import * as React from "react";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
 import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
-import CopyButton from "@/sections/common/CopyButton";
-import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
+import CopyButton from "@/sections/shared/common/CopyButton";
+import { EmojiAvatarIcon } from "@/sections/shared/common/EmojiAvatar/EmojiAvatarIcon";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 import { formatThreshold, truncateAddress } from "@/utils/formatString";
 

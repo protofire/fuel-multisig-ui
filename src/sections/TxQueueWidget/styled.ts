@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { WidgetCard, WidgetCardProps } from "../common/muiExtended/WidgetCard";
+import { WidgetCard, WidgetCardProps } from "../shared/common/muiExtended/WidgetCard";
 
 export const TxQueueWidgetStyled = styled(WidgetCard)<WidgetCardProps>(() => ({
   backgroundImage: "none",

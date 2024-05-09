@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { BigNumberish } from "fuels";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
+import { TransactionOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import {
   toTxQueueItem,
   TransactionDisplayInfo,
 } from "@/services/contracts/transformers/toTxQueueItem";
-import { getErrorMessage } from "@/utils/error";
 
 import { useGetTxIdList } from "./useGetTxIdList";
 
@@ -16,66 +16,54 @@ export function useGetTransactionQueue() {
     contract,
     isLoading: isGettingIds,
   } = useGetTxIdList();
-  const [_error, _setError] = useState<string | undefined>();
 
   const fetchTransactionData = useCallback(
     async (transactionIds: BigNumberish[]) => {
-      if (!contract) return [];
+      if (!contract || transactionIds.length === 0) return [];
 
-      const promises = transactionIds.map(async (id) => {
-        const [transaction, approvals, rejections] = await Promise.all([
-          contract.functions.get_tx(id).dryRun(),
-          contract.functions.get_tx_approval_count(id).dryRun(),
-          contract.functions.get_tx_rejection_count(id).dryRun(),
-        ]);
-
-        return {
-          id,
-          transaction: transaction.value,
-          approvals: approvals.value,
-          rejections: rejections.value,
-        };
-      });
-
-      return Promise.all(promises);
+      return Promise.all(
+        transactionIds.map(async (id) => {
+          try {
+            const [transaction, approvals, rejections] = await Promise.all([
+              contract.functions.get_tx(id).dryRun(),
+              contract.functions.get_tx_approval_count(id).dryRun(),
+              contract.functions.get_tx_rejection_count(id).dryRun(),
+            ]);
+            return {
+              id,
+              transaction: transaction.value,
+              approvals: approvals.value,
+              rejections: rejections.value,
+            };
+          } catch (error) {
+            console.error("Error fetching data for transaction ID", id, error);
+            return null;
+          }
+        })
+      );
     },
     [contract]
   );
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["transactionQueue", transactionIds],
-    queryFn: () =>
-      fetchTransactionData(transactionIds).catch((e) => {
-        const msg = getErrorMessage(e);
-        let defaultMsg =
-          "An error has occurred while trying to fetch transaction ids";
-
-        if (e.cause && Array.isArray(e.cause.logs) && e.cause.logs.length) {
-          defaultMsg = e.cause.logs[0];
-        }
-
-        console.error(defaultMsg, msg);
-        _setError(`${msg}: ${defaultMsg}`);
-      }),
-    enabled: !!transactionIds,
+    queryFn: () => fetchTransactionData(transactionIds as BigNumberish[]),
+    enabled: !!transactionIds && !!contract,
     refetchInterval: 10000, // Refetch every 10 seconds
   });
 
-  const transactionData: TransactionDisplayInfo[] = [];
-
-  data?.forEach((item) => {
-    if (item.transaction) {
-      transactionData.push({
-        ...toTxQueueItem(item.transaction),
-        approvalCount: item.approvals,
-        rejectionCount: item.rejections,
-      });
-    }
-  });
+  console.log("__dataGetTQueue", data);
+  const transactionData: TransactionDisplayInfo[] = (data ?? [])
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .map((item) => ({
+      ...toTxQueueItem(item.transaction as TransactionOutput),
+      approvalCount: item.approvals,
+      rejectionCount: item.rejections,
+    }));
 
   return {
     transactionData,
-    error: _error,
+    error: error,
     isLoading: isLoading || isGettingIds,
   };
 }

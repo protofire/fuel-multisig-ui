@@ -16,7 +16,7 @@ import { styled } from "@mui/material/styles";
 import {
   LoadingButton,
   LoadingButtonProps,
-} from "@/sections/common/LoadingButton";
+} from "@/sections/shared/common/LoadingButton";
 
 export const StyledConnectButton = styled(LoadingButton)<LoadingButtonProps>(
   ({ theme }) => ({

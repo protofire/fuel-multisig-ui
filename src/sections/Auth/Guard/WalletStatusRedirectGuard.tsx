@@ -6,7 +6,7 @@ import { ROUTES } from "@/config/routes";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useDelay } from "@/hooks/common/useDelay";
 import { useByOwnerSignersAccount } from "@/hooks/storageMultisignatures/useByOwnerSignersAccount";
-import { FallbackSpinner } from "@/sections/common/FallbackSpinner";
+import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 
 type Props = PropsWithChildren;
 

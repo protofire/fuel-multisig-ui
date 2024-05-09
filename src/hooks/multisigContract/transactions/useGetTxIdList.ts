@@ -10,16 +10,13 @@ export function useGetTxIdList() {
     contractId: multisigSelected?.address,
   });
 
-  const fetchTxIds = async () => {
-    if (!contract) return [];
-
-    const result = await contract.functions.get_active_tx_ids().dryRun();
-    return result.value ?? [];
-  };
-
   const { data, error, isLoading, isFetched } = useQuery({
     queryKey: ["activeTxIds", multisigSelected?.address || ""],
-    queryFn: fetchTxIds,
+    queryFn: () =>
+      contract?.functions
+        .get_active_tx_ids()
+        .dryRun()
+        .then((result) => result.value ?? []),
     refetchInterval: 10000,
     enabled: !!multisigSelected?.address && !!contract,
     initialData: [],

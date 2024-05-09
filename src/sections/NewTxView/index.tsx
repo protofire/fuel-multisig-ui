@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 
 import { ROUTES } from "@/config/routes";
 
-import { SummaryCard } from "../common/SummaryCard";
+import { SummaryCard } from "../shared/common/SummaryCard";
 import { CaptionComponent } from "./CaptionComponent";
 
 export function NewTxView() {

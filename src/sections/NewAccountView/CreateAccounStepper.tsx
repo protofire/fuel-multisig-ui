@@ -10,7 +10,7 @@ import { OwnersStep } from "@/sections/NewAccountView/creation/OwnersStep";
 import { MultisigCreationStep } from "@/sections/NewAccountView/creation/WalletCreationStep";
 import { BaseStepper, transformSteps } from "@/sections/shared/BaseStepper";
 
-import ErrorMessage from "../common/ErrorMessage";
+import ErrorMessage from "../shared/common/ErrorMessage";
 import {
   CreateAccountContext,
   CreateAccountForm,

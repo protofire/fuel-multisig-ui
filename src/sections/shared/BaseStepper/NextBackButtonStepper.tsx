@@ -5,7 +5,7 @@ import { styled } from "@mui/system";
 import {
   LoadingButton,
   LoadingButtonProps,
-} from "@/sections/common/LoadingButton";
+} from "@/sections/shared/common/LoadingButton";
 
 import { FooterButton, StepperFooter } from "./styled";
 

@@ -9,7 +9,7 @@ import {
 import * as React from "react";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
-import CopyButton from "@/sections/common/CopyButton";
+import CopyButton from "@/sections/shared/common/CopyButton";
 
 import { AccountInfoWrapper } from "./styled";
 

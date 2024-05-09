@@ -1,7 +1,7 @@
 import { Avatar, TextField, TextFieldProps } from "@mui/material";
 import React from "react";
 
-import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
+import { EmojiAvatarIcon } from "@/sections/shared/common/EmojiAvatar/EmojiAvatarIcon";
 import { getHexFromAddress } from "@/services/fuel/connectors/transformer";
 import { validateAddress } from "@/validations/blockchain";
 

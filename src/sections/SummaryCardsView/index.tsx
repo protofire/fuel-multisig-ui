@@ -5,7 +5,7 @@ import { Grid } from "@mui/material";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
 import { useEthMultisignatureSelected } from "@/hooks/multisignatureSelected/useEthMultisignatureSelected";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
-import { SummaryCard } from "@/sections/common/SummaryCard";
+import { SummaryCard } from "@/sections/shared/common/SummaryCard";
 
 export function SummaryCardsView() {
   const { balance, isFetching } = useEthMultisignatureSelected();
