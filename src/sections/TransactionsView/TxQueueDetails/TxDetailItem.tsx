@@ -12,6 +12,7 @@ import { TransactionDisplayInfo } from "@/services/contracts/transformers/toTxQu
 import { MAIN_COLOR } from "@/themes/palette";
 import { formatDate, truncateAddress } from "@/utils/formatString";
 
+import { StateMessage } from "./StateMessage";
 import { StyledGrid } from "./styled";
 
 interface Props {
@@ -20,7 +21,7 @@ interface Props {
 }
 
 export function TxDetailItem({ txData, isB256Activated = false }: Props) {
-  const { image, typeName, to, validUntil } = txData;
+  const { image, typeName, to, validUntil, status } = txData;
   const _to = isB256Activated ? to?.b256 : to?.bech32;
   const _validUntil = formatDate(validUntil);
 
@@ -101,9 +102,7 @@ export function TxDetailItem({ txData, isB256Activated = false }: Props) {
             </Box>
           </StyledGrid>
           <StyledGrid item xs={2} sm={2} md={2}>
-            {/* <Typography color={successTx ? "#ADD500" : "#FF9C7D"}>
-              {txStateMsg}
-            </Typography> */}
+            <StateMessage txType={status} />
           </StyledGrid>
         </Grid>
       </AccordionSummary>

@@ -22,5 +22,11 @@ export function useGetTxIdList() {
     initialData: [],
   });
 
-  return { data, error, isLoading: isLoading || !isFetched, contract };
+  return {
+    data,
+    error,
+    isLoading: isLoading || !isFetched,
+    contract,
+    multisigSelected,
+  };
 }

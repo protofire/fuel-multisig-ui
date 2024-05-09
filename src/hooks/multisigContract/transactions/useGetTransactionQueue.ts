@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { BigNumberish } from "fuels";
 import { useCallback } from "react";
 
-import { TransactionOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import {
   toTxQueueItem,
   TransactionDisplayInfo,
 } from "@/services/contracts/transformers/toTxQueueItem";
+import { getErrorMessage } from "@/utils/error";
 
 import { useGetTxIdList } from "./useGetTxIdList";
 
@@ -15,6 +15,7 @@ export function useGetTransactionQueue() {
     data: transactionIds,
     contract,
     isLoading: isGettingIds,
+    multisigSelected,
   } = useGetTxIdList();
 
   const fetchTransactionData = useCallback(
@@ -24,19 +25,17 @@ export function useGetTransactionQueue() {
       return Promise.all(
         transactionIds.map(async (id) => {
           try {
-            const [transaction, approvals, rejections] = await Promise.all([
-              contract.functions.get_tx(id).dryRun(),
-              contract.functions.get_tx_approval_count(id).dryRun(),
-              contract.functions.get_tx_rejection_count(id).dryRun(),
-            ]);
-            return {
-              id,
-              transaction: transaction.value,
-              approvals: approvals.value,
-              rejections: rejections.value,
-            };
+            const transaction = await contract.functions
+              .get_tx(id.toString())
+              .dryRun();
+
+            return transaction.value;
           } catch (error) {
-            console.error("Error fetching data for transaction ID", id, error);
+            console.error(
+              "Error fetching data for transaction ID",
+              id.toString(),
+              error
+            );
             return null;
           }
         })
@@ -45,25 +44,22 @@ export function useGetTransactionQueue() {
     [contract]
   );
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, isError } = useQuery({
     queryKey: ["transactionQueue", transactionIds],
     queryFn: () => fetchTransactionData(transactionIds as BigNumberish[]),
     enabled: !!transactionIds && !!contract,
     refetchInterval: 10000, // Refetch every 10 seconds
   });
 
-  console.log("__dataGetTQueue", data);
   const transactionData: TransactionDisplayInfo[] = (data ?? [])
-    .filter((item): item is NonNullable<typeof item> => item !== null)
-    .map((item) => ({
-      ...toTxQueueItem(item.transaction as TransactionOutput),
-      approvalCount: item.approvals,
-      rejectionCount: item.rejections,
+    .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
+    .map((tx) => ({
+      ...toTxQueueItem(tx, multisigSelected?.threshold || 1),
     }));
 
   return {
     transactionData,
-    error: error,
+    error: error && getErrorMessage(error),
     isLoading: isLoading || isGettingIds,
   };
 }
