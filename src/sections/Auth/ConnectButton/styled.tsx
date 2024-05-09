@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import {
   LoadingButton,
   LoadingButtonProps,
-} from "@/sections/common/LoadingButton";
+} from "@/sections/shared/common/LoadingButton";
 
 type Props = LoadingButtonProps & Pick<ButtonProps, "ref">;
 

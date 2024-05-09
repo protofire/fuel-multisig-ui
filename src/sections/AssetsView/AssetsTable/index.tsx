@@ -7,7 +7,11 @@ import { useState } from "react";
 
 import { ROUTES } from "@/config/routes";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
-import { Column, GenericTable, Row } from "@/sections/common/GenericTable";
+import {
+  Column,
+  GenericTable,
+  Row,
+} from "@/sections/shared/common/GenericTable";
 
 import AssetTabs from "./AssetTabs";
 

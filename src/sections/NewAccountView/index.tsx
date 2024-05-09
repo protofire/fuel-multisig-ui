@@ -2,7 +2,7 @@
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useByOwnerSignersAccount } from "@/hooks/storageMultisignatures/useByOwnerSignersAccount";
-import { FallbackSpinner } from "@/sections/common/FallbackSpinner";
+import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 import { MainContentCard } from "@/sections/shared/MainContentCard";
 
 import { CreateAccountStepper } from "./CreateAccounStepper";

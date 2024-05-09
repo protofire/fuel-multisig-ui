@@ -5,8 +5,8 @@ import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
 import { useAccountWalletItem } from "@/hooks/useGetProviderrWalletSelected";
-import CopyButton from "@/sections/common/CopyButton";
-import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
+import CopyButton from "@/sections/shared/common/CopyButton";
+import { EmojiAvatarIcon } from "@/sections/shared/common/EmojiAvatar/EmojiAvatarIcon";
 import { getConnectorImage } from "@/services/fuel/connectors/icons";
 import { truncateAddress } from "@/utils/formatString";
 

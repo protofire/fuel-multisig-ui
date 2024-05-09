@@ -82,3 +82,9 @@ export const formatDate = (inputDate: Date) => {
     minute: "numeric",
   });
 };
+
+export function capitalizeFirstLetter(identifier: string | undefined) {
+  return identifier
+    ? identifier.charAt(0).toUpperCase() + identifier.slice(1)
+    : "";
+}

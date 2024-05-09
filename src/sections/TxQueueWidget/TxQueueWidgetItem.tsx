@@ -21,8 +21,16 @@ export const TxQueueWidgetItem = ({
   owners,
   isB256Activated = false,
 }: Props) => {
-  const { image, typeName, validUntil, txMsg, to, valueAmount, approvalCount } =
-    data;
+  const {
+    image,
+    typeName,
+    validUntil,
+    txMsg,
+    to,
+    valueAmount,
+    approvalCount,
+    signMathOperation,
+  } = data;
   const _to = isB256Activated ? to?.b256 : to?.bech32;
 
   return (
@@ -47,7 +55,7 @@ export const TxQueueWidgetItem = ({
           </StyledStack>
         </StyledBox>
         <StyledValueBox>
-          {typeName !== "Transfer" && typeName !== "Call" ? `+` : "-"}
+          {signMathOperation}
           {valueAmount}
           <span>
             {approvalCount}/{owners}

@@ -1,14 +1,14 @@
 import { Box, Typography } from "@mui/material";
 
-import { AssetsTable } from "@/sections/AssetsView/AssetsTable";
+import { TxTable } from "@/sections/TransactionsView/TxTable";
 
-export default function AssetsPage() {
+export default function TransactionsPage() {
   return (
     <Box pt={4}>
       <Typography variant="h3" color="primary">
-        Assets
+        Transactions
       </Typography>
-      <AssetsTable />
+      <TxTable />
     </Box>
   );
 }

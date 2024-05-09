@@ -6,7 +6,7 @@ import { APP_NAME } from "@/config/app";
 import { ROUTES } from "@/config/routes";
 import { useSetupMultisig } from "@/hooks/multisigContract/useSetupMultisigContract";
 import { useAddSignersAccount } from "@/hooks/storageMultisignatures/useAddSignersAccount";
-import CopyButton from "@/sections/common/CopyButton";
+import CopyButton from "@/sections/shared/common/CopyButton";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { FlexCenterBox, StyledBox } from "@/sections/shared/BaseStepper/styled";

@@ -12,8 +12,8 @@ import { Controller } from "react-hook-form";
 
 import { useDelay } from "@/hooks/common/useDelay";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
-import { InputAddress } from "@/sections/common/muiExtended/InputAddress";
-import { InputAmountWithMax } from "@/sections/common/muiExtended/InputAmountWithMax";
+import { InputAddress } from "@/sections/shared/common/muiExtended/InputAddress";
+import { InputAmountWithMax } from "@/sections/shared/common/muiExtended/InputAmountWithMax";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { validateAddress } from "@/validations/blockchain";
 

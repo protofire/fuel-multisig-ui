@@ -1,40 +1,28 @@
-import { Avatar, Box, Tooltip, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Skeleton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import * as React from "react";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
-import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
-import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
 import CopyButton from "@/sections/shared/common/CopyButton";
-import { EmojiAvatarIcon } from "@/sections/shared/common/EmojiAvatar/EmojiAvatarIcon";
-import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
-import { formatThreshold, truncateAddress } from "@/utils/formatString";
 
 import { AccountInfoWrapper } from "./styled";
-import { SwitchUserAccount } from "./SwitchUserAccount";
 
 type Props = Partial<MultisignatureAccount> & {
   networkName: string;
-  ownersCount: number | undefined;
   networkColor: string | undefined;
-  multisigAccounts?: MultisignatureAccount[];
 };
 
-export function AccountInfoUI({
-  address,
+export function AccountInfoSkeleton({
   name,
   networkName,
-  threshold,
-  ownersCount,
   networkColor,
-  multisigAccounts,
 }: Props) {
-  const { isOpen, closeModal, openModal } = useModalBehaviour();
-  const walletItem = toAccountWalletItem(address as `fuel${string}`);
-
-  const { addressFormatted } = useAddressInFormatPicked({
-    accountWallet: walletItem,
-  });
-
   return (
     <AccountInfoWrapper networkcolor={networkColor}>
       <Box
@@ -51,13 +39,13 @@ export function AccountInfoUI({
             flexDirection="column"
             alignItems="center"
           >
-            <Avatar>
-              <EmojiAvatarIcon address={walletItem.address.b256} />
-            </Avatar>
+            <Skeleton variant="circular">
+              <Avatar></Avatar>
+            </Skeleton>
             <Tooltip title="Threshold" arrow>
               <Box display="flex" flexDirection="column">
                 <Typography variant="caption" color="primary">
-                  {formatThreshold({ threshold, owners: ownersCount })}
+                  <Skeleton width={"20px"} />
                 </Typography>
               </Box>
             </Tooltip>
@@ -77,21 +65,14 @@ export function AccountInfoUI({
               </Box>
             </Tooltip>
             <Typography color="white" variant="caption">
-              {truncateAddress(addressFormatted, 4)}
+              <Skeleton width={"80%"} />
             </Typography>
-            <CopyButton text={addressFormatted} />
+            <Stack direction={"row"}>
+              <Skeleton width={"40%"} />
+              <CopyButton text={""} />
+            </Stack>
           </Box>
         </Box>
-        {multisigAccounts && (
-          <Box sx={{ right: "0", position: "absolute", top: "3rem" }}>
-            <SwitchUserAccount
-              isOpen={isOpen}
-              closeModal={closeModal}
-              openModal={openModal}
-            />
-            {/* TODO Select Items */}
-          </Box>
-        )}
         <Box>
           <Typography variant="caption" color="white">
             {networkName}

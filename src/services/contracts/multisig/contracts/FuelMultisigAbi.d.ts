@@ -4,7 +4,7 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.81.0
+  Fuels version: 0.82.0
   Forc version: 0.49.3
   Fuel-Core version: 0.22.1
 */
@@ -25,8 +25,6 @@ import type { Option, Enum, Vec } from "./common";
 
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
-export type InternalTransactionParametersInput = Enum<{ Call: InternalContractCallParamsInput, Transfer: TransferParamsInput }>;
-export type InternalTransactionParametersOutput = Enum<{ Call: InternalContractCallParamsOutput, Transfer: TransferParamsOutput }>;
 export enum MultisigErrorInput { MaxOwnersReached = 'MaxOwnersReached', AlreadyOwner = 'AlreadyOwner', NotOwner = 'NotOwner', DuplicatedOwner = 'DuplicatedOwner', OwnersCannotBeEmpty = 'OwnersCannotBeEmpty', ThresholdCannotBeZero = 'ThresholdCannotBeZero', ThresholdCannotBeGreaterThanOwners = 'ThresholdCannotBeGreaterThanOwners', ThresholdNotReached = 'ThresholdNotReached', TransactionStillValid = 'TransactionStillValid', AlreadyVoted = 'AlreadyVoted', InvalidTxId = 'InvalidTxId', Unauthorized = 'Unauthorized', NotInitialized = 'NotInitialized', AlreadyInitialized = 'AlreadyInitialized', InsufficientAssetAmount = 'InsufficientAssetAmount', CanOnlyCallContracts = 'CanOnlyCallContracts', TransferRequiresAValue = 'TransferRequiresAValue', TransactionExpired = 'TransactionExpired', MaxTransactionsReached = 'MaxTransactionsReached' };
 export enum MultisigErrorOutput { MaxOwnersReached = 'MaxOwnersReached', AlreadyOwner = 'AlreadyOwner', NotOwner = 'NotOwner', DuplicatedOwner = 'DuplicatedOwner', OwnersCannotBeEmpty = 'OwnersCannotBeEmpty', ThresholdCannotBeZero = 'ThresholdCannotBeZero', ThresholdCannotBeGreaterThanOwners = 'ThresholdCannotBeGreaterThanOwners', ThresholdNotReached = 'ThresholdNotReached', TransactionStillValid = 'TransactionStillValid', AlreadyVoted = 'AlreadyVoted', InvalidTxId = 'InvalidTxId', Unauthorized = 'Unauthorized', NotInitialized = 'NotInitialized', AlreadyInitialized = 'AlreadyInitialized', InsufficientAssetAmount = 'InsufficientAssetAmount', CanOnlyCallContracts = 'CanOnlyCallContracts', TransferRequiresAValue = 'TransferRequiresAValue', TransactionExpired = 'TransactionExpired', MaxTransactionsReached = 'MaxTransactionsReached' };
 export type TransactionParametersInput = Enum<{ Call: ContractCallParamsInput, Transfer: TransferParamsInput }>;
@@ -40,20 +38,22 @@ export type ContractCallParamsInput = { calldata: Bytes, forwarded_gas: BigNumbe
 export type ContractCallParamsOutput = { calldata: Bytes, forwarded_gas: BN, function_selector: Bytes, single_value_type_arg: boolean, transfer_params: TransferParamsOutput };
 export type ContractIdInput = { value: string };
 export type ContractIdOutput = ContractIdInput;
-export type InternalContractCallParamsInput = { forwarded_gas: BigNumberish, single_value_type_arg: boolean, transfer_params: TransferParamsInput };
-export type InternalContractCallParamsOutput = { forwarded_gas: BN, single_value_type_arg: boolean, transfer_params: TransferParamsOutput };
 export type MultisigInitializedInput = { contract_id: ContractIdInput, threshold: BigNumberish, owners: Vec<IdentityInput> };
 export type MultisigInitializedOutput = { contract_id: ContractIdOutput, threshold: number, owners: Vec<IdentityOutput> };
 export type OwnerAddedInput = { owner: IdentityInput };
 export type OwnerAddedOutput = { owner: IdentityOutput };
+export type OwnerRemovedInput = { owner: IdentityInput };
+export type OwnerRemovedOutput = { owner: IdentityOutput };
 export type RawBytesInput = { ptr: BigNumberish, cap: BigNumberish };
 export type RawBytesOutput = { ptr: BN, cap: BN };
 export type ThresholdChangedInput = { new_threshold: BigNumberish };
 export type ThresholdChangedOutput = { new_threshold: number };
-export type TransactionInput = { tx_id: BigNumberish, to: IdentityInput, valid_until: BigNumberish, tx_parameters: InternalTransactionParametersInput };
-export type TransactionOutput = { tx_id: BN, to: IdentityOutput, valid_until: BN, tx_parameters: InternalTransactionParametersOutput };
 export type TransactionApprovedInput = { tx_id: BigNumberish, owner: IdentityInput };
 export type TransactionApprovedOutput = { tx_id: BN, owner: IdentityOutput };
+export type TransactionCancelledInput = { tx_id: BigNumberish };
+export type TransactionCancelledOutput = { tx_id: BN };
+export type TransactionDataInput = { tx_id: BigNumberish, to: IdentityInput, valid_until: BigNumberish, tx_parameters: TransactionParametersInput, approvals_count: BigNumberish, rejections_count: BigNumberish };
+export type TransactionDataOutput = { tx_id: BN, to: IdentityOutput, valid_until: BN, tx_parameters: TransactionParametersOutput, approvals_count: number, rejections_count: number };
 export type TransactionExecutedInput = { tx_id: BigNumberish };
 export type TransactionExecutedOutput = { tx_id: BN };
 export type TransactionProposedInput = { tx_id: BigNumberish, to: IdentityInput, transaction_parameters: TransactionParametersInput };
@@ -82,10 +82,6 @@ interface FuelMultisigAbiInterface extends Interface {
     get_threshold: FunctionFragment;
     get_tx: FunctionFragment;
     get_tx_approval_by_owner: FunctionFragment;
-    get_tx_approval_count: FunctionFragment;
-    get_tx_calldata: FunctionFragment;
-    get_tx_function_selector: FunctionFragment;
-    get_tx_rejection_count: FunctionFragment;
     is_owner: FunctionFragment;
   };
 
@@ -104,10 +100,6 @@ interface FuelMultisigAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'get_threshold', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'get_tx', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'get_tx_approval_by_owner', values: [BigNumberish, IdentityInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_tx_approval_count', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_tx_calldata', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_tx_function_selector', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_tx_rejection_count', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'is_owner', values: [IdentityInput]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'add_owner', data: BytesLike): DecodedValue;
@@ -125,10 +117,6 @@ interface FuelMultisigAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_threshold', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_tx', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_tx_approval_by_owner', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_tx_approval_count', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_tx_calldata', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_tx_function_selector', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_tx_rejection_count', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'is_owner', data: BytesLike): DecodedValue;
 }
 
@@ -148,12 +136,8 @@ export class FuelMultisigAbi extends Contract {
     get_next_tx_id: InvokeFunction<[], BN>;
     get_owners: InvokeFunction<[], Vec<IdentityOutput>>;
     get_threshold: InvokeFunction<[], number>;
-    get_tx: InvokeFunction<[tx_id: BigNumberish], Option<TransactionOutput>>;
+    get_tx: InvokeFunction<[tx_id: BigNumberish], Option<TransactionDataOutput>>;
     get_tx_approval_by_owner: InvokeFunction<[tx_id: BigNumberish, owner: IdentityInput], Option<boolean>>;
-    get_tx_approval_count: InvokeFunction<[tx_id: BigNumberish], Option<number>>;
-    get_tx_calldata: InvokeFunction<[tx_id: BigNumberish], Option<Bytes>>;
-    get_tx_function_selector: InvokeFunction<[tx_id: BigNumberish], Option<Bytes>>;
-    get_tx_rejection_count: InvokeFunction<[tx_id: BigNumberish], Option<number>>;
     is_owner: InvokeFunction<[owner: IdentityInput], boolean>;
   };
 }

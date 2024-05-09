@@ -50,12 +50,21 @@ export function useAssetsBalance(): UseAssetsBalanceReturn {
     if (!multisigSelected?.address) return;
 
     setIsLoading(true);
-    const _getBalances = async () =>
-      await wallet?.provider.getBalances(multisigSelected.address);
+    const _getBalances = async () => {
+      const _balances = await wallet?.provider.getBalances(
+        multisigSelected.address
+      );
+      _setCoinsBalances(_balances);
+    };
 
-    _getBalances()
-      .then(_setCoinsBalances)
-      .finally(() => setIsLoading(false));
+    // Call immediately at the first time
+    _getBalances().finally(() => setIsLoading(false));
+
+    const intervalId = setInterval(() => {
+      _getBalances().finally(() => setIsLoading(false));
+    }, 10000);
+
+    return () => clearInterval(intervalId);
   }, [_setCoinsBalances, multisigSelected?.address, wallet?.provider]);
 
   return { balances, isLoading };

@@ -2,6 +2,7 @@ import { CHAINS_COLORS } from "@/config/chains";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 
+import { AccountInfoSkeleton } from "./AccountInfoSkeleton";
 import { AccountInfoUI } from "./AccountInfoUI";
 
 export function AccountInfoWidget() {
@@ -11,7 +12,14 @@ export function AccountInfoWidget() {
     (chainInfo && CHAINS_COLORS[chainName]) || CHAINS_COLORS["Unknown"];
   const { multisigSelected } = useMultisignatureAccountSelected();
 
-  if (!multisigSelected) return null;
+  if (!multisigSelected) {
+    return (
+      <AccountInfoSkeleton
+        networkColor={networkColor}
+        networkName={chainName}
+      />
+    );
+  }
 
   return (
     <AccountInfoUI

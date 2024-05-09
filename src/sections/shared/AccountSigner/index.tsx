@@ -1,9 +1,9 @@
 import { Avatar, Box, Typography } from "@mui/material";
 
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
-import CopyButton from "@/sections/common/CopyButton";
-import { EmojiAvatarIcon } from "@/sections/common/EmojiAvatar/EmojiAvatarIcon";
-import { FuelExplorerLink } from "@/sections/common/ExplorerLink/FuelExplorerLink";
+import CopyButton from "@/sections/shared/common/CopyButton";
+import { EmojiAvatarIcon } from "@/sections/shared/common/EmojiAvatar/EmojiAvatarIcon";
+import { FuelExplorerLink } from "@/sections/shared/common/ExplorerLink/FuelExplorerLink";
 import { truncateAddress } from "@/utils/formatString";
 
 interface Props {

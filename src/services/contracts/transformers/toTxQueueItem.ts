@@ -1,12 +1,11 @@
+import { DateTime } from "fuels";
+
 import { assetByContractId } from "@/config/assetsMap";
 import { TX_TYPE_IMG } from "@/config/images";
 import { AccountAddress } from "@/domain/ui/AccountSelectItem";
-import { TransactionOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
+import { TransactionDataOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { getAccountWallet } from "@/services/fuel/connectors/transformer";
-import { DateTime } from "fuels";
-import {
-  irregularToDecimalFormatted,
-} from "@/utils/bnJsFormatter";
+import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
 
 export interface TransferProposed {
   id: string;
@@ -19,20 +18,32 @@ export interface TransferProposed {
   valueAmount: string | undefined;
 }
 
+export type TX_STATUS_TYPE =
+  | "PROPOSED"
+  | "READY_TO_EXECUTE"
+  | "EXECUTED_SUCCESS"
+  | "EXECUTED_FAILURE"
+  | "CANCELLED";
+
 export interface TransactionDisplayInfo extends TransferProposed {
   image: string;
   txMsg: string;
   approvalCount?: number;
   rejectionCount?: number;
+  signMathOperation?: "+" | "-" | "";
+  status: TX_STATUS_TYPE;
 }
 
 export const emptyDisplayInfo = {
   image: TX_TYPE_IMG.CONTRACT,
   txMsg: "to",
+  signMathOperation: "",
+  status: "PROPOSED",
 };
 
 export function toTxQueueItem(
-  transactionOutput: TransactionOutput
+  transactionOutput: TransactionDataOutput,
+  threshold: number
 ): TransactionDisplayInfo {
   const transfer = { ...emptyDisplayInfo } as TransactionDisplayInfo;
 
@@ -54,16 +65,23 @@ export function toTxQueueItem(
             }),
           }
         )
-      : "-";
+      : "";
+    transfer.signMathOperation = "-";
   }
 
   const _result = {
     ...transfer,
+    status:
+      transactionOutput.approvals_count >= threshold
+        ? "READY_TO_EXECUTE"
+        : transfer.status,
     id: transactionOutput.tx_id.toString(),
     to: transactionOutput.to.Address
       ? getAccountWallet(transactionOutput.to.Address.value)
       : undefined,
     validUntil: DateTime.fromTai64(transactionOutput.valid_until.toString()),
+    approvalCount: transactionOutput.approvals_count,
+    rejectionCount: transactionOutput.rejections_count,
   };
 
   return _result;

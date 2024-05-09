@@ -1,6 +1,6 @@
 import { PropsWithChildren, Suspense } from "react";
 
-import { FallbackSpinner } from "@/sections/common/FallbackSpinner";
+import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 
 import { ConnectionGuard } from "./ConnectedGuard";
 import { WalletStatusRedirectGuard } from "./WalletStatusRedirectGuard";

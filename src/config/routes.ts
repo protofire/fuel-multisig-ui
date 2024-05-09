@@ -6,8 +6,8 @@ export const ROUTES = {
   NewTx: "/app/new-transaction",
   SendAsset: "/app/new-transaction/send-asset",
   Assets: "/app/assets",
-  Transactions: "/transactions",
-  Settings: "/settings",
+  Transactions: "/app/transactions",
+  Settings: "/app/settings",
 } as const;
 
 export type RouteValue = (typeof ROUTES)[keyof typeof ROUTES];
