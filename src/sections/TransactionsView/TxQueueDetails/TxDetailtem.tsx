@@ -37,6 +37,8 @@ export function TxDetailItem({
   const _validUntil = formatDate(validUntil);
   const { data: signersApprovalStatus } = useTxSigners({ txId: id });
 
+  console.log("__sS", signersApprovalStatus);
+
   return (
     <Accordion
       sx={{

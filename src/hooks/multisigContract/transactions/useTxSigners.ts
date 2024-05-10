@@ -44,7 +44,6 @@ export function useTxSigners({ txId }: Props) {
               ...owner,
               status: boolToApprovedBySigner(transaction.value),
             };
-            return transaction.value;
           } catch (error) {
             console.error(
               `Error fetching owner ${owner.name} approval for transaction ID",

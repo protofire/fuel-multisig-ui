@@ -67,13 +67,13 @@ function ColorlibStepIcon(
 interface Props {
   txData: TransactionDisplayInfo;
   multisigSelected: MultisignatureAccount;
-  signersApprovalStatus: SignerApprovalStatus;
+  signersApprovalStatus: SignerApprovalStatus | undefined;
 }
 
 export function TxExecutionHandler({
   txData,
   multisigSelected,
-  signersApprovalStatus,
+  signersApprovalStatus: owners,
 }: Props) {
   const { status, approvalCount } = txData;
   const isProposed = status === TX_STATUS_TYPE.PROPOSED;
@@ -81,7 +81,7 @@ export function TxExecutionHandler({
   const [signerExecuting, setSignerExecuting] = useState<string[]>([]);
   const [showOwners, setShowOwners] = useState(true);
 
-  if (!signersApprovalStatus) return "loading";
+  if (!owners) return "loading";
 
   return (
     <Box
