@@ -9,22 +9,33 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 
-import { TransactionDisplayInfo } from "@/services/contracts/transformers/toTxQueueItem";
+import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
+import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
+import { useTxSigners } from "@/hooks/multisigContract/transactions/useTxSigners";
 import { MAIN_COLOR } from "@/themes/palette";
 import { formatDate, truncateAddress } from "@/utils/formatString";
 
 import { StateMessage } from "./StateMessage";
 import { StyledGrid } from "./styled";
+import { TxDetails } from "./TxDetails";
+import { TxExecutionHandler } from "./TxExecutionHandler";
 
 interface Props {
   txData: TransactionDisplayInfo;
   isB256Activated: boolean;
+  multisigSelected: MultisignatureAccount;
 }
 
-export function TxDetailItem({ txData, isB256Activated = false }: Props) {
-  const { image, typeName, to, validUntil, status, signMathOperation } = txData;
+export function TxDetailItem({
+  txData,
+  isB256Activated = false,
+  multisigSelected,
+}: Props) {
+  const { id, image, typeName, to, validUntil, status, signMathOperation } =
+    txData;
   const _to = isB256Activated ? to?.b256 : to?.bech32;
   const _validUntil = formatDate(validUntil);
+  const { data: signersApprovalStatus } = useTxSigners({ txId: id });
 
   return (
     <Accordion
@@ -108,7 +119,16 @@ export function TxDetailItem({ txData, isB256Activated = false }: Props) {
         </Grid>
       </AccordionSummary>
       <AccordionDetails sx={{ backgroundColor: "#201A1B", padding: "0px" }}>
-        <Box sx={{ flexGrow: 1, display: "flex" }}></Box>
+        <Box sx={{ flexGrow: 1, display: "flex" }}>
+          <TxDetails txData={txData} />
+          {multisigSelected && (
+            <TxExecutionHandler
+              txData={txData}
+              multisigSelected={multisigSelected}
+              signersApprovalStatus={signersApprovalStatus}
+            />
+          )}
+        </Box>
       </AccordionDetails>
     </Accordion>
   );

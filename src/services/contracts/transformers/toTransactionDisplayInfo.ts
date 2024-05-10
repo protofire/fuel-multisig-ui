@@ -2,46 +2,15 @@ import { DateTime } from "fuels";
 
 import { assetByContractId } from "@/config/assetsMap";
 import { TX_TYPE_IMG } from "@/config/images";
-import { AccountAddress } from "@/domain/ui/AccountSelectItem";
+import {
+  emptyDisplayInfo,
+  TransactionDisplayInfo,
+} from "@/domain/TransactionProposed";
 import { TransactionDataOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { getAccountWallet } from "@/services/fuel/connectors/transformer";
 import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
 
-export interface TransferProposed {
-  id: string;
-  to: AccountAddress | undefined;
-  validUntil: DateTime;
-  typeName: "Transfer" | "Call";
-  assetAddress: string | undefined;
-  assetValue: string | undefined;
-  assetDecimals: number;
-  valueAmount: string | undefined;
-}
-
-export type TX_STATUS_TYPE =
-  | "PROPOSED"
-  | "READY_TO_EXECUTE"
-  | "EXECUTED_SUCCESS"
-  | "EXECUTED_FAILURE"
-  | "CANCELLED";
-
-export interface TransactionDisplayInfo extends TransferProposed {
-  image: string;
-  txMsg: string;
-  approvalCount?: number;
-  rejectionCount?: number;
-  signMathOperation?: "+" | "-" | "";
-  status: TX_STATUS_TYPE;
-}
-
-export const emptyDisplayInfo = {
-  image: TX_TYPE_IMG.CONTRACT,
-  txMsg: "to",
-  signMathOperation: "",
-  status: "PROPOSED",
-};
-
-export function toTxQueueItem(
+export function toTransactionDisplayInfo(
   transactionOutput: TransactionDataOutput,
   threshold: number
 ): TransactionDisplayInfo {

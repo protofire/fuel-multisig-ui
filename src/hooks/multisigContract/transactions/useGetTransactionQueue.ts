@@ -3,9 +3,9 @@ import { BigNumberish } from "fuels";
 import { useCallback } from "react";
 
 import {
-  toTxQueueItem,
+  toTransactionDisplayInfo,
   TransactionDisplayInfo,
-} from "@/services/contracts/transformers/toTxQueueItem";
+} from "@/services/contracts/transformers/toTransactionDisplayInfo";
 import { getErrorMessage } from "@/utils/error";
 
 import { useGetTxIdList } from "./useGetTxIdList";
@@ -25,9 +25,7 @@ export function useGetTransactionQueue() {
       return Promise.all(
         transactionIds.map(async (id) => {
           try {
-            const transaction = await contract.functions
-              .get_tx(id.toString())
-              .dryRun();
+            const transaction = await contract.functions.get_tx(id).dryRun();
 
             return transaction.value;
           } catch (error) {
@@ -54,7 +52,7 @@ export function useGetTransactionQueue() {
   const transactionData: TransactionDisplayInfo[] = (data ?? [])
     .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
     .map((tx) => ({
-      ...toTxQueueItem(tx, multisigSelected?.threshold || 1),
+      ...toTransactionDisplayInfo(tx, multisigSelected?.threshold || 1),
     }));
 
   return {

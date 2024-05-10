@@ -3,7 +3,7 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { Box, Tooltip, Typography } from "@mui/material";
 import React from "react";
 
-import { TX_STATUS_TYPE } from "@/services/contracts/transformers/toTxQueueItem";
+import { TX_STATUS_TYPE } from "@/services/contracts/transformers/toTransactionDisplayInfo";
 
 const SimpleMessage = ({
   status,
