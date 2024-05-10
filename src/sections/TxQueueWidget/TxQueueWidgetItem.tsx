@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { TransactionDisplayInfo } from "@/services/contracts/transformers/toTransactionDisplayInfo";
+import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
 import { formatDate, truncateAddress } from "@/utils/formatString";
 
 import {

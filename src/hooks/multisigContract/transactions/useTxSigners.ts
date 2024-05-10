@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 
 import {
+  OwnerWithAction,
   SignerApprovalStatus,
   TransferProposed,
 } from "@/domain/TransactionProposed";
@@ -15,6 +16,12 @@ interface Props {
   txId: TransferProposed["id"];
 }
 
+interface UseTxSignersResult {
+  isLoading: boolean;
+  error: string | null;
+  data: Array<OwnerWithAction> | undefined;
+}
+
 function boolToApprovedBySigner(
   approved: boolean | undefined
 ): SignerApprovalStatus {
@@ -23,7 +30,7 @@ function boolToApprovedBySigner(
   return approved === false ? "Rejected" : "Pending";
 }
 
-export function useTxSigners({ txId }: Props) {
+export function useTxSigners({ txId }: Props): UseTxSignersResult {
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { contract } = useGetMultisigContract({
     contractId: multisigSelected?.address,
@@ -58,16 +65,18 @@ export function useTxSigners({ txId }: Props) {
     [contract, multisigSelected]
   );
 
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, error, isFetched } = useQuery({
     queryKey: ["transactionSigners", txId],
     queryFn: () => fetchData(txId),
     enabled: !!multisigSelected,
     refetchInterval: 10000, // Refetch every 10 seconds
   });
 
+  const _data = data?.filter((tx): tx is NonNullable<typeof tx> => tx !== null);
+
   return {
-    data,
+    data: _data,
     error: error && getErrorMessage(error),
-    isLoading: isLoading,
+    isLoading: isLoading || !isFetched,
   };
 }

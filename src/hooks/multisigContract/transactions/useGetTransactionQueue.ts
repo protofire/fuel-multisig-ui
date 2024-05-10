@@ -2,10 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { BigNumberish } from "fuels";
 import { useCallback } from "react";
 
-import {
-  toTransactionDisplayInfo,
-  TransactionDisplayInfo,
-} from "@/services/contracts/transformers/toTransactionDisplayInfo";
+import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
+import { toTransactionDisplayInfo } from "@/services/contracts/transformers/toTransactionDisplayInfo";
 import { getErrorMessage } from "@/utils/error";
 
 import { useGetTxIdList } from "./useGetTxIdList";

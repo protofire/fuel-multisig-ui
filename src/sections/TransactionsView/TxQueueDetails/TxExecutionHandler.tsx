@@ -18,7 +18,7 @@ import { useState } from "react";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import {
-  SignerApprovalStatus,
+  OwnerWithAction,
   TransactionDisplayInfo,
   TX_STATUS_TYPE,
   TxStatusType,
@@ -67,7 +67,7 @@ function ColorlibStepIcon(
 interface Props {
   txData: TransactionDisplayInfo;
   multisigSelected: MultisignatureAccount;
-  signersApprovalStatus: SignerApprovalStatus | undefined;
+  signersApprovalStatus: OwnerWithAction[] | undefined;
 }
 
 export function TxExecutionHandler({
@@ -81,7 +81,7 @@ export function TxExecutionHandler({
   const [signerExecuting, setSignerExecuting] = useState<string[]>([]);
   const [showOwners, setShowOwners] = useState(true);
 
-  if (!owners) return "loading";
+  if (!owners || !owners.length) return "loading";
 
   return (
     <Box

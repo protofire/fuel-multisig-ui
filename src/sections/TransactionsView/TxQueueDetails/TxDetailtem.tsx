@@ -35,7 +35,8 @@ export function TxDetailItem({
     txData;
   const _to = isB256Activated ? to?.b256 : to?.bech32;
   const _validUntil = formatDate(validUntil);
-  const { data: signersApprovalStatus } = useTxSigners({ txId: id });
+  const { data: signersApprovalStatus, isLoading: loadingSignersApproval } =
+    useTxSigners({ txId: id });
 
   console.log("__sS", signersApprovalStatus);
 
