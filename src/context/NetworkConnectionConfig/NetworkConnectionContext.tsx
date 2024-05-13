@@ -91,12 +91,12 @@ export const NetworkConnectionProvider: React.FC<
   }, [chainData]);
 
   const _accounts = useMemo(() => {
-    if (!accounts || !wallet) return [];
+    if (!accounts) return [];
 
     return accounts.map((address, index) =>
       toAccountWalletItem(address as `fuel${string}`, `Acct. ${index + 1}`)
     );
-  }, [accounts, wallet]);
+  }, [accounts]);
 
   useEffect(() => {
     if (!isConnected) return;

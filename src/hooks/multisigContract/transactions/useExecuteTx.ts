@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { useCallback } from "react";
 
 import { DryRunExecutionResult } from "@/domain/DryRunExecutionResult";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { useMultisigDryRunHandler } from "@/hooks/multisigContract/useMultisigDryRunHandler";
+import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
+import { customReportError } from "@/utils/error";
 
 import { UseGetMultisigContractResult } from "../useGetMultisigContract";
 
@@ -11,18 +12,20 @@ interface Props {
   multisigSelected: MultisignatureAccount;
   multisigContract: UseGetMultisigContractResult["contract"];
   proposedTxId: string;
+  onSuccess?: () => void;
 }
 
 interface UseApproveTxResult {
   dryRunHandler: DryRunExecutionResult;
   execute: () => void;
-  isLoading: boolean;
+  isPending: boolean;
 }
 
 export function useExecuteTx({
   multisigSelected,
   multisigContract,
   proposedTxId,
+  onSuccess,
 }: Props): UseApproveTxResult {
   const dryRunHandler = useMultisigDryRunHandler({
     multisigContract,
@@ -30,18 +33,35 @@ export function useExecuteTx({
     methodArgs: [proposedTxId],
   });
 
-  const _executeTx = useCallback(async () => {
-    if (!multisigContract) return;
-  }, [multisigContract]);
+  const mutation = useMutation({
+    mutationKey: [
+      "executeTx",
+      proposedTxId,
+      multisigContract?.account?.address,
+    ],
+    mutationFn: async () => {
+      return multisigContract?.functions
+        .execute_tx(proposedTxId)
+        .call()
+        .catch((e) => {
+          const parsedError = parseFuelError(e);
+          const msg = customReportError(e);
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: _executeTx,
-    mutationKey: ["executeTx", proposedTxId],
+          if (parsedError.log) {
+            throw new Error(parsedError.log);
+          } else if (parsedError.message) {
+            throw new Error(parsedError.message);
+          }
+
+          throw new Error(msg);
+        });
+    },
+    onMutate: () => onSuccess?.(),
   });
 
   return {
-    execute: mutate,
+    execute: mutation.mutate,
     dryRunHandler,
-    isLoading: isPending,
+    isPending: mutation.isPending,
   };
 }

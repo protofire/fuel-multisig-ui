@@ -33,13 +33,13 @@ export function ConfirmationWidget({
     accountConnected,
     multisigContract,
     proposedTxId,
-    onSuccess: () => setSignerExecuting([accountConnected || ""]),
+    // onSuccess: () => setSignerExecuting([accountConnected || ""]),
   });
   const { reject, dryRunHandler: dryRunReject } = useRejectTx({
     accountConnected,
     multisigContract,
     proposedTxId,
-    onSuccess: () => setSignerExecuting([accountConnected || ""]),
+    // onSuccess: () => setSignerExecuting([accountConnected || ""]),
   });
   const rejectDisabled =
     dryRunReject.isRunning ||

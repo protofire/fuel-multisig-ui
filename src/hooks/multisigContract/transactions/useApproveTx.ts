@@ -39,7 +39,11 @@ export function useApproveTx({
   // }, []);
 
   const mutation = useMutation({
-    mutationKey: ["approve", proposedTxId, multisigContract?.account?.address],
+    mutationKey: [
+      "approveTx",
+      proposedTxId,
+      multisigContract?.account?.address,
+    ],
     mutationFn: async () => {
       return multisigContract?.functions
         .approve_tx(proposedTxId)
