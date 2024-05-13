@@ -1,10 +1,15 @@
 "use client";
 import React, { useMemo } from "react";
+import { useForm } from "react-hook-form";
 
 import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
+import { useParseMetadataField } from "@/hooks/useParseMetadataField";
 import { BaseStepper, transformSteps } from "@/sections/shared/BaseStepper";
+import {
+  TxBuilderContext,
+  TxBuilderForm,
+} from "@/sections/TxBuilderView/TxBuilderContext/TxBuilderContext";
 
-import { TxBuilderContext } from "../TxBuilderContext/TxBuilderContext";
 import { ImportContractStep } from "./ImportContractStep";
 
 const steps = [
@@ -19,16 +24,27 @@ const steps = [
 export function TxBuilderStepper() {
   const managerStep = useManagerActiveStep(steps.length);
   const formSteps = useMemo(() => transformSteps(steps), []);
+  const metadataManager = useParseMetadataField();
+  const inputFormManager = useForm<TxBuilderForm>({
+    mode: "onBlur",
+    defaultValues: {
+      contractAddress: "",
+    },
+  });
 
   return (
     <TxBuilderContext.Provider
       value={{
         managerStep,
-        // metadataManager,
-        // inputFormManager,
+        inputFormManager,
+        metadataManager,
       }}
     >
-      <BaseStepper steps={formSteps} managerStep={managerStep} />
+      <BaseStepper
+        orientation="horizontal"
+        steps={formSteps}
+        managerStep={managerStep}
+      />
     </TxBuilderContext.Provider>
   );
 }
