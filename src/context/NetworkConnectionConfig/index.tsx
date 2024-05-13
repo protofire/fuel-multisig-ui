@@ -6,6 +6,7 @@ import {
 } from "@fuels/connectors";
 import { FuelProvider } from "@fuels/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { PropsWithChildren } from "react";
 
 import { NetworkConnectionProvider } from "./NetworkConnectionContext";
@@ -26,6 +27,7 @@ export function NetworkConnectionConfig({ children }: PropsWithChildren) {
       >
         <NetworkConnectionProvider>{children}</NetworkConnectionProvider>
       </FuelProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

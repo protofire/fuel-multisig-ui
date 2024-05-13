@@ -4,7 +4,7 @@ import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/us
 import { useGetTransactionQueue } from "@/hooks/multisigContract/transactions/useGetTransactionQueue";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 
-import { TxDetailItem } from "./TxDetailItem";
+import { TxDetailItem } from "./TxDetailtem";
 
 export function TxQueueDetails() {
   const { transactionData, isLoading, error } = useGetTransactionQueue();
@@ -12,7 +12,7 @@ export function TxQueueDetails() {
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { isB256Activated } = useFormatAccountWalletItem();
 
-  if (isLoading) {
+  if (isLoading || !multisigSelected) {
     return (
       <Box mt={2}>
         <Skeleton height={"3rem"} variant="rounded" />
@@ -28,6 +28,7 @@ export function TxQueueDetails() {
             key={txData.id}
             txData={txData}
             isB256Activated={isB256Activated}
+            multisigSelected={multisigSelected}
           />
         );
       })}

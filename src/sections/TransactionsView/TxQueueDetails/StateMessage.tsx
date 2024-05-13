@@ -3,13 +3,13 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { Box, Tooltip, Typography } from "@mui/material";
 import React from "react";
 
-import { TX_STATUS_TYPE } from "@/services/contracts/transformers/toTxQueueItem";
+import { TxStatusType } from "@/domain/TransactionProposed";
 
 const SimpleMessage = ({
   status,
   text,
 }: {
-  status: TX_STATUS_TYPE;
+  status: TxStatusType;
   text: string;
 }) => (
   <Typography color={status === "READY_TO_EXECUTE" ? "#ADD500" : "#FF9C7D"}>
@@ -21,10 +21,10 @@ export const StateMessage = ({
   txType,
   error = "",
 }: {
-  txType: TX_STATUS_TYPE;
+  txType: TxStatusType;
   error?: string;
 }) => {
-  const msg: Record<TX_STATUS_TYPE, React.JSX.Element> = {
+  const msg: Record<TxStatusType, React.JSX.Element> = {
     PROPOSED: <SimpleMessage status={txType} text="Awaiting Confirmations" />,
     EXECUTED_SUCCESS: <SimpleMessage status={txType} text="Success" />,
 

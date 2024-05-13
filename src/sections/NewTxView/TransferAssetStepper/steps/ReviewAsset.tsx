@@ -19,6 +19,20 @@ export function ReviewAsset() {
   const { recipientAddress, asset, amount, assetId } = getValues();
   const { isDelayFinished } = useDelay(500);
   const { proposeTransaction, isLoading } = useProposeTransaction();
+  // const argsMethod = useMemo(() => { //TODO
+  //   const _amount = new BigNumber(amount)
+  //     .multipliedBy(BigNumber(10).pow(asset?.decimals ?? 0))
+  //     .toString();
+
+  //   return {
+  //     to: toIdentityInput(recipientAddress),
+  //     txValidityDuration: getCurrentDatePlusTenDays(),
+  //     params: {
+  //       asset_id: { value: assetId },
+  //       value: _amount,
+  //     },
+  //   };
+  // }, [amount, asset?.decimals, assetId, recipientAddress]);
 
   const signAndSend = () => {
     const _amount = new BigNumber(amount)
