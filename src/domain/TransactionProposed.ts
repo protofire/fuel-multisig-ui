@@ -16,13 +16,20 @@ export interface TransferProposed {
   valueAmount: string | undefined;
 }
 
-export type SignerApprovalStatus = "Pending" | "Approved" | "Rejected";
+export const TX_OWNER_STATUS_TYPE = {
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  PENDING: "Pending",
+};
+
+export type SignerApprovalStatus = (keyof typeof TX_OWNER_STATUS_TYPE)[number];
 
 export const TX_STATUS_TYPE = {
   PROPOSED: "PROPOSED",
   EXECUTED_SUCCESS: "EXECUTED_SUCCESS",
   EXECUTED_FAILURE: "EXECUTED_FAILURE",
   CANCELLED: "CANCELLED",
+  READY_TO_EXECUTE: "READY_TO_EXECUTE",
 };
 
 export type TxStatusType = (keyof typeof TX_STATUS_TYPE)[number];

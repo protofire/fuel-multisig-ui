@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
+import { useState } from "react";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
@@ -35,10 +36,19 @@ export function TxDetailItem({
     txData;
   const _to = isB256Activated ? to?.b256 : to?.bech32;
   const _validUntil = formatDate(validUntil);
-  const { data: signersApprovalStatus, isLoading: loadingSignersApproval } =
-    useTxSigners({ txId: id });
+  const { data: signersApprovalStatus } = useTxSigners({ txId: id });
+  const [expandedIds, setExpandedIds] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+  const expanded = !!expandedIds[txData.id];
 
-  console.log("__sS", signersApprovalStatus);
+  const handleChange =
+    (id: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpandedIds((prevExpandedIds) => ({
+        ...prevExpandedIds,
+        [id]: isExpanded ? true : !prevExpandedIds[id],
+      }));
+    };
 
   return (
     <Accordion
@@ -129,6 +139,8 @@ export function TxDetailItem({
               txData={txData}
               multisigSelected={multisigSelected}
               signersApprovalStatus={signersApprovalStatus}
+              isB256Activated={isB256Activated}
+              expanded={expanded}
             />
           )}
         </Box>

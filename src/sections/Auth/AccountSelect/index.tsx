@@ -27,6 +27,7 @@ interface Props {
 }
 
 export function AccountSelect({
+  accountConnected,
   accounts,
   setAccount,
   disconnectWallet,

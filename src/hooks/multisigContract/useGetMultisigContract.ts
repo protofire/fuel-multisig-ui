@@ -11,7 +11,13 @@ interface Props {
   contractId: string | undefined;
 }
 
-export function useGetMultisigContract({ contractId = "" }: Props) {
+export interface UseGetMultisigContractResult {
+  contract: FuelMultisigAbi | undefined;
+}
+
+export function useGetMultisigContract({
+  contractId = "",
+}: Props): UseGetMultisigContractResult {
   const contractRef = useRef<FuelMultisigAbi | undefined>(undefined);
 
   const { contract } = useGetContract<FuelMultisigAbi>({
@@ -21,7 +27,11 @@ export function useGetMultisigContract({ contractId = "" }: Props) {
 
   if (!contractRef.current && contract) {
     contractRef.current = contract;
+  } else if (
+    contract?.account?.address &&
+    !contractRef.current?.account?.address.equals(contract?.account?.address)
+  ) {
+    contractRef.current = contract;
   }
-
   return { contract: contractRef.current };
 }
