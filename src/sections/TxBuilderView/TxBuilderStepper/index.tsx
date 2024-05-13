@@ -19,16 +19,6 @@ export function TxBuilderStepper() {
   const managerStep = useManagerActiveStep(steps.length);
   const formSteps = useMemo(() => transformSteps(steps), []);
 
-  // const metadataManager = useParseMetadataField();
-  // const inputFormManager = useForm<TxBuilderForm>({
-  //   address: "",
-  //   metadataSource: undefined,
-  //   selectedAbiIdentifier: undefined,
-  //   selectedAbiMessage: undefined,
-  //   dataArgs: undefined,
-  //   transferTxStruct: undefined,
-  // });
-
   return (
     <TxBuilderContext.Provider
       value={{
