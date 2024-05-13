@@ -7,6 +7,7 @@ export const ROUTES = {
   SendAsset: "/app/new-transaction/send-asset",
   Assets: "/app/assets",
   Transactions: "/app/transactions",
+  TxBuilder: "/app/transaction-builder",
   Settings: "/app/settings",
 } as const;
 
