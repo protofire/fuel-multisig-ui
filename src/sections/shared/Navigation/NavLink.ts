@@ -61,12 +61,12 @@ export const MENU_ITEMS: NavLink[] = [
     icon: icons.IconTxBuilder,
     target: true,
   },
-  // {
-  //   id: "settings",
-  //   title: "Settings",
-  //   type: "item",
-  //   url: ROUTES.Settings,
-  //   icon: icons.IconSettings,
-  //   target: true,
-  // },
+  {
+    id: "settings",
+    title: "Settings",
+    type: "item",
+    url: ROUTES.Settings,
+    icon: icons.IconSettings,
+    target: true,
+  },
 ];
