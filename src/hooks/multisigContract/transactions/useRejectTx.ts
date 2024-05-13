@@ -1,8 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 import { DryRunExecutionResult } from "@/domain/DryRunExecutionResult";
 import { useMultisigDryRunHandler } from "@/hooks/multisigContract/useMultisigDryRunHandler";
+import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
+import { customReportError } from "@/utils/error";
 
 import { UseGetMultisigContractResult } from "../useGetMultisigContract";
 
@@ -10,17 +11,19 @@ interface Props {
   multisigContract: UseGetMultisigContractResult["contract"];
   proposedTxId: string;
   accountConnected: string | undefined;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 interface UseApproveTxResult {
   dryRunHandler: DryRunExecutionResult;
   reject: () => void;
+  isPending: boolean;
 }
 
 export function useRejectTx({
   multisigContract,
   proposedTxId,
+  onSuccess,
 }: Props): UseApproveTxResult {
   const dryRunHandler = useMultisigDryRunHandler({
     multisigContract,
@@ -30,17 +33,31 @@ export function useRejectTx({
     failureOutcome: "You can't vote",
   });
 
-  const reject = useCallback(() => {
-    console.log("__approve");
-  }, []);
+  const mutation = useMutation({
+    mutationKey: ["rejectTx", proposedTxId, multisigContract?.account?.address],
+    mutationFn: async () => {
+      return multisigContract?.functions
+        .reject_tx(proposedTxId)
+        .call()
+        .catch((e) => {
+          const parsedError = parseFuelError(e);
+          const msg = customReportError(e);
 
-  const { data, isPending } = useQuery({
-    queryFn: reject,
-    queryKey: ["approve", proposedTxId],
+          if (parsedError.log) {
+            throw new Error(parsedError.log);
+          } else if (parsedError.message) {
+            throw new Error(parsedError.message);
+          }
+
+          throw new Error(msg);
+        });
+    },
+    onMutate: () => onSuccess?.(),
   });
 
   return {
-    reject,
+    reject: mutation.mutate,
     dryRunHandler,
+    isPending: mutation.isPending,
   };
 }
