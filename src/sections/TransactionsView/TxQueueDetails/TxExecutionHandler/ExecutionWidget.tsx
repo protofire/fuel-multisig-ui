@@ -30,7 +30,6 @@ export function ExecutionWidget({
     proposedTxId,
   });
 
-  console.log("__executeHandler", dryRunHandler);
   return (
     <>
       <Box display="flex" flex={1} width="100%" mt={0} flexDirection="column">
