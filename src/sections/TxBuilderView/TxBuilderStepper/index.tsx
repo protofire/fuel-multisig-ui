@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo } from "react";
 
 import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
@@ -10,7 +11,7 @@ const steps = [
   {
     id: 0,
     name: "Import Contract",
-    label: "Import a Contract to get the message to interact with it.",
+    label: "Import a Contract to get the methods to interact with it.",
     Component: ImportContractStep,
   },
 ];
