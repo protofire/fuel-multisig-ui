@@ -563,12 +563,10 @@
     chalk "4"
     cli-table "^0.3.11"
 
-"@fuels/connectors@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@fuels/connectors/-/connectors-0.1.1.tgz#ce67439fadc34219d1693eaa83fe6ad8a83f9209"
-  integrity sha512-h0ErY8J8y58QaOyjVtcXICY/GjmSZMD/nLnrAMyrBpsrAUChLV6lYdwZ1MxVhHJFpbtaCG0IrclHxwJvQCFE5Q==
-  dependencies:
-    json-rpc-2.0 "1.7.0"
+"@fuels/connectors@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@fuels/connectors/-/connectors-0.2.2.tgz#af2cb8a0f7942de1b5987df12da95a5eccfbc964"
+  integrity sha512-TbyJjK3GgyeF6ERZyoh8GfECAVBoI69w4Ee/Osw2Q1zzGIY5/oWwPJxCUzOzd+47eIRWlvtItl1mvkyDyn3aVA==
 
 "@fuels/react@0.18.0":
   version "0.18.0"
@@ -2972,11 +2970,6 @@ json-parse-even-better-errors@^2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz#7c47805a94319928e05777405dc12e1f7a4ee02d"
   integrity sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==
-
-json-rpc-2.0@1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/json-rpc-2.0/-/json-rpc-2.0-1.7.0.tgz#840deb0bc168463e12bceb462f7fe225e793fc17"
-  integrity sha512-asnLgC1qD5ytP+fvBP8uL0rvj+l8P6iYICbzZ8dVxCpESffVjzA7KkYkbKCIbavs7cllwH1ZUaNtJwphdeRqpg==
 
 json-schema-traverse@^0.4.1:
   version "0.4.1"
