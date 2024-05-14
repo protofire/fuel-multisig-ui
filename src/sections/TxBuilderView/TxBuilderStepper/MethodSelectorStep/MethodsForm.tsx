@@ -1,4 +1,4 @@
-import { Box, Stack, TextField, Typography } from "@mui/material";
+import { Box, Stack, TextField } from "@mui/material";
 import { Contract } from "fuels";
 import { Controller } from "react-hook-form";
 
@@ -38,11 +38,11 @@ export function MethodsForm({ selectedAbiMethod, metadataContract }: Props) {
             justifyContent="space-between"
             alignItems="center"
           >
-            {thereAreAttributes && (
+            {/* {thereAreAttributes && (
               <Typography variant="caption" fontWeight="500">
                 Message to send:
               </Typography>
-            )}
+            )} */}
             {/* <DryRunMessage
               error={errorDryrun}
               outcome={outcomeDryRun}
