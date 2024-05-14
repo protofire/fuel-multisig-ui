@@ -1,4 +1,4 @@
-import { Box, FormControl } from "@mui/material";
+import { Box, FormControl, FormHelperText } from "@mui/material";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
@@ -21,14 +21,14 @@ export function ImportContractStep() {
     downStep: handleBack,
     upStep: handleNext,
   } = managerStep;
-  const { metadataFile, onChange, onRemove } = metadataManager;
+  const { metadataFile, onChange, onRemove, metadata } = metadataManager;
   const { isB256Activated } = useFormatAccountWalletItem();
-
   const {
     control,
     formState: { isValid, errors },
     getValues,
     setValue,
+    resetField,
   } = inputFormManager;
   const { contractAddress } = getValues();
 
@@ -46,10 +46,15 @@ export function ImportContractStep() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isB256Activated]);
 
-  const _handleNext = () => console.log("__getValues", contractAddress);
+  useEffect(() => {
+    if (!metadata.isSupplied || !metadata.source) return;
+
+    setValue("metadataSource", metadata.source);
+  }, [metadata.isSupplied, metadata.isValid, metadata.source, setValue]);
+
   const _onRemove = () => {
     onRemove();
-    // reset({ address: values.address });
+    resetField("metadataSource");
   };
 
   return (
@@ -91,6 +96,11 @@ export function ImportContractStep() {
               disabled={!contractAddress || Boolean(errors.contractAddress)}
             />
           </DropzoneWrapper>
+          {errors.metadataSource && (
+            <FormHelperText error id={`error-metadata-source`}>
+              {errors.metadataSource?.message}
+            </FormHelperText>
+          )}
         </FormControl>
       </Box>
       <Box pt={5}>
@@ -98,10 +108,10 @@ export function ImportContractStep() {
           activeStep={activeStep}
           stepsLength={stepsLength}
           handleBack={handleBack}
-          handleNext={_handleNext}
+          handleNext={handleNext}
           hiddenBack={true}
           nextButtonProps={{
-            disabled: !isValid,
+            disabled: !isValid || !metadata.isValid,
             isLoading: false,
           }}
         />

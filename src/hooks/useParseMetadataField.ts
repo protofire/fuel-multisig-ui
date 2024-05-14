@@ -1,3 +1,4 @@
+import { JsonAbi } from "fuels";
 import {
   Dispatch,
   SetStateAction,
@@ -12,16 +13,19 @@ import { readerAsFileState } from "@/utils/fileReader";
 type OnChange = Dispatch<SetStateAction<File | null>>;
 type OnRemove = () => void;
 
-interface Options {
-  isWasmRequired?: boolean;
-}
-
 interface Callbacks {
   onChange?: OnChange;
   onRemove?: OnRemove;
 }
 
-export type MetadataState = Record<string, unknown>;
+export type MetadataState = {
+  source?: JsonAbi;
+  name: string;
+  isSupplied: boolean;
+  error: null | string;
+  isValid: boolean;
+  message?: string | null;
+};
 
 export interface UseMetadata {
   metadata: MetadataState;
@@ -32,29 +36,23 @@ export interface UseMetadata {
 
 export const metadataManager = new MetadataManager();
 
-export function useParseMetadataField(
-  initialValue?: Record<string, unknown>,
-  options: Options & Callbacks = {}
-): UseMetadata {
+export function useParseMetadataField(): UseMetadata {
   const [metadataFile, setMetadataFile] = useState<File | undefined>();
-  //   const apiPromise = useMemo(() => apiProvider?.api, [apiProvider?.api]);
-  //   const { isWasmRequired = false } = options;
-  const [metadata, setMetadata] = useState<MetadataState>();
+  const [metadata, setMetadata] = useState<MetadataState>(
+    metadataManager.EMPTY
+  );
 
   const onChange = useCallback(async (file: File) => {
     setMetadataFile(file);
     const fileState = await readerAsFileState(file);
-    const abiJson = metadataManager.parseFile(fileState);
+    const metadataJson: MetadataState = metadataManager.parseFile(fileState);
 
-    debugger;
-    // setMetadata(newState);
-    setMetadata(fileState);
+    setMetadata(metadataJson);
   }, []);
 
   const onRemove = useCallback(() => {
     setMetadataFile(undefined);
-    // setMetadata(metadataManager.EMPTY);
-    setMetadata(undefined);
+    setMetadata(metadataManager.EMPTY);
   }, [setMetadataFile]);
 
   useEffect(() => {

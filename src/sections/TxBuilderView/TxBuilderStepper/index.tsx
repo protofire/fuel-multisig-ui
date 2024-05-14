@@ -11,6 +11,7 @@ import {
 } from "@/sections/TxBuilderView/TxBuilderContext/TxBuilderContext";
 
 import { ImportContractStep } from "./ImportContractStep";
+import { MethodSelectorStep } from "./MethodSelectorStep";
 
 const steps = [
   {
@@ -19,6 +20,12 @@ const steps = [
     label: "Import a Contract to get the methods to interact with it.",
     Component: ImportContractStep,
   },
+  {
+    id: 1,
+    name: "Method Selector",
+    label: "Set the transaction Information.",
+    Component: MethodSelectorStep,
+  },
 ];
 
 export function TxBuilderStepper() {
@@ -26,9 +33,11 @@ export function TxBuilderStepper() {
   const formSteps = useMemo(() => transformSteps(steps), []);
   const metadataManager = useParseMetadataField();
   const inputFormManager = useForm<TxBuilderForm>({
-    mode: "onBlur",
+    mode: "all",
     defaultValues: {
       contractAddress: "",
+      metadataSource: undefined,
+      abiMethodSelector: "",
     },
   });
 

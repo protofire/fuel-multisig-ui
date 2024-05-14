@@ -1,3 +1,4 @@
+import { JsonAbi } from "fuels";
 import { createContext } from "react";
 import { UseFormReturn } from "react-hook-form";
 
@@ -6,6 +7,8 @@ import { UseMetadata } from "@/hooks/useParseMetadataField";
 
 export interface TxBuilderForm {
   contractAddress: string;
+  metadataSource: JsonAbi;
+  abiMethodSelector: string;
 }
 
 export interface TxBuilderContextData {
