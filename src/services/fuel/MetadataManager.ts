@@ -30,9 +30,7 @@ export class MetadataManager {
 
   parseFile(file: FileState) {
     try {
-      const sourceJson = JSON.parse(
-        this.utf8decoder.decode(file.data)
-      ) as Record<string, unknown>;
+      const sourceJson = JSON.parse(this.utf8decoder.decode(file.data));
       const name = file.name.replace(".json", "");
 
       return {

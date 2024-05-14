@@ -1,22 +1,8 @@
 import { JsonAbi } from "fuels";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { MetadataManager } from "@/services/fuel/MetadataManager";
 import { readerAsFileState } from "@/utils/fileReader";
-
-type OnChange = Dispatch<SetStateAction<File | null>>;
-type OnRemove = () => void;
-
-interface Callbacks {
-  onChange?: OnChange;
-  onRemove?: OnRemove;
-}
 
 export type MetadataState = {
   source?: JsonAbi;
