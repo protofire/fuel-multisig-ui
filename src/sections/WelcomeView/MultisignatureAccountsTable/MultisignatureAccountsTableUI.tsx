@@ -73,7 +73,6 @@ export function MultisignatureAccountsTableUI({
               <Box width={300}>
                 <AccountSigner
                   owner={toAccountWalletItem(multisig.address, multisig.name)}
-                  truncateAmount={16}
                   showLink={false}
                 />
               </Box>
