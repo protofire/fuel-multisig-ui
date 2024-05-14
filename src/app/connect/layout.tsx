@@ -2,8 +2,8 @@
 import { Suspense } from "react";
 
 import { Guard } from "@/sections/Auth/Guard";
-import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 import { BasicLayout } from "@/sections/layout/BasicLayout";
+import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 
 export default function ConnectLayout({
   children,

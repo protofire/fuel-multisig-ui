@@ -4,7 +4,7 @@ import { Avatar, Box, SelectChangeEvent, Stack } from "@mui/material";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { WalletProviderItem } from "@/domain/ui/WalletProviderItem";
 import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
-import { useAccountWalletItem } from "@/hooks/useGetProviderrWalletSelected";
+import { useAccountWalletSelected } from "@/hooks/useAccountWalletSelected";
 import CopyButton from "@/sections/shared/common/CopyButton";
 import { EmojiAvatarIcon } from "@/sections/shared/common/EmojiAvatar/EmojiAvatarIcon";
 import { getConnectorImage } from "@/services/fuel/connectors/icons";
@@ -35,7 +35,7 @@ export function AccountSelect({
   walletProvider,
   isLoading = false,
 }: Props) {
-  const { accountWalletItem: accountSelected } = useAccountWalletItem();
+  const { accountWalletItem: accountSelected } = useAccountWalletSelected();
 
   const { addressFormatted, isB256Activated } = useAddressInFormatPicked({
     accountWallet: accountSelected,

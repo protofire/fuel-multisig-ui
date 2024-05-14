@@ -14,7 +14,7 @@ import { Controller } from "react-hook-form";
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { useDeployMultisigContract } from "@/hooks/multisigContract/useDeployMultisigContract";
 import { useDraftMultisigDeployed } from "@/hooks/multisigContract/useDraftMultisigDeployed";
-import { useAccountWalletItem } from "@/hooks/useGetProviderrWalletSelected";
+import { useAccountWalletSelected } from "@/hooks/useAccountWalletSelected";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import NetworkBadge from "@/sections/shared/NetworkBadge";
 import { FuelWalletIcon } from "@/services/fuel/connectors/icons/FuelWalletIcon";
@@ -38,7 +38,7 @@ export function MultisigCreationStep() {
     setValue,
     getValues,
   } = inputFormManager;
-  const { accountWalletItem } = useAccountWalletItem();
+  const { accountWalletItem } = useAccountWalletSelected();
   const { deployContract, isLoading: isDeploying } =
     useDeployMultisigContract();
   const { deployedMultisigAddress, walletName } = getValues();

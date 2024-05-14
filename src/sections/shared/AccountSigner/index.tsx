@@ -10,14 +10,18 @@ interface Props {
   owner: AccountWalletItem;
   showCopy?: boolean;
   showLink?: boolean;
-  truncateAmount?: number;
+  startlength?: number;
+  endlength?: number;
+  isB256Activated?: boolean;
 }
 
 export function AccountSigner({
   owner,
   showCopy = true,
-  truncateAmount = 4,
+  startlength: startlenght = 6,
+  endlength: endlenght = 6,
   showLink = true,
+  isB256Activated = false,
 }: Props) {
   const { address, name } = owner;
 
@@ -31,7 +35,11 @@ export function AccountSigner({
         <Typography fontSize={14}>{name}</Typography>
         <Typography display="flex" alignItems="center" component="div">
           <Typography fontSize={12}>
-            {truncateAddress(address.bech32, truncateAmount)}
+            {truncateAddress(
+              isB256Activated ? address.b256 : address.bech32,
+              startlenght,
+              endlenght
+            )}
           </Typography>
           {showCopy && <CopyButton text={address.bech32} />}
           {showLink && <FuelExplorerLink hash={address.b256} path="account" />}
