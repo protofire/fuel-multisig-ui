@@ -13,7 +13,7 @@ interface Props {
 export function MethodsForm({ selectedAbiMethod, metadataContract }: Props) {
   const { inputFormManager } = useTxBuilderContext();
   const thereAreAttributes =
-    selectedAbiMethod?.interfaceMethod?.attributes.length || 0;
+    selectedAbiMethod?.interfaceMethod?.jsonFn.inputs.length || 0;
   const {
     control,
     formState: { isValid, errors },
@@ -49,7 +49,7 @@ export function MethodsForm({ selectedAbiMethod, metadataContract }: Props) {
               isRunning={isDryRunning}
             /> */}
           </Box>
-          {thereAreAttributes && (
+          {thereAreAttributes > 0 && (
             <Controller
               name={"abiMethodParams"}
               control={control}
