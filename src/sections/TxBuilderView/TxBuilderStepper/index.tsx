@@ -37,7 +37,8 @@ export function TxBuilderStepper() {
     defaultValues: {
       contractAddress: "",
       metadataSource: undefined,
-      abiMethodSelector: "",
+      abiMethodSelected: "",
+      abiMethodParams: "",
     },
   });
 

@@ -4,9 +4,10 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Skeleton,
   Typography,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
@@ -19,7 +20,9 @@ import { MonoTypography } from "@/sections/shared/common/MonoTypography";
 import { truncateAddress } from "@/utils/formatString";
 
 import { useTxBuilderContext } from "../../TxBuilderContext/useTxBuilderContext";
+import { MethodsForm } from "./MethodsForm";
 import { BoxRow } from "./styled";
+import { useAbiMethodSelector } from "./useAbiMethodSelector";
 
 export function MethodSelectorStep() {
   const { inputFormManager, managerStep, metadataManager } =
@@ -30,8 +33,8 @@ export function MethodSelectorStep() {
     downStep: handleBack,
     upStep: handleNext,
   } = managerStep;
-  const { getValues, setValue, control } = inputFormManager;
-  const { contractAddress, metadataSource, abiMethodSelector } = getValues();
+  const { getValues, setValue, control, watch } = inputFormManager;
+  const { contractAddress, metadataSource } = getValues();
   const { addressFormatted } = useAddressInFormatPicked({
     accountWallet: contractAddress,
   });
@@ -46,6 +49,16 @@ export function MethodSelectorStep() {
       metadataContract && Object.values(metadataContract.interface.functions),
     [metadataContract]
   );
+  const abiMethodSelected = watch("abiMethodSelected");
+  const abiSelectedParams = watch("abiMethodParams");
+  const { selectedAbiMethod, selectedAbiMethodLoading } = useAbiMethodSelector({
+    methodName: abiMethodSelected,
+    metadataContract,
+  });
+
+  const _handleNext = useCallback(() => {
+    console.log("__Sign");
+  }, []);
 
   if (!metadataContract) {
     return (
@@ -58,6 +71,8 @@ export function MethodSelectorStep() {
       />
     );
   }
+
+  console.log("__printingParams", abiSelectedParams);
 
   return (
     <Box mt={3} display="flex" gap={1} flexDirection="column">
@@ -80,7 +95,7 @@ export function MethodSelectorStep() {
       </BoxRow>
       {sortedAbiMessages?.length && (
         <Controller
-          name="abiMethodSelector"
+          name="abiMethodSelected"
           control={control}
           render={({ field }) => (
             <FormControl fullWidth>
@@ -89,12 +104,15 @@ export function MethodSelectorStep() {
               <Select
                 labelId="select-method-label"
                 {...field}
-                onChange={(e) => field.onChange(e)}
+                onChange={(e) => {
+                  field.onChange(e.target.value);
+                  //   setValue("abiMethodSelected", e.target.value);
+                }}
                 autoFocus
                 label="Select Method"
               >
-                {sortedAbiMessages.map((m, index) => (
-                  <MenuItem key={index} value={m.name}>
+                {sortedAbiMessages.map((m) => (
+                  <MenuItem key={m.selector} value={m.name}>
                     {m.name}
                   </MenuItem>
                 ))}
@@ -103,14 +121,29 @@ export function MethodSelectorStep() {
           )}
         />
       )}
+      {selectedAbiMethodLoading ? (
+        <>
+          <Skeleton width={"100%"} />
+          <Skeleton width={"100%"} />
+          <Skeleton width={"100%"} />
+        </>
+      ) : (
+        selectedAbiMethod &&
+        metadataContract && (
+          <MethodsForm
+            selectedAbiMethod={selectedAbiMethod}
+            metadataContract={metadataContract}
+          />
+        )
+      )}
       <Box p={5}>
         <NextBackButtonStepper
           activeStep={activeStep}
           stepsLength={stepsLength}
           handleBack={handleBack}
-          handleNext={handleNext}
+          handleNext={_handleNext}
           nextButtonProps={{
-            disabled: !abiMethodSelector,
+            disabled: !selectedAbiMethod || selectedAbiMethod.isReadOnly,
           }}
         />
       </Box>

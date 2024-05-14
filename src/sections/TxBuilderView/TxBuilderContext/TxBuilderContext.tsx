@@ -8,7 +8,8 @@ import { UseMetadata } from "@/hooks/useParseMetadataField";
 export interface TxBuilderForm {
   contractAddress: string;
   metadataSource: JsonAbi;
-  abiMethodSelector: string;
+  abiMethodSelected: string;
+  abiMethodParams: string;
 }
 
 export interface TxBuilderContextData {
