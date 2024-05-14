@@ -1,10 +1,11 @@
+import { BigNumberish } from "fuels";
 import { useCallback, useState } from "react";
 
 import {
   IdentityInput,
-  TransferParamsInput,
+  TransactionParametersInput,
 } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
-import { getErrorMessage } from "@/utils/error";
+import { customReportError, getErrorMessage } from "@/utils/error";
 import { getCurrentDatePlusTenDays } from "@/utils/getCurrentDatePlusTenDays";
 
 import { useMultisignatureAccountSelected } from "../multisignatureSelected/useMultisignatureAccountSelected";
@@ -12,7 +13,8 @@ import { useGetMultisigContract } from "./useGetMultisigContract";
 
 interface ProposeTransactionProps {
   to: IdentityInput;
-  params: TransferParamsInput;
+  txValidityDuration?: BigNumberish;
+  params: TransactionParametersInput;
 }
 
 export interface UseProposeTransactionReturn {
@@ -30,8 +32,9 @@ export function useProposeTransaction() {
   });
 
   const proposeTransaction = useCallback(
-    async ({ to, params }: ProposeTransactionProps) => {
-      const txValidityDuration = getCurrentDatePlusTenDays();
+    async ({ to, txValidityDuration, params }: ProposeTransactionProps) => {
+      const _txValidityDuration =
+        txValidityDuration ?? getCurrentDatePlusTenDays();
       setError(null);
       setIsLoading(true);
 
@@ -41,13 +44,13 @@ export function useProposeTransaction() {
         //   .getTransactionCost();
 
         const _dryRun = await contract?.functions
-          .propose_tx(to, txValidityDuration, { Transfer: params })
+          .propose_tx(to, _txValidityDuration, params)
           .dryRun();
 
-        console.log("__dryRun", _dryRun);
+        customReportError(_dryRun);
 
         const response = await contract?.functions
-          .propose_tx(to, txValidityDuration, { Transfer: params })
+          .propose_tx(to, _txValidityDuration, params)
           // .txParams({
           //   gasPrice: cost?.gasPrice,
           //   gasLimit: cost?.gasUsed.mul(1.1),

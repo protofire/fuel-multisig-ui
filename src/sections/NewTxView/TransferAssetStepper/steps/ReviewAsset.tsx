@@ -1,9 +1,12 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import BigNumber from "bignumber.js";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
+import { ROUTES } from "@/config/routes";
 import { useDelay } from "@/hooks/common/useDelay";
-import { useProposeTransaction } from "@/hooks/multisigContract/useProposeTransaction";
+import { useTransferAsset } from "@/hooks/multisigContract/useTransferAsset";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { toIdentityInput } from "@/services/contracts/transformers/toInputIdentity";
@@ -14,37 +17,34 @@ import { useTransferAssetContext } from "../TransferAssetContext";
 
 export function ReviewAsset() {
   const { inputFormManager, managerStep } = useTransferAssetContext();
+  const router = useRouter();
   const { activeStep, stepsLength, upStep, downStep } = managerStep;
-  const { getValues } = inputFormManager;
+  const { getValues, reset } = inputFormManager;
   const { recipientAddress, asset, amount, assetId } = getValues();
   const { isDelayFinished } = useDelay(500);
-  const { proposeTransaction, isLoading } = useProposeTransaction();
-  // const argsMethod = useMemo(() => { //TODO
-  //   const _amount = new BigNumber(amount)
-  //     .multipliedBy(BigNumber(10).pow(asset?.decimals ?? 0))
-  //     .toString();
-
-  //   return {
-  //     to: toIdentityInput(recipientAddress),
-  //     txValidityDuration: getCurrentDatePlusTenDays(),
-  //     params: {
-  //       asset_id: { value: assetId },
-  //       value: _amount,
-  //     },
-  //   };
-  // }, [amount, asset?.decimals, assetId, recipientAddress]);
-
-  const signAndSend = () => {
+  const sendParams = useMemo(() => {
     const _amount = new BigNumber(amount)
       .multipliedBy(BigNumber(10).pow(asset?.decimals ?? 0))
       .toString();
-    proposeTransaction({
+
+    return {
       to: toIdentityInput(recipientAddress),
       params: {
         asset_id: { value: assetId },
         value: _amount,
       },
-    });
+    };
+  }, [amount, asset?.decimals, assetId, recipientAddress]);
+  const { send, isPending } = useTransferAsset({
+    ...sendParams,
+    onSuccess: () => {
+      router.push(ROUTES.App);
+      reset();
+    },
+  });
+
+  const signAndSend = () => {
+    send();
   };
 
   if (!asset)
@@ -117,8 +117,8 @@ export function ReviewAsset() {
           handleNext={signAndSend}
           nextLabel={<>Sign and send</>}
           nextButtonProps={{
-            disabled: !isDelayFinished || isLoading,
-            isLoading: !isDelayFinished || isLoading,
+            disabled: !isDelayFinished || isPending,
+            isLoading: !isDelayFinished || isPending,
           }}
         />
       </Box>
