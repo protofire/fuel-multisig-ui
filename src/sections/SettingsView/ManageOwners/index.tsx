@@ -1,11 +1,23 @@
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import { Box, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
+import { ROUTES } from "@/config/routes";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
+import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
+import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
+import { useRecentlyClicked } from "@/hooks/common/useRecentlyClicked";
 import { useAccountWalletSelected } from "@/hooks/useAccountWalletSelected";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
-import { LoadingButton } from "@/sections/shared/common/LoadingButton";
 
+import { DeleteOwnerModal } from "./DeleteOwnerModal";
 import { useManageOwnersUi } from "./useManageOwnersUi";
 
 interface Props {
@@ -15,6 +27,10 @@ interface Props {
 
 export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
   const { owners } = multisigSelected;
+  const router = useRouter();
+  const [currentOwner, setCurrentOwner] = useState<
+    AccountWalletItem | undefined
+  >();
   const isPendingDelete = false;
   const { accountWalletItem } = useAccountWalletSelected();
   const { ownersQuery } = useManageOwnersUi({
@@ -22,9 +38,31 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
     accountWalletItemConnected: accountWalletItem,
   });
   const isOnlyOne = ownersQuery.data?.length <= 1;
+  const { openModal, isOpen, closeModal } = useModalBehaviour();
+  const {
+    openModal: openModalDelete,
+    isOpen: isOpenModalDelete,
+    closeModal: closeModalDelete,
+  } = useModalBehaviour();
+  const { ref: refButton, recentlyClicked } = useRecentlyClicked(1500);
+
+  const handleLocalDelete = (owner: AccountWalletItem) => {
+    if (isPendingDelete || isOnlyOne) return;
+
+    setCurrentOwner(owner);
+    openModalDelete();
+  };
+  const handleAddOwner = () => {
+    router.push(ROUTES.SetOwners);
+  };
 
   return (
     <Box display="flex">
+      <DeleteOwnerModal
+        owner={currentOwner}
+        isOpen={isOpenModalDelete}
+        closeModal={closeModalDelete}
+      />
       <Box minWidth={300}>
         <Typography variant="h5">Manage Owners</Typography>
       </Box>
@@ -52,11 +90,7 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
                   />
                   <Box display="flex" gap={0.25}>
                     <DeleteOutlinedIcon
-                      onClick={() => {
-                        if (isPendingDelete || isOnlyOne) return;
-
-                        console.log(accountOwner);
-                      }}
+                      onClick={() => handleLocalDelete(accountOwner)}
                       sx={{
                         cursor:
                           isOnlyOne || isPendingDelete
@@ -96,7 +130,8 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
             );
           })}
         </Box>
-        <LoadingButton
+        <Button
+          ref={refButton}
           variant="text"
           sx={{
             justifyContent: "flex-start",
@@ -104,12 +139,18 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
             fontSize: 14,
             marginTop: "1rem",
           }}
-          // {...(owners === undefined
-          //   ? { isLoading: true }
-          //   : { onClick: handleAddOwner })}
+          {...(!ownersQuery.isFetched ||
+          ownersQuery.isLoading ||
+          recentlyClicked
+            ? { isLoading: true }
+            : { onClick: handleAddOwner })}
         >
-          + Add new owner
-        </LoadingButton>
+          {recentlyClicked ? (
+            <CircularProgress color="secondary" size={20} />
+          ) : (
+            `+ Add new owner`
+          )}
+        </Button>
       </Box>
     </Box>
   );
