@@ -6,7 +6,7 @@ import { UseModalBehaviour } from "@/hooks/common/useModalBehaviour";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
 
 interface Props extends Omit<UseModalBehaviour, "openModal"> {
-  onConfirm?: () => void;
+  onConfirm?: (owner: AccountWalletItem) => void;
   owner?: AccountWalletItem;
 }
 
@@ -57,7 +57,14 @@ export function DeleteOwnerModal({
             </Typography>
           </Box>
           <Box mt={3} mb={2}>
-            {owner && <AccountSigner owner={owner} />}
+            {owner && (
+              <AccountSigner
+                owner={owner}
+                showCopy={false}
+                showLink={false}
+                endlength={12}
+              />
+            )}
           </Box>
         </Box>
         <Box
@@ -73,7 +80,7 @@ export function DeleteOwnerModal({
           <Button
             onClick={() => {
               closeModal();
-              onConfirm?.();
+              owner && onConfirm?.(owner);
             }}
             variant="contained"
             sx={{ width: 134 }}
