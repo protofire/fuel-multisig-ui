@@ -4,6 +4,7 @@ import { Box, BoxProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { PropsWithChildren } from "react";
 
+import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
 import { useSettingsTheme } from "@/context/SettingsThemeConsumer";
 import {
   MainContentWrapper,
@@ -11,6 +12,7 @@ import {
 } from "@/sections/layout/wrapper";
 
 import { scalePixels } from "../../themes/spacing";
+import ErrorMessage from "../shared/common/ErrorMessage";
 import { Footer } from "./Footer";
 import { TopBar } from "./TopBar";
 import { VerticalMenuBar } from "./VerticalMenuBar";
@@ -41,6 +43,7 @@ const ContentWrapper = styled(Box)<
 export const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { settings } = useSettingsTheme();
   const marginLeft = settings.navOpen ? settings.drawerWidth || 0 : 0;
+  const { error, setError } = useInteractionError();
 
   return (
     <VerticalLayoutWrapper>
@@ -52,7 +55,12 @@ export const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
           component="main"
           navopen={settings.navOpen.toString()}
         >
-          {children}
+          <>
+            {error?.msg && (
+              <ErrorMessage error={error} clearError={() => setError(null)} />
+            )}
+            {children}
+          </>
         </ContentWrapper>
         <Footer />
       </MainContentWrapper>
