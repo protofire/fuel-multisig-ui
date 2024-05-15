@@ -16,7 +16,6 @@ export interface TxBuilderContextData {
   managerStep: ManagerActiveStep;
   inputFormManager: UseFormReturn<TxBuilderForm>;
   metadataManager: UseMetadata;
-  resetTxBuilderStepper: () => void;
 }
 
 export const TxBuilderContext = createContext({} as TxBuilderContextData);

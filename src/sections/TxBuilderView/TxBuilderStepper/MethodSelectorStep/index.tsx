@@ -1,3 +1,4 @@
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import {
   Box,
   FormControl,
@@ -33,8 +34,7 @@ import { BoxRow } from "./styled";
 import { useAbiMethodSelector } from "./useAbiMethodSelector";
 
 export function MethodSelectorStep() {
-  const { inputFormManager, managerStep, resetTxBuilderStepper } =
-    useTxBuilderContext();
+  const { inputFormManager, managerStep } = useTxBuilderContext();
   const { getValues, control, watch } = inputFormManager;
   const abiMethodSelected = watch("abiMethodSelected");
   const abiSelectedParams = watch("abiMethodParams");
@@ -88,7 +88,6 @@ export function MethodSelectorStep() {
     }).then((result) => {
       if (result) {
         router.push(ROUTES.App);
-        resetTxBuilderStepper();
       }
     });
   }, [
@@ -97,7 +96,6 @@ export function MethodSelectorStep() {
     contractAddress,
     proposeTransaction,
     router,
-    resetTxBuilderStepper,
   ]);
 
   if (!metadataContract) {
@@ -180,6 +178,12 @@ export function MethodSelectorStep() {
           stepsLength={stepsLength}
           handleBack={handleBack}
           handleNext={_handleNext}
+          nextLabel={
+            <>
+              Propose transaction
+              <ArrowRightAltIcon />
+            </>
+          }
           nextButtonProps={{
             disabled: !selectedAbiMethod || selectedAbiMethod.isReadOnly,
           }}
