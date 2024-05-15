@@ -2,7 +2,6 @@
 import { Box } from "@mui/material";
 import { useForm } from "react-hook-form";
 
-import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
 import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import Breadcrumbs from "@/sections/NewTxView/Breadcrumbs";
@@ -16,7 +15,6 @@ export default function SettingsPageLayout({
   children,
 }: React.PropsWithChildren) {
   const { multisigSelected } = useMultisignatureAccountSelected();
-  const { isB256Activated } = useFormatAccountWalletItem();
   const managerStep = useManagerActiveStep();
   const inputFormManager = useForm<SettingsMultisigForm>({
     mode: "all",
@@ -25,24 +23,12 @@ export default function SettingsPageLayout({
     },
   });
 
-  if (!multisigSelected) {
-    return (
-      <FallbackSpinner
-        sx={{
-          justifyContent: "start",
-          height: "auto",
-        }}
-        text="Select a multisig..."
-      />
-    );
-  }
-
   return (
     <SettingsMultisigContext.Provider
       value={{
         managerStep,
         inputFormManager,
-        threshold: 3,
+        multisigSelected,
       }}
     >
       <Box
@@ -55,7 +41,17 @@ export default function SettingsPageLayout({
         }}
       >
         <Breadcrumbs path="Settings" />
-        {children}
+        {multisigSelected ? (
+          children
+        ) : (
+          <FallbackSpinner
+            sx={{
+              justifyContent: "start",
+              height: "auto",
+            }}
+            text="Select a multisig..."
+          />
+        )}
       </Box>
     </SettingsMultisigContext.Provider>
   );

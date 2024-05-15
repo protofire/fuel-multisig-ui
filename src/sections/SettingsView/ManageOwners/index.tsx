@@ -38,7 +38,6 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
     accountWalletItemConnected: accountWalletItem,
   });
   const isOnlyOne = ownersQuery.data?.length <= 1;
-  const { openModal, isOpen, closeModal } = useModalBehaviour();
   const {
     openModal: openModalDelete,
     isOpen: isOpenModalDelete,
@@ -142,7 +141,7 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
           {...(!ownersQuery.isFetched ||
           ownersQuery.isLoading ||
           recentlyClicked
-            ? { isLoading: true }
+            ? { disabled: true }
             : { onClick: handleAddOwner })}
         >
           {recentlyClicked ? (
