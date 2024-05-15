@@ -42,12 +42,18 @@ export function TxBuilderStepper() {
     },
   });
 
+  const resetTxBuilderStepper = () => {
+    inputFormManager.reset();
+    metadataManager.onRemove();
+  };
+
   return (
     <TxBuilderContext.Provider
       value={{
         managerStep,
         inputFormManager,
         metadataManager,
+        resetTxBuilderStepper,
       }}
     >
       <BaseStepper
