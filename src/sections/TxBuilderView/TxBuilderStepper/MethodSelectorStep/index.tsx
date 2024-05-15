@@ -17,12 +17,19 @@ import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackBut
 import CopyButton from "@/sections/shared/common/CopyButton";
 import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 import { MonoTypography } from "@/sections/shared/common/MonoTypography";
-import { truncateAddress } from "@/utils/formatString";
+import { hex_to_bytes, truncateAddress } from "@/utils/formatString";
 
 import { useTxBuilderContext } from "../../TxBuilderContext/useTxBuilderContext";
 import { MethodsForm } from "./MethodsForm";
 import { BoxRow } from "./styled";
 import { useAbiMethodSelector } from "./useAbiMethodSelector";
+import { getAccountWallet } from "@/services/fuel/connectors/transformer";
+import { BASE_ASSET_ID } from "@/config/assetsMap";
+import BigNumber from "bignumber.js";
+import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
+import { useGetMultisigContract } from "@/hooks/multisigContract/useGetMultisigContract";
+import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
+import { getCurrentDatePlusTenDays } from "@/utils/getCurrentDatePlusTenDays";
 
 export function MethodSelectorStep() {
   const { inputFormManager, managerStep, metadataManager } =
@@ -39,6 +46,7 @@ export function MethodSelectorStep() {
     accountWallet: contractAddress,
   });
   const { multisigSelected } = useMultisignatureAccountSelected();
+
   const { contract: metadataContract } = useContractFromMetadata({
     contractId: contractAddress,
     jsonAbi: metadataSource,
@@ -55,6 +63,34 @@ export function MethodSelectorStep() {
     methodName: abiMethodSelected,
     metadataContract,
   });
+
+  async function proposeTx() {
+    const callParams: ContractCallParamsInput = {
+      calldata: hex_to_bytes(abiSelectedParams),
+      forwarded_gas: 10000000,
+      function_selector: hex_to_bytes(selectedAbiMethod?.interfaceMethod?.selector),
+      single_value_type_arg: true,
+      transfer_params: {
+        asset_id: { value: BASE_ASSET_ID },
+        value: new BigNumber(0).toString(),
+      },
+    };
+    const contractAddressWallet = getAccountWallet(contractAddress);
+    try {
+      console.log("Tx: ", callParams);
+      // console.log("Contractaddress: ", contractAddress);
+      const res = await multisigContract.contract?.functions
+        .propose_tx(
+          toIdentityContractIdInput(contractAddressWallet.bech32),
+          getCurrentDatePlusTenDays(),
+          { Call: callParams }
+        )
+        .call();
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const _handleNext = useCallback(() => {
     console.log("__Sign");

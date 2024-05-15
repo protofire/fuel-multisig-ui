@@ -15,8 +15,6 @@ export function toTransactionDisplayInfo(
   transactionOutput: TransactionDataOutput,
   threshold: number
 ): TransferDisplayInfo | CallDisplayInfo {
-  
-
   if ("Transfer" in transactionOutput.tx_parameters) {
     const transferTransaction = { ...emptyDisplayInfo } as TransferDisplayInfo;
     transferTransaction.typeName = "Transfer";
@@ -53,10 +51,9 @@ export function toTransactionDisplayInfo(
       approvalCount: transactionOutput.approvals_count,
       rejectionCount: transactionOutput.rejections_count,
     };
-  
+
     return _result;
-  }
-  else{
+  } else {
     const callTransaction = { ...emptyDisplayInfo } as CallDisplayInfo;
     callTransaction.typeName = "Call";
     callTransaction.assetAddress =
@@ -77,8 +74,11 @@ export function toTransactionDisplayInfo(
         )
       : "";
     callTransaction.signMathOperation = "-";
-    callTransaction.selector = transactionOutput.tx_parameters.Call.function_selector.toString();
-    callTransaction.callData = transactionOutput.tx_parameters.Call.calldata.toString();
+    callTransaction.selector =
+      transactionOutput.tx_parameters.Call.function_selector.toString();
+    callTransaction.callData =
+      transactionOutput.tx_parameters.Call.calldata.toString();
+      debugger;
 
     const _result = {
       ...callTransaction,
@@ -94,9 +94,7 @@ export function toTransactionDisplayInfo(
       approvalCount: transactionOutput.approvals_count,
       rejectionCount: transactionOutput.rejections_count,
     };
-  
+
     return _result;
   }
-
-  
 }
