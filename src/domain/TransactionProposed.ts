@@ -38,7 +38,7 @@ export interface OwnerWithAction extends Owner {
   status: SignerApprovalStatus;
 }
 
-export interface TransactionDisplayInfo extends TransferProposed {
+export interface TransferDisplayInfo extends TransferProposed {
   image: string;
   txMsg: string;
   approvalCount?: number;
@@ -48,9 +48,35 @@ export interface TransactionDisplayInfo extends TransferProposed {
   ownersWithAction: OwnerWithAction[];
 }
 
+export interface CallDisplayInfo extends TransferProposed {
+  image: string;
+  txMsg: string;
+  approvalCount?: number;
+  rejectionCount?: number;
+  signMathOperation?: "+" | "-" | "";
+  status: TxStatusType;
+  ownersWithAction: OwnerWithAction[];
+  selector: string;
+  callData: string;
+}
+
 export const emptyDisplayInfo = {
   image: TX_TYPE_IMG.CONTRACT,
   txMsg: "to",
   signMathOperation: "",
   status: TX_STATUS_TYPE.PROPOSED,
 };
+
+// Type guard for TransferDisplayInfo
+export function isTransferDisplayInfo(
+  info: TransferDisplayInfo | CallDisplayInfo
+): info is TransferDisplayInfo {
+  return !("selector" in info && "callData" in info);
+}
+
+// Type guard for CallDisplayInfo
+export function isCallDisplayInfo(
+  info: TransferDisplayInfo | CallDisplayInfo
+): info is CallDisplayInfo {
+  return "selector" in info && "callData" in info;
+}

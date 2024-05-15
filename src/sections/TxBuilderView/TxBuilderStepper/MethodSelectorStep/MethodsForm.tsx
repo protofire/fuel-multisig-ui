@@ -23,8 +23,6 @@ export function MethodsForm({ selectedAbiMethod, metadataContract }: Props) {
     resetField,
   } = inputFormManager;
 
-  console.log("__selected", selectedAbiMethod?.interfaceMethod);
-
   return (
     <Stack
       direction="row"
