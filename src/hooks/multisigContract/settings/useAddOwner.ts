@@ -19,13 +19,14 @@ interface Props {
 }
 
 interface UseDeleteOwnerResult {
-  deleteOwner: (onwer: AccountWalletItem) => void;
-  ownerDeleting: AccountWalletItem | undefined;
+  addOwner: (onwer: AccountWalletItem) => void;
   isPending: boolean;
+  ownerAdded: AccountWalletItem | undefined;
 }
 
-export function useDeleteOwner({
+export function useAddOwner({
   multisigAddress,
+  onSuccess,
 }: Props): UseDeleteOwnerResult {
   const { contract: multisigContract } = useGetMultisigContract({
     contractId: multisigAddress,
@@ -36,10 +37,10 @@ export function useDeleteOwner({
     mutationKey: ["removeOwner", multisigContract?.account?.address],
     mutationFn: async (owner: AccountWalletItem) => {
       const methodSelector =
-        multisigContract?.interface.functions.remove_owner.selector;
+        multisigContract?.interface.functions.add_owner.selector;
 
       if (!methodSelector) {
-        throw Error("No remove_owner selector found on multisig contract");
+        throw Error("No add_owner selector found on multisig contract");
       }
 
       const hex_owner = getHexFromAddress(owner.address.bech32);
@@ -64,11 +65,12 @@ export function useDeleteOwner({
         return owner;
       });
     },
+    onSettled: () => onSuccess?.(),
   });
 
   return {
-    deleteOwner: mutation.mutate,
+    addOwner: mutation.mutate,
     isPending: mutation.isPending,
-    ownerDeleting: mutation.data,
+    ownerAdded: mutation.data,
   };
 }

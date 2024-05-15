@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { SettingsMultisigContext } from "./AddOwnerStepperContext";
+import { SettingsMultisigContext } from ".";
 
 export function useSettingsMultisigContext() {
   const context = useContext(SettingsMultisigContext);
