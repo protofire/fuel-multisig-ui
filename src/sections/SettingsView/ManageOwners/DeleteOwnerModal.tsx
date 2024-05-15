@@ -57,7 +57,7 @@ export function DeleteOwnerModal({
             </Typography>
           </Box>
           <Box mt={3} mb={2}>
-            {owner && <AccountSigner owner={owner} truncateAmount={12} />}
+            {owner && <AccountSigner owner={owner} />}
           </Box>
         </Box>
         <Box
