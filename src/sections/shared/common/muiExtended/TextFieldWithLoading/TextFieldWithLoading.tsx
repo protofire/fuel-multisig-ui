@@ -1,4 +1,5 @@
 import { CircularProgress, TextField, TextFieldProps } from "@mui/material";
+import React from "react";
 
 interface LoadingProp {
   loading?: boolean;
@@ -6,20 +7,22 @@ interface LoadingProp {
 
 export type TextFieldWithLoadingProps = LoadingProp & TextFieldProps;
 
-export const TextFieldWithLoading: React.FC<TextFieldWithLoadingProps> = (
-  props
-) => {
-  // eslint-disable-next-line react/prop-types
+export const TextFieldWithLoading = React.forwardRef<
+  HTMLInputElement,
+  TextFieldWithLoadingProps
+>(function TextFieldWithLoading(props, ref) {
   const { loading, ...otherProps } = props;
 
   return (
     <TextField
       {...otherProps}
+      ref={ref}
       InputProps={{
+        ...otherProps.InputProps,
         endAdornment: loading ? (
-          <CircularProgress size={20} color="primary" />
+          <CircularProgress size={20} color="inherit" />
         ) : null,
       }}
     />
   );
-};
+});

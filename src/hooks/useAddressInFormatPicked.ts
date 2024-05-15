@@ -10,6 +10,7 @@ import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 interface Props {
   accountWallet: AccountWalletItem | string | undefined;
+  b256Format?: boolean;
 }
 
 interface UseToggleAddressFormatReturn {
@@ -19,8 +20,12 @@ interface UseToggleAddressFormatReturn {
 
 export function useAddressInFormatPicked({
   accountWallet,
+  b256Format,
 }: Props): UseToggleAddressFormatReturn {
   const { isB256Activated } = useFormatAccountWalletItem();
+
+  const _isB256Activated =
+    b256Format !== undefined ? b256Format : isB256Activated;
 
   const addressFormatted = useMemo(() => {
     if (accountWallet === undefined) return "";
@@ -29,10 +34,10 @@ export function useAddressInFormatPicked({
       ? accountWallet
       : toAccountWalletItem(accountWallet);
 
-    return isB256Activated
+    return _isB256Activated
       ? _accountWallet.address.b256
       : _accountWallet.address.bech32;
-  }, [accountWallet, isB256Activated]);
+  }, [_isB256Activated, accountWallet]);
 
   return {
     addressFormatted,

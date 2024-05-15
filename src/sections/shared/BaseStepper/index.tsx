@@ -1,4 +1,4 @@
-import { Step, Stepper, Typography } from "@mui/material";
+import { Step, Stepper, StepperOwnProps, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import React from "react";
@@ -19,6 +19,7 @@ export type BaseStepperProps = {
   managerStep: ManagerActiveStep;
   steps: StepType[];
   displayStepLabel?: boolean;
+  orientation?: StepperOwnProps["orientation"];
 };
 
 export const transformSteps = (
@@ -41,9 +42,46 @@ export function BaseStepper({
   managerStep,
   steps,
   displayStepLabel = true,
+  orientation = "vertical",
 }: BaseStepperProps) {
   const theme = useTheme();
   const { activeStep } = managerStep;
+
+  if (orientation === "horizontal") {
+    return (
+      <Box display={"flex"} flexDirection={"column"}>
+        <Box
+          p={5}
+          sx={{
+            background: theme.palette.grey.A200,
+          }}
+        >
+          <Stepper activeStep={activeStep} orientation="horizontal">
+            {steps.map((step, index) => (
+              <Step key={index}>
+                <StyledStepLabel
+                  active={step.id === activeStep ? 1 : 0}
+                  completed={step.id < activeStep ? 1 : 0}
+                >
+                  <Typography>{step.name}</Typography>
+                </StyledStepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Box>
+        <Box sx={{ background: theme.palette.grey.A100 }}>
+          <Box>
+            <Box p={5} mr={8}>
+              {steps[activeStep].label && (
+                <Typography variant="h4">{steps[activeStep].label}</Typography>
+              )}
+              {steps[activeStep].Component}
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box display="flex" flexDirection="row">
