@@ -38,7 +38,7 @@ export interface OwnerWithAction extends Owner {
   status: SignerApprovalStatus;
 }
 
-export interface TransactionDisplayInfo extends TransferProposed {
+export interface TransferDisplayInfo extends TransferProposed {
   image: string;
   txMsg: string;
   approvalCount?: number;
@@ -46,6 +46,18 @@ export interface TransactionDisplayInfo extends TransferProposed {
   signMathOperation?: "+" | "-" | "";
   status: TxStatusType;
   ownersWithAction: OwnerWithAction[];
+}
+
+export interface CallDisplayInfo extends TransferProposed {
+  image: string;
+  txMsg: string;
+  approvalCount?: number;
+  rejectionCount?: number;
+  signMathOperation?: "+" | "-" | "";
+  status: TxStatusType;
+  ownersWithAction: OwnerWithAction[];
+  selector: string;
+  callData: string;
 }
 
 export const emptyDisplayInfo = {

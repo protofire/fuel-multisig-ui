@@ -1,12 +1,15 @@
 import { Box, Typography } from "@mui/material";
 
 import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
-import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
+import {
+  CallDisplayInfo,
+  TransferDisplayInfo,
+} from "@/domain/TransactionProposed";
 
 import { AccountWithExplorer } from "./AccountWithExplorer";
 
 interface Props {
-  txData: TransactionDisplayInfo;
+  txData: TransferDisplayInfo | CallDisplayInfo;
 }
 export function TxDetails({ txData }: Props) {
   const { typeName, status, valueAmount, txMsg } = txData;
@@ -37,7 +40,18 @@ export function TxDetails({ txData }: Props) {
             )}
           </>
         ) : (
-          <>Call</>
+          <>
+            <Typography color="white" mb={1}>
+              <span style={{ fontWeight: "bold" }}>{` Call contract: `}</span>{" "}
+            </Typography>
+            {txData.to && (
+              <AccountWithExplorer
+                account={txData.to}
+                isB256Activated={isB256Activated}
+              />
+            )}
+            txData.selector
+          </>
         )}
       </Box>
     </Box>

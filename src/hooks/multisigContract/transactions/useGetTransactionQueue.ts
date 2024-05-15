@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BigNumberish } from "fuels";
 import { useCallback } from "react";
 
-import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
+import { TransferDisplayInfo } from "@/domain/TransactionProposed";
 import { toTransactionDisplayInfo } from "@/services/contracts/transformers/toTransactionDisplayInfo";
 import { getErrorMessage } from "@/utils/error";
 
@@ -47,7 +47,7 @@ export function useGetTransactionQueue() {
     refetchInterval: 10000, // Refetch every 10 seconds
   });
 
-  const transactionData: TransactionDisplayInfo[] = (data ?? [])
+  const transactionData: TransferDisplayInfo[] = (data ?? [])
     .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
     .map((tx) => ({
       ...toTransactionDisplayInfo(tx, multisigSelected?.threshold || 1),
