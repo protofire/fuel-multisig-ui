@@ -1,0 +1,13 @@
+import { useContext } from "react";
+
+import { SettingsMultisigContext } from "./AddOwnerStepperContext";
+
+export function useSettingsMultisigContext() {
+  const context = useContext(SettingsMultisigContext);
+  if (!context) {
+    throw new Error(
+      "useSettingsMultisigContext must be used within the context Provider"
+    );
+  }
+  return context;
+}

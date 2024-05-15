@@ -3,8 +3,8 @@ import { Box, Typography } from "@mui/material";
 import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
 import {
   CallDisplayInfo,
-  TransferDisplayInfo,
   isCallDisplayInfo,
+  TransferDisplayInfo,
 } from "@/domain/TransactionProposed";
 
 import { AccountWithExplorer } from "./AccountWithExplorer";
@@ -15,8 +15,6 @@ interface Props {
 export function TxDetails({ txData }: Props) {
   const { typeName, status, valueAmount, txMsg } = txData;
   const { isB256Activated } = useFormatAccountWalletItem();
-
-  console.dir(txData, {depth: null})
 
   return (
     <Box

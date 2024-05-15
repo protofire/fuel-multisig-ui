@@ -14,6 +14,7 @@ import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
 import { useRecentlyClicked } from "@/hooks/common/useRecentlyClicked";
+import { useDeleteOwner } from "@/hooks/multisigContract/settings/useDeleteOwner";
 import { useAccountWalletSelected } from "@/hooks/useAccountWalletSelected";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
 
@@ -31,14 +32,17 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
   const [currentOwner, setCurrentOwner] = useState<
     AccountWalletItem | undefined
   >();
-  const isPendingDelete = false;
+  const {
+    deleteOwner,
+    isPending: isPendingDelete,
+    ownerDeleting,
+  } = useDeleteOwner({ multisigAddress: multisigSelected.address });
   const { accountWalletItem } = useAccountWalletSelected();
   const { ownersQuery } = useManageOwnersUi({
     owners,
     accountWalletItemConnected: accountWalletItem,
   });
   const isOnlyOne = ownersQuery.data?.length <= 1;
-  const { openModal, isOpen, closeModal } = useModalBehaviour();
   const {
     openModal: openModalDelete,
     isOpen: isOpenModalDelete,
@@ -47,7 +51,12 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
   const { ref: refButton, recentlyClicked } = useRecentlyClicked(1500);
 
   const handleLocalDelete = (owner: AccountWalletItem) => {
-    if (isPendingDelete || isOnlyOne) return;
+    if (
+      isPendingDelete ||
+      isOnlyOne ||
+      ownerDeleting?.address.b256 === owner.address.b256
+    )
+      return;
 
     setCurrentOwner(owner);
     openModalDelete();
@@ -62,6 +71,7 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
         owner={currentOwner}
         isOpen={isOpenModalDelete}
         closeModal={closeModalDelete}
+        onConfirm={deleteOwner}
       />
       <Box minWidth={300}>
         <Typography variant="h5">Manage Owners</Typography>
@@ -73,6 +83,9 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
         </Typography>
         <Box mt={2}>
           {ownersQuery.data.map((accountOwner) => {
+            const _isDeleting =
+              ownerDeleting?.address.b256 === accountOwner.address.b256;
+
             return (
               <Box
                 display="flex"
@@ -89,38 +102,25 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
                     isB256Activated={isB256Activated}
                   />
                   <Box display="flex" gap={0.25}>
-                    <DeleteOutlinedIcon
-                      onClick={() => handleLocalDelete(accountOwner)}
-                      sx={{
-                        cursor:
-                          isOnlyOne || isPendingDelete
-                            ? "not-allowed"
-                            : "pointer",
-                      }}
-                      color={
-                        isOnlyOne || isPendingDelete ? "disabled" : "inherit"
-                      }
-                    />
-                    {/* {isPendingDelete && isYou ? (
+                    {isPendingDelete &&
+                    currentOwner?.address.b256 === accountOwner.address.b256 ? (
                       <CircularProgress color="secondary" size={20} />
                     ) : (
                       <DeleteOutlinedIcon
-                        onClick={() =>
-                          !isPendingDelete && handleLocalDelete(owner)
-                        }
+                        onClick={() => handleLocalDelete(accountOwner)}
                         sx={{
                           cursor:
-                            owners?.length === 1 || isDeletedLoading
+                            isOnlyOne || isPendingDelete || _isDeleting
                               ? "not-allowed"
                               : "pointer",
                         }}
                         color={
-                          owners?.length === 1 || isDeletedLoading
+                          isOnlyOne || isPendingDelete || _isDeleting
                             ? "disabled"
                             : "inherit"
                         }
                       />
-                    )} */}
+                    )}
                   </Box>
                 </Box>
                 <Box>
@@ -142,7 +142,7 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
           {...(!ownersQuery.isFetched ||
           ownersQuery.isLoading ||
           recentlyClicked
-            ? { isLoading: true }
+            ? { disabled: true }
             : { onClick: handleAddOwner })}
         >
           {recentlyClicked ? (

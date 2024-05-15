@@ -2,15 +2,15 @@
 import { Box, Typography } from "@mui/material";
 
 import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
-import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 import { AccountSigner } from "../shared/AccountSigner";
 import { FallbackSpinner } from "../shared/common/FallbackSpinner";
 import { ManageOwners } from "./ManageOwners";
+import { useSettingsMultisigContext } from "./SettingsStepperContext/useSettingsMultisigContext";
 
 export function SettingsView() {
-  const { multisigSelected } = useMultisignatureAccountSelected();
+  const { multisigSelected } = useSettingsMultisigContext();
   const { isB256Activated } = useFormatAccountWalletItem();
 
   if (!multisigSelected) {
