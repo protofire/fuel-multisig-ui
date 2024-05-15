@@ -6,7 +6,7 @@ import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 interface UseAccountWalletItemReturn {
   accountWalletItem: AccountWalletItem | undefined;
 }
-export function useAccountWalletItem(): UseAccountWalletItemReturn {
+export function useAccountWalletSelected(): UseAccountWalletItemReturn {
   const { accountConnected, accounts } = useNetworkConnection();
 
   const accountWalletItem = useMemo(() => {

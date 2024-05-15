@@ -53,12 +53,20 @@ export const MENU_ITEMS: NavLink[] = [
     icon: icons.ImportExport,
     target: true,
   },
-  // {
-  //   id: "settings",
-  //   title: "Settings",
-  //   type: "item",
-  //   url: ROUTES.Settings,
-  //   icon: icons.IconSettings,
-  //   target: true,
-  // },
+  {
+    id: "builder",
+    title: "Transaction builder",
+    type: "item",
+    url: ROUTES.TxBuilder,
+    icon: icons.IconTxBuilder,
+    target: true,
+  },
+  {
+    id: "settings",
+    title: "Settings",
+    type: "item",
+    url: ROUTES.Settings,
+    icon: icons.IconSettings,
+    target: true,
+  },
 ];

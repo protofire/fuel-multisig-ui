@@ -71,8 +71,8 @@ export function ReviewAsset() {
             </Typography>
             <Typography component="div">
               <AccountSigner
-                truncateAmount={12}
                 owner={toAccountWalletItem(recipientAddress)}
+                endlength={8}
               />
             </Typography>
           </FlexCenterBox>

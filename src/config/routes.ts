@@ -7,7 +7,10 @@ export const ROUTES = {
   SendAsset: "/app/new-transaction/send-asset",
   Assets: "/app/assets",
   Transactions: "/app/transactions",
+  TxBuilder: "/app/transaction-builder",
   Settings: "/app/settings",
+  SetOwners: "/app/settings/owners",
+  SetThreshold: "/app/settings/threshold",
 } as const;
 
 export type RouteValue = (typeof ROUTES)[keyof typeof ROUTES];

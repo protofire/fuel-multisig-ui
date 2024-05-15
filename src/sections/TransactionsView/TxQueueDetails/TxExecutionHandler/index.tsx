@@ -140,7 +140,7 @@ export function TxExecutionHandler({
                       <AccountSigner
                         key={owner.address}
                         owner={_owner}
-                        truncateAmount={12}
+                        endlength={8}
                       />
                     </Box>
                   </StepLabel>
