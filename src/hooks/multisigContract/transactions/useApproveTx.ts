@@ -1,7 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { DryRunExecutionResult } from "@/domain/DryRunExecutionResult";
+import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { useMultisigDryRunHandler } from "@/hooks/multisigContract/useMultisigDryRunHandler";
+import { useEventListenerCallback } from "@/hooks/useEventListenerCallback";
 import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
 import { customReportError } from "@/utils/error";
 
@@ -34,9 +36,13 @@ export function useApproveTx({
     failureOutcome: "You can't vote",
   });
 
-  // const _approve = useCallback(async () => {
-  //   multisigContract?.functions.approve_tx(proposedTxId);
-  // }, []);
+  useEventListenerCallback(
+    [
+      MultisigLocalManagmentEvents.approveTx,
+      MultisigLocalManagmentEvents.rejectTx,
+    ],
+    () => dryRunHandler.executeDryRun()
+  );
 
   const mutation = useMutation({
     mutationKey: [
@@ -61,7 +67,11 @@ export function useApproveTx({
           throw new Error(msg);
         });
     },
-    onMutate: () => onSuccess?.(),
+    onSuccess: () => {
+      document.dispatchEvent(
+        new CustomEvent(MultisigLocalManagmentEvents.approveTx)
+      );
+    },
   });
 
   return {

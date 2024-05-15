@@ -1,10 +1,13 @@
 import { useEffect, useRef } from "react";
 
 import { IS_DEVELOPMENT } from "@/config/environment";
+import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { WalletConnectionEvents } from "@/domain/events/WalletConnectionEvents";
 
 type EventCallback = () => void;
-type EventNames = keyof typeof WalletConnectionEvents;
+type EventNames =
+  | keyof typeof WalletConnectionEvents
+  | MultisigLocalManagmentEvents;
 
 export function useEventListenerCallback(
   events: EventNames[] | EventNames, // accept any array of strings as event names

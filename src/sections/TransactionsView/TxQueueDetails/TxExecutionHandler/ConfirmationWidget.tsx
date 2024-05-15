@@ -35,7 +35,11 @@ export function ConfirmationWidget({
     proposedTxId,
     // onSuccess: () => setSignerExecuting([accountConnected || ""]),
   });
-  const { reject, dryRunHandler: dryRunReject } = useRejectTx({
+  const {
+    reject,
+    dryRunHandler: dryRunReject,
+    isPending: isPendingReject,
+  } = useRejectTx({
     accountConnected,
     multisigContract,
     proposedTxId,
@@ -73,7 +77,7 @@ export function ConfirmationWidget({
                   : theme.palette.grey[400],
             }}
             disabled={rejectDisabled}
-            isLoading={dryRunReject.isRunning}
+            isLoading={dryRunReject.isRunning || isPendingReject}
             onClick={reject}
           >
             Reject
