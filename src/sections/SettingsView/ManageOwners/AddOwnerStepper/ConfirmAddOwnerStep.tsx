@@ -1,7 +1,9 @@
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
-import { useDeleteOwner } from "@/hooks/multisigContract/settings/useDeleteOwner";
+import { ROUTES } from "@/config/routes";
+import { useAddOwner } from "@/hooks/multisigContract/settings/useAddOwner";
 import { useAccountWalletSelected } from "@/hooks/useAccountWalletSelected";
 import { ModalStyledDivider } from "@/sections/Auth/ModalWalletProvider/styled";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
@@ -25,11 +27,14 @@ export function ConfirmAddOwnerStep() {
     owners: _owners,
     accountWalletItemConnected: accountWalletItem,
   });
-  const {
-    deleteOwner,
-    isPending: isPendingDelete,
-    ownerDeleting,
-  } = useDeleteOwner({ multisigAddress: multisigSelected.address });
+  const { addOwner, isPending, ownerAdded } = useAddOwner({
+    multisigAddress: multisigSelected?.address as string,
+    onSuccess: () => router.push(ROUTES.Settings),
+  });
+
+  const handleNext = () => {
+    owner && addOwner(toAccountWalletItem(owner.address, owner.name));
+  };
 
   return (
     <Box>
@@ -68,11 +73,17 @@ export function ConfirmAddOwnerStep() {
           activeStep={activeStep}
           stepsLength={stepsLength}
           handleBack={downStep}
-          handleNext={() => console.log("confirm")}
-          // nextButtonProps={{
-          //   disabled: !isValid,
-          //   isLoading: false,
-          // }}
+          nextLabel={
+            <>
+              Propose transaction
+              <ArrowRightAltIcon />
+            </>
+          }
+          handleNext={handleNext}
+          nextButtonProps={{
+            disabled: isPending,
+            isLoading: isPending,
+          }}
         />
       </Box>
     </Box>

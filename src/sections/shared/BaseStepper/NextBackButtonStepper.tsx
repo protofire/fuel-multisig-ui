@@ -1,5 +1,5 @@
 import { East as EastIcon, West as WestIcon } from "@mui/icons-material";
-import { Box, BoxProps } from "@mui/material";
+import { Box, BoxProps, ButtonProps } from "@mui/material";
 import { styled } from "@mui/system";
 
 import {
@@ -19,7 +19,7 @@ export type NextBackButtonStepperProps = {
   isNextDisabled?: boolean;
   //   isDoingNext?: boolean;
   nextButtonProps?: LoadingButtonProps & { disabled: boolean };
-  backButtonProps?: LoadingButtonProps & { disabled: boolean };
+  backButtonProps?: LoadingButtonProps & { disabled: boolean } & ButtonProps;
   hiddenBack?: boolean;
 };
 

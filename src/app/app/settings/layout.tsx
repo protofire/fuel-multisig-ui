@@ -20,7 +20,7 @@ export default function SettingsPageLayout({
   const inputFormManager = useForm<SettingsMultisigForm>({
     mode: "all",
     defaultValues: {
-      owner: undefined,
+      owner: { address: "", name: "" },
     },
   });
 

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 import { ROUTES } from "@/config/routes";
+import { useRecentlyClicked } from "@/hooks/common/useRecentlyClicked";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { StyledBox } from "@/sections/shared/BaseStepper/styled";
 import { pluralizeVerb } from "@/utils/formatString";
@@ -15,15 +16,21 @@ import { useSettingsMultisigContext } from "../../SettingsStepperContext/useSett
 export function AddOwnerStep() {
   const { multisigSelected, inputFormManager, managerStep } =
     useSettingsMultisigContext();
-  const { activeStep, stepsLength, upStep } = managerStep;
+  const { activeStep, stepsLength, upStep: handleNext } = managerStep;
   const router = useRouter();
-  const { control, setValue, getValues, setFocus } = inputFormManager;
+  const {
+    control,
+    setValue,
+    getValues,
+    formState: { errors, isValid },
+  } = inputFormManager;
   const owner = getValues("owner");
   const ownersAmount = multisigSelected?.owners.length || 0;
   const ownerNumber = ownersAmount + 1;
+  const { ref: refButton, recentlyClicked } = useRecentlyClicked(1500);
 
   useEffect(() => {
-    if (owner) return;
+    if (owner.name) return;
 
     setValue("owner", {
       address: "",
@@ -105,11 +112,16 @@ export function AddOwnerStep() {
           activeStep={activeStep}
           stepsLength={stepsLength}
           handleBack={() => router.push(ROUTES.Settings)}
-          handleNext={upStep}
-          // nextButtonProps={{
-          //   disabled: !isValid,
-          //   isLoading: false,
-          // }}
+          handleNext={handleNext}
+          backLabel="Cancel"
+          nextButtonProps={{
+            disabled: Boolean(errors.owner) || !isValid,
+          }}
+          backButtonProps={{
+            ref: refButton,
+            disabled: recentlyClicked,
+            isLoading: recentlyClicked,
+          }}
         />
       </Box>
     </Box>

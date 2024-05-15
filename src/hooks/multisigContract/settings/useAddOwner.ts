@@ -20,12 +20,13 @@ interface Props {
 
 interface UseDeleteOwnerResult {
   addOwner: (onwer: AccountWalletItem) => void;
-  ownerDeleting: AccountWalletItem | undefined;
   isPending: boolean;
+  ownerAdded: AccountWalletItem | undefined;
 }
 
-export function useDeleteOwner({
+export function useAddOwner({
   multisigAddress,
+  onSuccess,
 }: Props): UseDeleteOwnerResult {
   const { contract: multisigContract } = useGetMultisigContract({
     contractId: multisigAddress,
@@ -64,11 +65,12 @@ export function useDeleteOwner({
         return owner;
       });
     },
+    onSettled: () => onSuccess?.(),
   });
 
   return {
     addOwner: mutation.mutate,
     isPending: mutation.isPending,
-    ownerDeleting: mutation.data,
+    ownerAdded: mutation.data,
   };
 }
