@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
 import { toIdentityInputs } from "@/services/contracts/transformers/toInputIdentity";
+import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
 import { getErrorMessage } from "@/utils/error";
 
 import { useGetMultisigContract } from "./useGetMultisigContract";
@@ -23,7 +24,6 @@ export function useSetupMultisig({
   contractId,
 }: Props): UseSetupMultisigReturn {
   const [error, setError] = useState<string | undefined>();
-  const [errorDecoy, setErrorDecoy] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const { setError: setGlobalError } = useInteractionError();
   const { contract } = useGetMultisigContract({ contractId });
@@ -42,7 +42,7 @@ export function useSetupMultisig({
           .then((_result) => _result)
           .catch(async (errorCallreason) => {
             // Skip struct data size false positive error when dryRun display AlreadyInitialized
-            const msg = getErrorMessage(errorCallreason);
+            const { message: msg } = parseFuelError(errorCallreason);
             if (
               typeof msg === "string" &&
               msg.includes("Invalid struct data size")
