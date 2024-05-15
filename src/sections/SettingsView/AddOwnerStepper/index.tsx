@@ -6,6 +6,7 @@ import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 import { BaseStepper, transformSteps } from "@/sections/shared/BaseStepper";
 
 import { SettingsMultisigForm } from "../SettingsStepperContext/AddOwnerStepperContext";
+import { steps } from "./stepsAdd";
 
 export function AddOwnerStepper() {
   const managerStep = useManagerActiveStep();
