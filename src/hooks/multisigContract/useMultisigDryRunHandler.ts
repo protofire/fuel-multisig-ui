@@ -23,6 +23,7 @@ interface Props<K extends ContractMethods> {
   methodArgs: ContractFunctionArgs<FuelMultisigAbi, K>;
   successOutcome?: string;
   failureOutcome?: string;
+  refetchInterval?: false | number; // frequency in milliseconds
 }
 
 function executeDryRun<K extends ContractMethods>({
@@ -47,6 +48,7 @@ export function useMultisigDryRunHandler<K extends ContractMethods>({
   methodArgs,
   successOutcome = "Transaction will be executed",
   failureOutcome = "Transaction will be reverted",
+  refetchInterval = 15000,
 }: Props<K>): DryRunExecutionResult {
   const [_outComeError, setOutcomeError] = useState(failureOutcome);
 
@@ -79,6 +81,7 @@ export function useMultisigDryRunHandler<K extends ContractMethods>({
     },
     staleTime: Infinity,
     retry: 0,
+    refetchInterval,
   });
 
   return {
