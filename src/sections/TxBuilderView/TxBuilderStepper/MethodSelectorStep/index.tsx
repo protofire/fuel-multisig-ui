@@ -62,7 +62,11 @@ export function MethodSelectorStep() {
   });
 
   const _handleNext = useCallback(() => {
-    if (!selectedAbiMethod || !selectedAbiMethod.interfaceMethod) {
+    if (
+      !selectedAbiMethod ||
+      !selectedAbiMethod.interfaceMethod ||
+      !contractAddress
+    ) {
       return;
     }
     const callParams: ContractCallParamsInput = {

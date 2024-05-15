@@ -47,7 +47,7 @@ export function useProposeTransaction() {
           .propose_tx(to, _txValidityDuration, params)
           .dryRun();
 
-        customReportError(_dryRun);
+        console.info("Dry run result", _dryRun);
 
         const response = await contract?.functions
           .propose_tx(to, _txValidityDuration, params)
