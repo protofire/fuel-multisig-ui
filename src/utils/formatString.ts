@@ -94,3 +94,46 @@ export function hex_to_bytes(hex: string): number[] {
   const numbers: number[] = Array.from(buffer);
   return numbers;
 }
+
+/**
+ * Pluralizes a given verb if the provided count is greater than 1.
+ *
+ * This function takes a count and a verb, and returns the verb in its plural form if the count is greater than 1.
+ * It handles common pluralization rules for verbs in English, including special cases like verbs ending in 'y',
+ * 's', 'x', 'z', 'ch', and 'sh'. It also specifically handles the verb 'one' by converting it to 'ones'.
+ *
+ * @example
+ * // returns 'runs'
+ * pluralizeVerb(3, 'run');
+ *
+ * @example
+ * // returns 'flies'
+ * pluralizeVerb(3, 'fly');
+ *
+ * @example
+ * // returns 'ones'
+ * pluralizeVerb(2, 'one');
+ *
+ */
+export function pluralizeVerb(count: number, verb: string): string {
+  if (count > 1) {
+    if (verb.toLocaleLowerCase() === "one") {
+      return verb + "s";
+    }
+    // Aquí puedes agregar lógica adicional para manejar irregularidades en los verbos en inglés si es necesario
+    if (verb.endsWith("y")) {
+      return verb.slice(0, -1) + "ies";
+    } else if (
+      verb.endsWith("s") ||
+      verb.endsWith("x") ||
+      verb.endsWith("z") ||
+      verb.endsWith("ch") ||
+      verb.endsWith("sh")
+    ) {
+      return verb + "es";
+    } else {
+      return verb + "s";
+    }
+  }
+  return verb;
+}

@@ -5,21 +5,22 @@ import { useForm } from "react-hook-form";
 import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import Breadcrumbs from "@/sections/NewTxView/Breadcrumbs";
+import { ADD_OWNER_STEPS } from "@/sections/SettingsView/ManageOwners/AddOwnerStepper";
 import {
   SettingsMultisigContext,
   SettingsMultisigForm,
-} from "@/sections/SettingsView/SettingsStepperContext/AddOwnerStepperContext";
+} from "@/sections/SettingsView/SettingsStepperContext";
 import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 
 export default function SettingsPageLayout({
   children,
 }: React.PropsWithChildren) {
   const { multisigSelected } = useMultisignatureAccountSelected();
-  const managerStep = useManagerActiveStep();
+  const managerStep = useManagerActiveStep(ADD_OWNER_STEPS.length);
   const inputFormManager = useForm<SettingsMultisigForm>({
     mode: "all",
     defaultValues: {
-      owners: [],
+      owner: undefined,
     },
   });
 

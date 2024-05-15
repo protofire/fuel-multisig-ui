@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import { AddOwnerStepper } from "@/sections/SettingsView/AddOwnerStepper";
+import { AddOwnerStepper } from "@/sections/SettingsView/ManageOwners/AddOwnerStepper";
 
 export default function OwnersPage() {
   return (

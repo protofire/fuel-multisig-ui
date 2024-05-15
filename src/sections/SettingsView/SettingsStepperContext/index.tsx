@@ -5,7 +5,7 @@ import { MultisignatureAccount, Owner } from "@/domain/MultisignatureAccount";
 import { ManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 
 export interface SettingsMultisigForm {
-  owners: Owner[];
+  owner: Owner;
   threshold: number;
 }
 

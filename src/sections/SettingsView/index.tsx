@@ -57,14 +57,6 @@ export function SettingsView() {
           isB256Activated={isB256Activated}
           multisigSelected={multisigSelected}
         />
-        {/* <ManageOwners
-            selectedMultisig={
-            (selectedMultisig as SignatoriesAccount) ?? undefined
-          }
-          handleAddOwner={handleAddOwner}
-          isDeletedLoading={isLoading}
-          handleDeleteOwner={handleDeleteOwner}
-        /> */}
       </Box>
       <Box mt={4} bgcolor={(theme) => theme.palette.grey.A100} p={3}>
         {/* <RequiredConfirmations
