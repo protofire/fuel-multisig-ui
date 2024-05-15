@@ -66,3 +66,17 @@ export const emptyDisplayInfo = {
   signMathOperation: "",
   status: TX_STATUS_TYPE.PROPOSED,
 };
+
+// Type guard for TransferDisplayInfo
+export function isTransferDisplayInfo(
+  info: TransferDisplayInfo | CallDisplayInfo
+): info is TransferDisplayInfo {
+  return !("selector" in info && "callData" in info);
+}
+
+// Type guard for CallDisplayInfo
+export function isCallDisplayInfo(
+  info: TransferDisplayInfo | CallDisplayInfo
+): info is CallDisplayInfo {
+  return "selector" in info && "callData" in info;
+}
