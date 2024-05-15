@@ -30,6 +30,7 @@ import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts
 import { useGetMultisigContract } from "@/hooks/multisigContract/useGetMultisigContract";
 import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
 import { getCurrentDatePlusTenDays } from "@/utils/getCurrentDatePlusTenDays";
+import { useProposeTransaction } from "@/hooks/multisigContract/useProposeTransaction";
 
 export function MethodSelectorStep() {
   const { inputFormManager, managerStep, metadataManager } =
@@ -63,18 +64,9 @@ export function MethodSelectorStep() {
     methodName: abiMethodSelected,
     metadataContract,
   });
+  const { proposeTransaction, error, isLoading } = useProposeTransaction();
 
   async function proposeTx() {
-    const callParams: ContractCallParamsInput = {
-      calldata: hex_to_bytes(abiSelectedParams),
-      forwarded_gas: 10000000,
-      function_selector: hex_to_bytes(selectedAbiMethod?.interfaceMethod?.selector),
-      single_value_type_arg: true,
-      transfer_params: {
-        asset_id: { value: BASE_ASSET_ID },
-        value: new BigNumber(0).toString(),
-      },
-    };
     const contractAddressWallet = getAccountWallet(contractAddress);
     try {
       console.log("Tx: ", callParams);
@@ -93,8 +85,32 @@ export function MethodSelectorStep() {
   }
 
   const _handleNext = useCallback(() => {
-    console.log("__Sign");
-  }, []);
+    if (!selectedAbiMethod || !selectedAbiMethod.interfaceMethod) {
+      return;
+    }
+    const callParams: ContractCallParamsInput = {
+      calldata: hex_to_bytes(abiSelectedParams),
+      forwarded_gas: 10000000,
+      function_selector: hex_to_bytes(
+        selectedAbiMethod.interfaceMethod.selector
+      ),
+      single_value_type_arg: true,
+      transfer_params: {
+        asset_id: { value: BASE_ASSET_ID },
+        value: new BigNumber(0).toString(),
+      },
+    };
+    const contractAddressWallet = getAccountWallet(contractAddress);
+    proposeTransaction({
+      to: toIdentityContractIdInput(contractAddressWallet.bech32),
+      params: { Call: callParams },
+    });
+  }, [
+    selectedAbiMethod,
+    abiSelectedParams,
+    contractAddress,
+    proposeTransaction,
+  ]);
 
   if (!metadataContract) {
     return (

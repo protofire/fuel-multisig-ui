@@ -78,7 +78,6 @@ export function toTransactionDisplayInfo(
       transactionOutput.tx_parameters.Call.function_selector.toString();
     callTransaction.callData =
       transactionOutput.tx_parameters.Call.calldata.toString();
-      debugger;
 
     const _result = {
       ...callTransaction,
