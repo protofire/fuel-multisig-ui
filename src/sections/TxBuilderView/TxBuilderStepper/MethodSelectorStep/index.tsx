@@ -1,3 +1,4 @@
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import {
   Box,
   FormControl,
@@ -7,9 +8,14 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
+import BigNumber from "bignumber.js";
+import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
+import { BASE_ASSET_ID } from "@/config/assetsMap";
+import { ROUTES } from "@/config/routes";
+import { useProposeTransaction } from "@/hooks/multisigContract/useProposeTransaction";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
 import { useContractFromMetadata } from "@/hooks/useContractFromMetadata";
@@ -17,7 +23,10 @@ import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackBut
 import CopyButton from "@/sections/shared/common/CopyButton";
 import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 import { MonoTypography } from "@/sections/shared/common/MonoTypography";
-import { truncateAddress } from "@/utils/formatString";
+import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
+import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
+import { getAccountWallet } from "@/services/fuel/connectors/transformer";
+import { hex_to_bytes, truncateAddress } from "@/utils/formatString";
 
 import { useTxBuilderContext } from "../../TxBuilderContext/useTxBuilderContext";
 import { MethodsForm } from "./MethodsForm";
@@ -25,20 +34,18 @@ import { BoxRow } from "./styled";
 import { useAbiMethodSelector } from "./useAbiMethodSelector";
 
 export function MethodSelectorStep() {
-  const { inputFormManager, managerStep, metadataManager } =
-    useTxBuilderContext();
-  const {
-    activeStep,
-    stepsLength,
-    downStep: handleBack,
-    upStep: handleNext,
-  } = managerStep;
-  const { getValues, setValue, control, watch } = inputFormManager;
+  const { inputFormManager, managerStep } = useTxBuilderContext();
+  const { getValues, control, watch } = inputFormManager;
+  const abiMethodSelected = watch("abiMethodSelected");
+  const abiSelectedParams = watch("abiMethodParams");
   const { contractAddress, metadataSource } = getValues();
+  const router = useRouter();
+  const { proposeTransaction } = useProposeTransaction();
+  const { multisigSelected } = useMultisignatureAccountSelected();
+  const { activeStep, stepsLength, downStep: handleBack } = managerStep;
   const { addressFormatted } = useAddressInFormatPicked({
     accountWallet: contractAddress,
   });
-  const { multisigSelected } = useMultisignatureAccountSelected();
   const { contract: metadataContract } = useContractFromMetadata({
     contractId: contractAddress,
     jsonAbi: metadataSource,
@@ -49,16 +56,47 @@ export function MethodSelectorStep() {
       metadataContract && Object.values(metadataContract.interface.functions),
     [metadataContract]
   );
-  const abiMethodSelected = watch("abiMethodSelected");
-  const abiSelectedParams = watch("abiMethodParams");
   const { selectedAbiMethod, selectedAbiMethodLoading } = useAbiMethodSelector({
     methodName: abiMethodSelected,
     metadataContract,
   });
 
   const _handleNext = useCallback(() => {
-    console.log("__Sign");
-  }, []);
+    if (
+      !selectedAbiMethod ||
+      !selectedAbiMethod.interfaceMethod ||
+      !contractAddress
+    ) {
+      return;
+    }
+    const callParams: ContractCallParamsInput = {
+      calldata: hex_to_bytes(abiSelectedParams),
+      forwarded_gas: 10000000,
+      function_selector: hex_to_bytes(
+        selectedAbiMethod.interfaceMethod.selector
+      ),
+      single_value_type_arg: true,
+      transfer_params: {
+        asset_id: { value: BASE_ASSET_ID },
+        value: new BigNumber(0).toString(),
+      },
+    };
+    const contractAddressWallet = getAccountWallet(contractAddress);
+    proposeTransaction({
+      to: toIdentityContractIdInput(contractAddressWallet.bech32),
+      params: { Call: callParams },
+    }).then((result) => {
+      if (result) {
+        router.push(ROUTES.App);
+      }
+    });
+  }, [
+    selectedAbiMethod,
+    abiSelectedParams,
+    contractAddress,
+    proposeTransaction,
+    router,
+  ]);
 
   if (!metadataContract) {
     return (
@@ -71,8 +109,6 @@ export function MethodSelectorStep() {
       />
     );
   }
-
-  console.log("__printingParams", abiSelectedParams);
 
   return (
     <Box mt={3} display="flex" gap={1} flexDirection="column">
@@ -142,6 +178,12 @@ export function MethodSelectorStep() {
           stepsLength={stepsLength}
           handleBack={handleBack}
           handleNext={_handleNext}
+          nextLabel={
+            <>
+              Propose transaction
+              <ArrowRightAltIcon />
+            </>
+          }
           nextButtonProps={{
             disabled: !selectedAbiMethod || selectedAbiMethod.isReadOnly,
           }}

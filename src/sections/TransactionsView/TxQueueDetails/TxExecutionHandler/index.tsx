@@ -13,7 +13,7 @@ import { useState } from "react";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import {
   OwnerWithAction,
-  TransactionDisplayInfo,
+  TransferDisplayInfo,
   TX_OWNER_STATUS_TYPE,
   TX_STATUS_TYPE,
 } from "@/domain/TransactionProposed";
@@ -27,7 +27,7 @@ import { CircleStepIcon, ColorlibStepIcon, StyledStep } from "./styled";
 import { TxExecutionSkeleton } from "./TxExecutionSkeleton";
 
 interface Props {
-  txData: TransactionDisplayInfo;
+  txData: TransferDisplayInfo;
   multisigSelected: MultisignatureAccount;
   signersApprovalStatus: OwnerWithAction[] | undefined;
   isB256Activated: boolean;

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
+import { TransferDisplayInfo } from "@/domain/TransactionProposed";
 import { formatDate, truncateAddress } from "@/utils/formatString";
 
 import {
@@ -11,7 +11,7 @@ import {
 } from "./styled";
 
 interface Props {
-  data: TransactionDisplayInfo;
+  data: TransferDisplayInfo;
   owners: number;
   isB256Activated?: boolean;
 }

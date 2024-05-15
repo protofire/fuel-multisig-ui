@@ -11,7 +11,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
-import { TransactionDisplayInfo } from "@/domain/TransactionProposed";
+import { TransferDisplayInfo } from "@/domain/TransactionProposed";
 import { useTxSigners } from "@/hooks/multisigContract/transactions/useTxSigners";
 import { MAIN_COLOR } from "@/themes/palette";
 import { formatDate, truncateAddress } from "@/utils/formatString";
@@ -22,7 +22,7 @@ import { TxDetails } from "./TxDetails";
 import { TxExecutionHandler } from "./TxExecutionHandler";
 
 interface Props {
-  txData: TransactionDisplayInfo;
+  txData: TransferDisplayInfo;
   isB256Activated: boolean;
   multisigSelected: MultisignatureAccount;
 }
