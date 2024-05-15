@@ -1,11 +1,12 @@
 import { BigNumberish } from "fuels";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { useInteractionError } from "@/context/InteractionErrorContext/useInteractionError";
 import {
   IdentityInput,
   TransactionParametersInput,
 } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
-import { customReportError, getErrorMessage } from "@/utils/error";
+import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
 import { getCurrentDatePlusTenDays } from "@/utils/getCurrentDatePlusTenDays";
 
 import { useMultisignatureAccountSelected } from "../multisignatureSelected/useMultisignatureAccountSelected";
@@ -25,6 +26,7 @@ export interface UseProposeTransactionReturn {
 
 export function useProposeTransaction() {
   const [error, setError] = useState<string | null>(null);
+  const { setError: setGlobalError } = useInteractionError();
   const [isLoading, setIsLoading] = useState(false);
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { contract } = useGetMultisigContract({
@@ -59,17 +61,25 @@ export function useProposeTransaction() {
 
         return response;
       } catch (e) {
-        const msg = getErrorMessage(e);
-        const defaultMsg = "An error has ocurred while trying to propose tx";
+        const { message, log } = parseFuelError(e);
+        const defaultMsg = message
+          ? message
+          : "An error has ocurred while trying to propose tx";
 
-        console.error(defaultMsg, msg);
-        setError(`${msg}: ${defaultMsg}`);
+        console.error(defaultMsg, message);
+        setError(`${message}: ${log}`);
       } finally {
         setIsLoading(false);
       }
     },
     [contract?.functions]
   );
+
+  useEffect(() => {
+    setGlobalError(error ? { msg: error } : null);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   return { proposeTransaction, error, isLoading };
 }
