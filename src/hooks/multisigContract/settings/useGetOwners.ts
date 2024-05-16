@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { useGetMultisigContract } from "@/hooks/multisigContract/useGetMultisigContract";
+import { useEventListenerCallback } from "@/hooks/useEventListenerCallback";
+import { IdentityOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
 import { customReportError } from "@/utils/error";
 
@@ -10,7 +13,7 @@ interface Props {
 
 interface UseGetThresholdReturn {
   isLoading: boolean;
-  threshold: number | undefined;
+  owners: IdentityOutput[] | undefined;
   refetch: () => void;
 }
 
@@ -28,7 +31,6 @@ export function useGetOwners({ contractId }: Props): UseGetThresholdReturn {
         })
         .dryRun()
         .then((result) => {
-          debugger;
           return result.value;
         })
         .catch((e) => {
@@ -49,8 +51,12 @@ export function useGetOwners({ contractId }: Props): UseGetThresholdReturn {
     refetchOnWindowFocus: false,
   });
 
+  useEventListenerCallback([MultisigLocalManagmentEvents.txExecuted], () =>
+    refetch()
+  );
+
   return {
-    threshold: data,
+    owners: data,
     isLoading: isLoading || !isFetched,
     refetch,
   };

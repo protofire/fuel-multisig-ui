@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { useGetMultisigContract } from "@/hooks/multisigContract/useGetMultisigContract";
+import { useEventListenerCallback } from "@/hooks/useEventListenerCallback";
 import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
 import { customReportError } from "@/utils/error";
 
@@ -47,6 +49,10 @@ export function useGetThreshold({ contractId }: Props): UseGetThresholdReturn {
     refetchInterval: 20000,
     refetchOnWindowFocus: false,
   });
+
+  useEventListenerCallback([MultisigLocalManagmentEvents.txExecuted], () =>
+    refetch()
+  );
 
   return {
     threshold: data,
