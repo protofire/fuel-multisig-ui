@@ -34,7 +34,7 @@ export function useAddOwner({
   const { proposeTransaction, isLoading } = useProposeTransaction();
 
   const mutation = useMutation({
-    mutationKey: ["removeOwner", multisigContract?.account?.address],
+    mutationKey: ["proposeAddOwner", multisigContract?.account?.address],
     mutationFn: async (owner: AccountWalletItem) => {
       const methodSelector =
         multisigContract?.interface.functions.add_owner.selector;
@@ -51,7 +51,7 @@ export function useAddOwner({
         calldata: hex_owner_bytes,
         forwarded_gas: 0, // TODO check is this value needs to be changed
         function_selector: hex_to_bytes(methodSelector),
-        single_value_type_arg: false, // Si recibe un solo parametro y es primitivo va en true, en cualquier otro caso va en false (AFAIK)
+        single_value_type_arg: false, // If it receives only one parameter and it is primitive, it goes true, otherwise it goes false (AFAIK).
         transfer_params: {
           asset_id: { value: BASE_ASSET_ID },
           value: new BigNumber(0).toString(),
