@@ -12,9 +12,10 @@ import { Controller } from "react-hook-form";
 
 import { useDelay } from "@/hooks/common/useDelay";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
+import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
+import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { InputAddress } from "@/sections/shared/common/muiExtended/InputAddress";
 import { InputAmountWithMax } from "@/sections/shared/common/muiExtended/InputAmountWithMax";
-import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { validateAddress } from "@/validations/blockchain";
 
 import { useTransferAssetContext } from "../TransferAssetContext";
@@ -48,7 +49,10 @@ export function FormTransferAsset() {
     setValue,
     getValues,
   } = inputFormManager;
-  const { balances, isLoading } = useAssetsBalance();
+  const { multisigSelected } = useMultisignatureAccountSelected();
+  const { balances, isLoading } = useAssetsBalance({
+    contractId: multisigSelected?.address,
+  });
   const { assetId } = getValues();
   const { isDelayFinished } = useDelay(500);
   const amountMaxText = useMemo(() => {

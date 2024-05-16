@@ -1,16 +1,24 @@
 "use client";
 
 import { Grid } from "@mui/material";
+import { useMemo } from "react";
 
+import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
-import { useEthMultisignatureSelected } from "@/hooks/multisignatureSelected/useEthMultisignatureSelected";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import { SummaryCard } from "@/sections/shared/common/SummaryCard";
 
 export function SummaryCardsView() {
-  const { balance, isFetching } = useEthMultisignatureSelected();
   const { multisigSelected } = useMultisignatureAccountSelected();
-  const { balances } = useAssetsBalance();
+  const { balances, isLoading } = useAssetsBalance({
+    contractId: multisigSelected?.address,
+  });
+
+  const ethBalance = useMemo(
+    () =>
+      balances?.find((assetBalance) => assetBalance.assetId === BASE_ASSET_ID),
+    [balances]
+  );
 
   return (
     <>
@@ -18,8 +26,8 @@ export function SummaryCardsView() {
         <SummaryCard
           captionTitle="Balance"
           widthSkeleton="60%"
-          caption={balance}
-          isLoading={isFetching}
+          caption={ethBalance?.amountFormatted}
+          isLoading={isLoading}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>

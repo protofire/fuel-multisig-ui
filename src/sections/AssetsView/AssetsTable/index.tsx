@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { ROUTES } from "@/config/routes";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
+import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import {
   Column,
   GenericTable,
@@ -48,7 +49,10 @@ const columns: Column[] = [
 
 export const AssetsTable: React.FC = () => {
   const [assetType, setAssetType] = useState<AssetsType>("token");
-  const { balances, isLoading } = useAssetsBalance();
+  const { multisigSelected } = useMultisignatureAccountSelected();
+  const { balances, isLoading } = useAssetsBalance({
+    contractId: multisigSelected?.address,
+  });
   const router = useRouter();
 
   const handleChange = (newValue: number) => {

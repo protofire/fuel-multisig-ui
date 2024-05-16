@@ -1,9 +1,11 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
+import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { ROUTES } from "@/config/routes";
 import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
+import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 import { AccountSigner } from "../shared/AccountSigner";
@@ -16,6 +18,7 @@ export function SettingsView() {
   const { multisigSelected } = useSettingsMultisigContext();
   const { isB256Activated } = useFormatAccountWalletItem();
   const router = useRouter();
+  const { wallet } = useNetworkConnection();
 
   if (!multisigSelected || !router) {
     return (
@@ -77,6 +80,17 @@ export function SettingsView() {
           multisignatureAccount={multisigSelected}
         />
       </Box>
+      <Button
+        onClick={async () => {
+          const result = await wallet?.transferToContract(
+            multisigSelected.address,
+            100000,
+            BASE_ASSET_ID
+          );
+
+          debugger;
+        }}
+      ></Button>
     </>
   );
 }
