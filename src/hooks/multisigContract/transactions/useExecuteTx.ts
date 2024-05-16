@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { DryRunExecutionResult } from "@/domain/DryRunExecutionResult";
+import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { useMultisigDryRunHandler } from "@/hooks/multisigContract/useMultisigDryRunHandler";
 import { parseFuelError } from "@/services/contracts/utils/parseFuelError";
@@ -56,7 +57,13 @@ export function useExecuteTx({
           throw new Error(msg);
         });
     },
-    onMutate: () => onSuccess?.(),
+    onSuccess: () => {
+      onSuccess?.();
+
+      document.dispatchEvent(
+        new CustomEvent(MultisigLocalManagmentEvents.txExecuted)
+      );
+    },
   });
 
   return {

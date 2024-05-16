@@ -1,6 +1,7 @@
 import { ChainId } from "@/domain/ChainInfo";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { IMultisignatureAccountsRepository } from "@/domain/repositories/IMultisignatureAccountsRepository";
+import { getErrorMessage } from "@/utils/error";
 
 import { MyDatabase } from ".";
 
@@ -36,8 +37,14 @@ export class MultisignaturesAccountsDatabase
   async updateSignatoryAccount(
     account: MultisignatureAccount,
     changes: Partial<MultisignatureAccount>
-  ): Promise<number> {
-    return await this.db.signatoriesAccounts.update(account, changes);
+  ): Promise<MultisignatureAccount> {
+    try {
+      await this.db.signatoriesAccounts.update(account, changes);
+      return { ...account, ...changes };
+    } catch (e) {
+      const msg = getErrorMessage(e);
+      throw Error(msg);
+    }
   }
 
   async deleteSignatoryAccount(

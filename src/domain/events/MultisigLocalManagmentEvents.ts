@@ -1,4 +1,5 @@
 export const enum MultisigLocalManagmentEvents {
-  approveTx = "approveTx",
-  rejectTx = "rejectTx",
+  txApproved = "txApproved",
+  txRejected = "txRejected",
+  txExecuted = "txExecuted",
 }

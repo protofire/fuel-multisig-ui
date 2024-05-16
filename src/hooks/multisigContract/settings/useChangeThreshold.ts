@@ -41,7 +41,7 @@ export function useChangeThreshold({
 
       const callParams: ContractCallParamsInput = {
         calldata: [0, 0, 0, 0, 0, 0, 0, threshold],
-        forwarded_gas: 0,
+        forwarded_gas: 10_000_000,
         function_selector: hex_to_bytes(methodSelector),
         single_value_type_arg: true, // If it receives only one parameter and it is primitive, it goes true, otherwise it goes false (AFAIK).
         transfer_params: {
