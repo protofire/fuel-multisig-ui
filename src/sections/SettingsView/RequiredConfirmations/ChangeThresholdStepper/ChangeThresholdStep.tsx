@@ -63,7 +63,7 @@ export function ChangeThresholdStep() {
               required: "This field is required",
               validate: (value) =>
                 value !== multisigSelected?.threshold ||
-                "The number must not be 42",
+                "The threshold must be different to current one.",
             }}
             render={({ field }) => (
               <Select

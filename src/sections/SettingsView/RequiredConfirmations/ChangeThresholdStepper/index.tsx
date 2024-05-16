@@ -7,7 +7,7 @@ import { useSettingsMultisigContext } from "../../SettingsStepperContext/useSett
 import { ChangeThresholdStep } from "./ChangeThresholdStep";
 import { ConfirmChangeThresholdStep } from "./ConfirmChangeThresholdStep";
 
-export const ADD_OWNER_STEPS = [
+export const CHANGE_THRESHOLD_STEPS = [
   {
     id: 1,
     name: "Change Threshold",
@@ -24,7 +24,7 @@ export const ADD_OWNER_STEPS = [
 
 export function ChangeThresholdStepper() {
   const { managerStep } = useSettingsMultisigContext();
-  const formSteps = useMemo(() => transformSteps(ADD_OWNER_STEPS), []);
+  const formSteps = useMemo(() => transformSteps(CHANGE_THRESHOLD_STEPS), []);
 
   return <BaseStepper managerStep={managerStep} steps={formSteps} />;
 }
