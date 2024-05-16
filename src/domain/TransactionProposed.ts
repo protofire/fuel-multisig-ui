@@ -9,7 +9,7 @@ export interface TransferProposed {
   id: string;
   to: AccountAddress | undefined;
   validUntil: DateTime;
-  typeName: "Transfer" | "Call";
+  typeName: "Transfer" | "Custom Contract" | "Settings";
   assetAddress: string | undefined;
   assetValue: string | undefined;
   assetDecimals: number;
@@ -58,6 +58,8 @@ export interface CallDisplayInfo extends TransferProposed {
   ownersWithAction: OwnerWithAction[];
   selector: string;
   callData: string;
+  methodName: string;
+  methodArgs: Record<string, string>;
 }
 
 export const emptyDisplayInfo = {

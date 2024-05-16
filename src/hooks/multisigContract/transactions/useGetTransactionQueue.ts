@@ -50,7 +50,11 @@ export function useGetTransactionQueue() {
   const transactionData: TransferDisplayInfo[] = (data ?? [])
     .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
     .map((tx) => ({
-      ...toTransactionDisplayInfo(tx, multisigSelected?.threshold || 1),
+      ...toTransactionDisplayInfo(
+        tx,
+        multisigSelected?.threshold || 1,
+        multisigSelected
+      ),
     }));
 
   return {

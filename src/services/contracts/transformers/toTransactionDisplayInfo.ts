@@ -2,6 +2,7 @@ import { DateTime } from "fuels";
 
 import { assetByContractId } from "@/config/assetsMap";
 import { TX_TYPE_IMG } from "@/config/images";
+import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import {
   CallDisplayInfo,
   emptyDisplayInfo,
@@ -13,7 +14,8 @@ import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
 
 export function toTransactionDisplayInfo(
   transactionOutput: TransactionDataOutput,
-  threshold: number
+  threshold: number,
+  multisigSelected: MultisignatureAccount | undefined
 ): TransferDisplayInfo | CallDisplayInfo {
   if ("Transfer" in transactionOutput.tx_parameters) {
     const transferTransaction = { ...emptyDisplayInfo } as TransferDisplayInfo;
@@ -55,13 +57,25 @@ export function toTransactionDisplayInfo(
     return _result;
   } else {
     const callTransaction = { ...emptyDisplayInfo } as CallDisplayInfo;
-    callTransaction.typeName = "Call";
+
+    if (transactionOutput.to.ContractId?.value && multisigSelected?.address) {
+      if (
+        getAccountWallet(transactionOutput.to.ContractId?.value).b256 ===
+        getAccountWallet(multisigSelected.address).b256
+      ) {
+        callTransaction.typeName = "Settings";
+        callTransaction.image = TX_TYPE_IMG.CONTRACT;
+      } else {
+        callTransaction.typeName = "Custom Contract";
+        callTransaction.image = TX_TYPE_IMG.CONTRACT;
+      }
+    }
+
     callTransaction.assetAddress =
       transactionOutput.tx_parameters.Call.transfer_params.asset_id.value;
     callTransaction.assetValue =
       transactionOutput.tx_parameters.Call.transfer_params.value?.toString();
     callTransaction.assetDecimals = 0;
-    callTransaction.image = TX_TYPE_IMG.CONTRACT;
     callTransaction.valueAmount = callTransaction.assetAddress
       ? irregularToDecimalFormatted(
           transactionOutput.tx_parameters.Call.transfer_params.value,
