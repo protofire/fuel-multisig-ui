@@ -86,8 +86,8 @@ export function toTransactionDisplayInfo(
           ? "READY_TO_EXECUTE"
           : callTransaction.status,
       id: transactionOutput.tx_id.toString(),
-      to: transactionOutput.to.Address
-        ? getAccountWallet(transactionOutput.to.Address.value)
+      to: transactionOutput.to.ContractId
+        ? getAccountWallet(transactionOutput.to.ContractId.value)
         : undefined,
       validUntil: DateTime.fromTai64(transactionOutput.valid_until.toString()),
       approvalCount: transactionOutput.approvals_count,
