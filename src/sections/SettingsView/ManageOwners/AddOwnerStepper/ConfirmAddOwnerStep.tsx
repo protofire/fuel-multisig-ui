@@ -1,5 +1,5 @@
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 import { ROUTES } from "@/config/routes";
@@ -21,20 +21,29 @@ export function ConfirmAddOwnerStep() {
   const { accountWalletItem } = useAccountWalletSelected();
   const { activeStep, stepsLength, downStep } = managerStep;
   const router = useRouter();
-  const { control, setValue, getValues, setFocus } = inputFormManager;
+  const { control, setValue, getValues, reset } = inputFormManager;
   const owner = getValues("owner");
   const { ownersQuery } = useManageOwnersUi({
     owners: _owners,
     accountWalletItemConnected: accountWalletItem,
   });
-  const { addOwner, isPending, ownerAdded } = useAddOwner({
+  const { addOwner, isPending } = useAddOwner({
     multisigAddress: multisigSelected?.address as string,
-    onSuccess: () => router.push(ROUTES.Settings),
+    onSuccess: () => {
+      router.push(ROUTES.Settings);
+      reset();
+      managerStep.resetSteps();
+    },
   });
 
   const handleNext = () => {
     owner && addOwner(toAccountWalletItem(owner.address, owner.name));
   };
+
+  if (!owner.address) {
+    downStep();
+    return <CircularProgress color="secondary" size={20} />;
+  }
 
   return (
     <Box>
