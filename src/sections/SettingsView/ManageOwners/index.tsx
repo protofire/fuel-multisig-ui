@@ -6,10 +6,8 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { ROUTES } from "@/config/routes";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { useModalBehaviour } from "@/hooks/common/useModalBehaviour";
@@ -24,11 +22,15 @@ import { useManageOwnersUi } from "./useManageOwnersUi";
 interface Props {
   multisigSelected: MultisignatureAccount;
   isB256Activated: boolean;
+  handleAddOwner: () => void;
 }
 
-export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
+export function ManageOwners({
+  multisigSelected,
+  isB256Activated,
+  handleAddOwner,
+}: Props) {
   const { owners } = multisigSelected;
-  const router = useRouter();
   const [currentOwner, setCurrentOwner] = useState<
     AccountWalletItem | undefined
   >();
@@ -60,9 +62,6 @@ export function ManageOwners({ multisigSelected, isB256Activated }: Props) {
 
     setCurrentOwner(owner);
     openModalDelete();
-  };
-  const handleAddOwner = () => {
-    router.push(ROUTES.SetOwners);
   };
 
   return (

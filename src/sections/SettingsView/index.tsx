@@ -1,19 +1,23 @@
 "use client";
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 
+import { ROUTES } from "@/config/routes";
 import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 import { AccountSigner } from "../shared/AccountSigner";
 import { FallbackSpinner } from "../shared/common/FallbackSpinner";
 import { ManageOwners } from "./ManageOwners";
+import { RequiredConfirmations } from "./RequiredConfirmations";
 import { useSettingsMultisigContext } from "./SettingsStepperContext/useSettingsMultisigContext";
 
 export function SettingsView() {
   const { multisigSelected } = useSettingsMultisigContext();
   const { isB256Activated } = useFormatAccountWalletItem();
+  const router = useRouter();
 
-  if (!multisigSelected) {
+  if (!multisigSelected || !router) {
     return (
       <FallbackSpinner
         sx={{
@@ -24,6 +28,14 @@ export function SettingsView() {
       />
     );
   }
+
+  const handleAddOwner = () => {
+    router.push(ROUTES.SetOwners);
+  };
+
+  const handleAddThreshold = () => {
+    router.push(ROUTES.SetThreshold);
+  };
 
   return (
     <>
@@ -56,9 +68,14 @@ export function SettingsView() {
         <ManageOwners
           isB256Activated={isB256Activated}
           multisigSelected={multisigSelected}
+          handleAddOwner={handleAddOwner}
         />
       </Box>
       <Box mt={4} bgcolor={(theme) => theme.palette.grey.A100} p={3}>
+        <RequiredConfirmations
+          handleAddThreshold={handleAddThreshold}
+          multisignatureAccount={multisigSelected}
+        />
         {/* <RequiredConfirmations
           owners={selectedMultisig?.owners}
           threshold={selectedMultisig?.threshold}
