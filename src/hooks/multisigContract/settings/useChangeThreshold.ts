@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js";
 import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
-import { toIdentityInput } from "@/services/contracts/transformers/toInputIdentity";
+import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
 import { hex_to_bytes } from "@/utils/formatString";
 
 import { useGetMultisigContract } from "../useGetMultisigContract";
@@ -51,7 +51,7 @@ export function useChangeThreshold({
       };
 
       return proposeTransaction({
-        to: toIdentityInput(multisigAddress),
+        to: toIdentityContractIdInput(multisigAddress),
         params: { Call: callParams },
       }).then((r) => {
         return true;

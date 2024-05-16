@@ -6,7 +6,7 @@ import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
 import { IDENTITY_ADDRESS } from "@/services/contracts/callData";
 import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
-import { toIdentityInput } from "@/services/contracts/transformers/toInputIdentity";
+import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
 import { getHexFromAddress } from "@/services/fuel/connectors/transformer";
 import { hex_to_bytes } from "@/utils/formatString";
 
@@ -58,7 +58,7 @@ export function useDeleteOwner({
       };
 
       return proposeTransaction({
-        to: toIdentityInput(multisigAddress),
+        to: toIdentityContractIdInput(multisigAddress),
         params: { Call: callParams },
       }).then((r) => {
         return owner;
