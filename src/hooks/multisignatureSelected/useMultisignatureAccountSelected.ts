@@ -20,12 +20,12 @@ export function useMultisignatureAccountSelected(): UseAccountMultisignatureSele
   const { multisignatureSelectedRepository, multisignatureAccountsRepository } =
     useLocalDbContext();
   const { chainInfo } = useNetworkConnection();
-  const { threshold, refetch } = useGetThreshold({
+  const { threshold, refetch: refetchThreshold } = useGetThreshold({
     contractId: multisigSelected?.address,
   });
 
   useEventListenerCallback([MultisigLocalManagmentEvents.txExecuted], () =>
-    refetch()
+    refetchThreshold()
   );
 
   useEffect(() => {
