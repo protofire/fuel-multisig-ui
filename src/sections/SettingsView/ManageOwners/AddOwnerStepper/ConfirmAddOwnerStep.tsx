@@ -41,7 +41,6 @@ export function ConfirmAddOwnerStep() {
   };
 
   if (!owner.address) {
-    downStep();
     return <CircularProgress color="secondary" size={20} />;
   }
 

@@ -2,6 +2,8 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
+import { ROUTES } from "@/config/routes";
+import { useChangeThreshold } from "@/hooks/multisigContract/settings/useChangeThreshold";
 import { ModalStyledDivider } from "@/sections/Auth/ModalWalletProvider/styled";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { StyledBox } from "@/sections/TxQueueWidget/styled";
@@ -15,17 +17,17 @@ export function ConfirmChangeThresholdStep() {
   const { activeStep, stepsLength, downStep } = managerStep;
   const { getValues, reset } = inputFormManager;
   const thresholdModified = getValues("threshold");
-  // const { addOwner, isPending } = useAddOwner({
-  //   multisigAddress: multisigSelected?.address as string,
-  //   onSuccess: () => {
-  //     router.push(ROUTES.Settings);
-  //     reset();
-  //     managerStep.resetSteps();
-  //   },
-  // });
+  const { proposeChangeThreshold, isPending } = useChangeThreshold({
+    multisigAddress: multisigSelected?.address as string,
+    onSuccess: () => {
+      router.push(ROUTES.Settings);
+      reset();
+      managerStep.resetSteps();
+    },
+  });
 
   const handleNext = () => {
-    console.log("__log");
+    proposeChangeThreshold(thresholdModified);
   };
 
   return (
@@ -67,10 +69,10 @@ export function ConfirmChangeThresholdStep() {
             </>
           }
           handleNext={handleNext}
-          // nextButtonProps={{
-          //   disabled: isPending,
-          //   isLoading: isPending,
-          // }}
+          nextButtonProps={{
+            disabled: isPending,
+            isLoading: isPending,
+          }}
         />
       </Box>
     </Box>
