@@ -1,71 +1,49 @@
-import { CoinQuantity } from "fuels";
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { BN } from "fuels";
 
-import { assetByContractId } from "@/config/assetsMap";
-import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
+import { assetsMap } from "@/config/assetsMap";
 import { AssetAmount } from "@/domain/ui/AssetAmount";
 import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
 
-import { useMultisignatureAccountSelected } from "./useMultisignatureAccountSelected";
+import { useGetMultisigContract } from "../multisigContract/useGetMultisigContract";
+
+interface Props {
+  contractId: string | undefined;
+}
 
 interface UseAssetsBalanceReturn {
   balances: AssetAmount[] | undefined;
   isLoading: boolean;
 }
 
-export function useAssetsBalance(): UseAssetsBalanceReturn {
-  const [isLoading, setIsLoading] = useState(true);
-  const { wallet } = useNetworkConnection();
-  const { multisigSelected } = useMultisignatureAccountSelected();
-  const [balances, setBalances] = useState<AssetAmount[]>();
+export function useAssetsBalance({
+  contractId,
+}: Props): UseAssetsBalanceReturn {
+  const { contract } = useGetMultisigContract({ contractId });
 
-  const _setCoinsBalances = useCallback(
-    (coinsBalance: CoinQuantity[] | undefined) => {
-      if (!coinsBalance?.length) {
-        setBalances([]);
-        return;
-      }
+  const { data, isLoading, isFetched } = useQuery({
+    queryKey: ["useAssetsBalance", contract?.account?.address.toString()],
+    queryFn: async () => {
+      return Promise.all(
+        Object.values(assetsMap).map(async (asset) => {
+          const balance = await contract?.getBalance(asset.assetId);
 
-      const _balances = coinsBalance.map((coinQuantity): AssetAmount => {
-        const assetInfo = assetByContractId(coinQuantity.assetId);
+          const formatted = irregularToDecimalFormatted(balance, {
+            significantFigures: 4,
+            assetInfo: asset,
+          });
 
-        const formatted = irregularToDecimalFormatted(coinQuantity.amount, {
-          significantFigures: 4,
-          assetInfo,
-        });
-
-        return {
-          ...assetInfo,
-          amountFormatted: formatted || "-",
-          amount: coinQuantity.amount,
-        };
-      }, []);
-
-      setBalances(_balances);
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (!multisigSelected?.address) return;
-
-    setIsLoading(true);
-    const _getBalances = async () => {
-      const _balances = await wallet?.provider.getBalances(
-        multisigSelected.address
+          return {
+            ...asset,
+            amount: balance || new BN(0),
+            amountFormatted: formatted || "",
+          };
+        })
       );
-      _setCoinsBalances(_balances);
-    };
+    },
+    enabled: !!contract,
+    initialData: [],
+  });
 
-    // Call immediately at the first time
-    _getBalances().finally(() => setIsLoading(false));
-
-    const intervalId = setInterval(() => {
-      _getBalances().finally(() => setIsLoading(false));
-    }, 10000);
-
-    return () => clearInterval(intervalId);
-  }, [_setCoinsBalances, multisigSelected?.address, wallet?.provider]);
-
-  return { balances, isLoading };
+  return { balances: data, isLoading: !isFetched || isLoading };
 }
