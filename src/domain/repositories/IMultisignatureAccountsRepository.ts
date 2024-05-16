@@ -10,7 +10,7 @@ export interface IMultisignatureAccountsRepository {
   updateSignatoryAccount(
     account: MultisignatureAccount,
     changes: Partial<MultisignatureAccount>
-  ): Promise<number>;
+  ): Promise<MultisignatureAccount>;
   findSignatoriesByOwner(
     walletAddress: string,
     networkId?: ChainId

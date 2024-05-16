@@ -38,8 +38,8 @@ export function useApproveTx({
 
   useEventListenerCallback(
     [
-      MultisigLocalManagmentEvents.approveTx,
-      MultisigLocalManagmentEvents.rejectTx,
+      MultisigLocalManagmentEvents.txApproved,
+      MultisigLocalManagmentEvents.txRejected,
     ],
     () => dryRunHandler.executeDryRun()
   );
@@ -69,7 +69,7 @@ export function useApproveTx({
     },
     onSuccess: () => {
       document.dispatchEvent(
-        new CustomEvent(MultisigLocalManagmentEvents.approveTx)
+        new CustomEvent(MultisigLocalManagmentEvents.txApproved)
       );
     },
   });

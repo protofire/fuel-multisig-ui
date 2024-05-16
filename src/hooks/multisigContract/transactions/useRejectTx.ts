@@ -55,7 +55,7 @@ export function useRejectTx({
     },
     onSuccess: () => {
       document.dispatchEvent(
-        new CustomEvent(MultisigLocalManagmentEvents.rejectTx)
+        new CustomEvent(MultisigLocalManagmentEvents.txRejected)
       );
     },
   });
