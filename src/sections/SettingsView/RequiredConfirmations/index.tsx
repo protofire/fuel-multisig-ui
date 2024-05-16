@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
+import { pluralizeVerb } from "@/utils/formatString";
 
 interface Props {
   handleAddThreshold: () => void;
@@ -24,7 +25,8 @@ export function RequiredConfirmations({
         </Typography>
         <Box mt={2} display="flex" flexDirection="column" gap={3}>
           <Typography variant="body1">
-            {threshold ?? 0} out of {owners?.length ?? 0} owner(s).
+            {threshold ?? 0} out of {owners?.length ?? 0}
+            {pluralizeVerb(owners?.length ?? 0, " owner")}.
           </Typography>
           <Button
             sx={{ width: 134 }}

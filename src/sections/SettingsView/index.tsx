@@ -76,11 +76,6 @@ export function SettingsView() {
           handleAddThreshold={handleAddThreshold}
           multisignatureAccount={multisigSelected}
         />
-        {/* <RequiredConfirmations
-          owners={selectedMultisig?.owners}
-          threshold={selectedMultisig?.threshold}
-          handleAddThreshold={handleAddThreshold}
-        /> */}
       </Box>
     </>
   );

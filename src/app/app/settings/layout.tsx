@@ -21,6 +21,7 @@ export default function SettingsPageLayout({
     mode: "all",
     defaultValues: {
       owner: { address: "", name: "" },
+      threshold: 1,
     },
   });
 
