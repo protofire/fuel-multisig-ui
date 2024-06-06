@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.82.0
-  Forc version: 0.49.3
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.2
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import type {
@@ -30,13 +30,13 @@ export enum MultisigErrorOutput { MaxOwnersReached = 'MaxOwnersReached', Already
 export type TransactionParametersInput = Enum<{ Call: ContractCallParamsInput, Transfer: TransferParamsInput }>;
 export type TransactionParametersOutput = Enum<{ Call: ContractCallParamsOutput, Transfer: TransferParamsOutput }>;
 
-export type AddressInput = { value: string };
+export type AddressInput = { bits: string };
 export type AddressOutput = AddressInput;
-export type AssetIdInput = { value: string };
+export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
 export type ContractCallParamsInput = { calldata: Bytes, forwarded_gas: BigNumberish, function_selector: Bytes, single_value_type_arg: boolean, transfer_params: TransferParamsInput };
 export type ContractCallParamsOutput = { calldata: Bytes, forwarded_gas: BN, function_selector: Bytes, single_value_type_arg: boolean, transfer_params: TransferParamsOutput };
-export type ContractIdInput = { value: string };
+export type ContractIdInput = { bits: string };
 export type ContractIdOutput = ContractIdInput;
 export type MultisigInitializedInput = { contract_id: ContractIdInput, threshold: BigNumberish, owners: Vec<IdentityInput> };
 export type MultisigInitializedOutput = { contract_id: ContractIdOutput, threshold: number, owners: Vec<IdentityOutput> };
@@ -44,8 +44,6 @@ export type OwnerAddedInput = { owner: IdentityInput };
 export type OwnerAddedOutput = { owner: IdentityOutput };
 export type OwnerRemovedInput = { owner: IdentityInput };
 export type OwnerRemovedOutput = { owner: IdentityOutput };
-export type RawBytesInput = { ptr: BigNumberish, cap: BigNumberish };
-export type RawBytesOutput = { ptr: BN, cap: BN };
 export type ThresholdChangedInput = { new_threshold: BigNumberish };
 export type ThresholdChangedOutput = { new_threshold: number };
 export type TransactionApprovedInput = { tx_id: BigNumberish, owner: IdentityInput };
