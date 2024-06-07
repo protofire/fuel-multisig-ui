@@ -12,10 +12,6 @@ interface UseDeployMultisigContractReturn {
   isLoading: boolean;
 }
 
-// const fromHexString = (hexString: string) =>
-//   const match = hexString.match(/.{1,2}/g
-//   Uint8Array.from().map((byte) => parseInt(byte, 16)));
-
 export function useDeployMultisigContract(): UseDeployMultisigContractReturn {
   const { wallet } = useNetworkConnection();
   const [error, setError] = useState<string | undefined>();
@@ -31,14 +27,9 @@ export function useDeployMultisigContract(): UseDeployMultisigContractReturn {
 
     setLoading(true);
     try {
-      const gasMax = wallet.provider.getGasConfig().maxGasPerTx;
-
       const factory = await FuelMultisigAbi__factory.deployContract(
         bytecode,
-        wallet,
-        {
-          maxFee: gasMax,
-        }
+        wallet
       );
 
       return factory.id.toAddress();

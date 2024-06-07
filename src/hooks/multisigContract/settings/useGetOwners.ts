@@ -25,10 +25,6 @@ export function useGetOwners({ contractId }: Props): UseGetThresholdReturn {
     queryFn: async () => {
       return contract?.functions
         .get_owners()
-        .txParams({
-          gasPrice: 1,
-          gasLimit: 100_000,
-        })
         .dryRun()
         .then((result) => {
           return result.value;

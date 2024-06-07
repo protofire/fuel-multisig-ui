@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 
 import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
 import {
@@ -6,6 +6,9 @@ import {
   isCallDisplayInfo,
   TransferDisplayInfo,
 } from "@/domain/TransactionProposed";
+import CopyButton from "@/sections/shared/common/CopyButton";
+import { MonoTypography } from "@/sections/shared/common/MonoTypography";
+import { truncateAddress } from "@/utils/formatString";
 
 import { AccountWithExplorer } from "./AccountWithExplorer";
 
@@ -35,8 +38,19 @@ export function TxDetails({ txData }: Props) {
                 isB256Activated={isB256Activated}
               />
             )}
-            Selector: {txData.selector}
-            Calldata (raw): {txData.callData}
+            <Typography>Selector: {txData.selector}</Typography>
+            <Typography>
+              Calldata (raw):
+              <Tooltip placement="bottom-end" title={txData.callData}>
+                <MonoTypography variant="caption" sx={{ mr: "0.3rem" }}>
+                  {truncateAddress(txData.callData, 12, 12)}
+                </MonoTypography>
+              </Tooltip>
+              <CopyButton
+                text={txData.callData}
+                initialToolTipText="Copy the whole Call data"
+              />
+            </Typography>
           </>
         ) : (
           <>

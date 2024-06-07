@@ -30,7 +30,7 @@ export function ConfirmAddOwnerStep() {
   const { addOwner, isPending } = useAddOwner({
     multisigAddress: multisigSelected?.address as string,
     onSuccess: () => {
-      router.push(ROUTES.Settings);
+      router.push(ROUTES.Transactions);
       reset();
       managerStep.resetSteps();
     },

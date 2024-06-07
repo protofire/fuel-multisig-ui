@@ -25,8 +25,8 @@ function updateOwners(
 
   const updatedOwners: Owner[] = newOwners.map((newOwner, index) => {
     const address = isContractIdInput(newOwner)
-      ? newOwner.ContractId.value
-      : newOwner.Address.value;
+      ? newOwner.ContractId.bits
+      : newOwner.Address.bits;
     const accountWallet = getAccountWallet(address);
     const existingOwner = currentOwnersMap.get(accountWallet.bech32);
     const name = existingOwner ? existingOwner.name : `Signer ${index + 1}`;

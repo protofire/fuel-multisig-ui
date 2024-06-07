@@ -9,7 +9,8 @@ export function AccountInfoWidget() {
   const { chainInfo } = useNetworkConnection();
   const chainName = chainInfo?.name || "";
   const networkColor =
-    (chainInfo && CHAINS_COLORS[chainName]) || CHAINS_COLORS["Unknown"];
+    (chainInfo?.chainId !== undefined && CHAINS_COLORS[chainInfo.chainId]) ||
+    CHAINS_COLORS["default"];
   const { multisigSelected } = useMultisignatureAccountSelected();
 
   if (!multisigSelected) {

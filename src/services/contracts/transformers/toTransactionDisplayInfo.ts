@@ -11,6 +11,7 @@ import {
 import { TransactionDataOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { getAccountWallet } from "@/services/fuel/connectors/transformer";
 import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
+import { bytes_to_hex } from "@/utils/formatString";
 
 export function toTransactionDisplayInfo(
   transactionOutput: TransactionDataOutput,
@@ -21,7 +22,7 @@ export function toTransactionDisplayInfo(
     const transferTransaction = { ...emptyDisplayInfo } as TransferDisplayInfo;
     transferTransaction.typeName = "Transfer";
     transferTransaction.assetAddress =
-      transactionOutput.tx_parameters.Transfer?.asset_id.value;
+      transactionOutput.tx_parameters.Transfer?.asset_id.bits;
     transferTransaction.assetValue =
       transactionOutput.tx_parameters.Transfer?.value?.toString();
     transferTransaction.assetDecimals = 0;
@@ -47,7 +48,7 @@ export function toTransactionDisplayInfo(
           : transferTransaction.status,
       id: transactionOutput.tx_id.toString(),
       to: transactionOutput.to.Address
-        ? getAccountWallet(transactionOutput.to.Address.value)
+        ? getAccountWallet(transactionOutput.to.Address.bits)
         : undefined,
       validUntil: DateTime.fromTai64(transactionOutput.valid_until.toString()),
       approvalCount: transactionOutput.approvals_count,
@@ -58,9 +59,9 @@ export function toTransactionDisplayInfo(
   } else {
     const callTransaction = { ...emptyDisplayInfo } as CallDisplayInfo;
 
-    if (transactionOutput.to.ContractId?.value && multisigSelected?.address) {
+    if (transactionOutput.to.ContractId?.bits && multisigSelected?.address) {
       if (
-        getAccountWallet(transactionOutput.to.ContractId?.value).b256 ===
+        getAccountWallet(transactionOutput.to.ContractId?.bits).b256 ===
         getAccountWallet(multisigSelected.address).b256
       ) {
         callTransaction.typeName = "Settings";
@@ -72,7 +73,7 @@ export function toTransactionDisplayInfo(
     }
 
     callTransaction.assetAddress =
-      transactionOutput.tx_parameters.Call.transfer_params.asset_id.value;
+      transactionOutput.tx_parameters.Call.transfer_params.asset_id.bits;
     callTransaction.assetValue =
       transactionOutput.tx_parameters.Call.transfer_params.value?.toString();
     callTransaction.assetDecimals = 0;
@@ -88,10 +89,12 @@ export function toTransactionDisplayInfo(
         )
       : "";
     callTransaction.signMathOperation = "-";
-    callTransaction.selector =
-      transactionOutput.tx_parameters.Call.function_selector.toString();
-    callTransaction.callData =
-      transactionOutput.tx_parameters.Call.calldata.toString();
+    callTransaction.selector = bytes_to_hex(
+      transactionOutput.tx_parameters.Call.function_selector
+    );
+    callTransaction.callData = bytes_to_hex(
+      transactionOutput.tx_parameters.Call.calldata
+    );
 
     const _result = {
       ...callTransaction,
@@ -101,7 +104,7 @@ export function toTransactionDisplayInfo(
           : callTransaction.status,
       id: transactionOutput.tx_id.toString(),
       to: transactionOutput.to.ContractId
-        ? getAccountWallet(transactionOutput.to.ContractId.value)
+        ? getAccountWallet(transactionOutput.to.ContractId.bits)
         : undefined,
       validUntil: DateTime.fromTai64(transactionOutput.valid_until.toString()),
       approvalCount: transactionOutput.approvals_count,
