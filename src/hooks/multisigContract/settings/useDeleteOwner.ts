@@ -50,9 +50,8 @@ export function useDeleteOwner({
         calldata: hex_owner_bytes,
         forwarded_gas: 10_000_000, // TODO check is this value needs to be changed
         function_selector: hex_to_bytes(methodSelector),
-        single_value_type_arg: false, // If it receives only one parameter and it is primitive, it goes true, otherwise it goes false (AFAIK).
         transfer_params: {
-          asset_id: { value: BASE_ASSET_ID },
+          asset_id: { bits: BASE_ASSET_ID },
           value: new BigNumber(0).toString(),
         },
       };

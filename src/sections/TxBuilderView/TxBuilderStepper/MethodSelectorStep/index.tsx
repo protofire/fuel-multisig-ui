@@ -75,9 +75,8 @@ export function MethodSelectorStep() {
       function_selector: hex_to_bytes(
         selectedAbiMethod.interfaceMethod.selector
       ),
-      single_value_type_arg: true,
       transfer_params: {
-        asset_id: { value: BASE_ASSET_ID },
+        asset_id: { bits: BASE_ASSET_ID },
         value: new BigNumber(0).toString(),
       },
     };
