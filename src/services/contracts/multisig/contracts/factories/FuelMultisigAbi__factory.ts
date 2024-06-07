@@ -262,11 +262,6 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "single_value_type_arg",
-          "type": 2,
-          "typeArguments": null
-        },
-        {
           "name": "transfer_params",
           "type": 27,
           "typeArguments": null
