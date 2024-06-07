@@ -5,7 +5,6 @@ import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
-import { hex_to_bytes } from "@/utils/formatString";
 
 import { useGetMultisigContract } from "../useGetMultisigContract";
 import { useProposeTransaction } from "../useProposeTransaction";
@@ -33,7 +32,7 @@ export function useChangeThreshold({
     mutationKey: ["proposeChangeThreshold", multisigContract?.account?.address],
     mutationFn: async (threshold: number) => {
       const methodSelector =
-        multisigContract?.interface.functions.change_threshold.selector;
+        multisigContract?.interface.functions.change_threshold.selectorBytes;
 
       if (!methodSelector) {
         throw Error("No change_threshold selector found on multisig contract");
@@ -42,7 +41,7 @@ export function useChangeThreshold({
       const callParams: ContractCallParamsInput = {
         calldata: [0, 0, 0, 0, 0, 0, 0, threshold],
         forwarded_gas: 10_000_000,
-        function_selector: hex_to_bytes(methodSelector),
+        function_selector: methodSelector,
         transfer_params: {
           asset_id: { bits: BASE_ASSET_ID },
           value: new BigNumber(0).toString(),
