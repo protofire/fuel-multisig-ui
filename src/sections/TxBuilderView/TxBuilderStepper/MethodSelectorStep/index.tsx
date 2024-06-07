@@ -168,7 +168,6 @@ export function MethodSelectorStep() {
             selectedAbiMethod={selectedAbiMethod}
             metadataContract={metadataContract}
             decodedValue={decodedValue}
-            dryRunHandler={druRunHandler}
           />
         )
       )}

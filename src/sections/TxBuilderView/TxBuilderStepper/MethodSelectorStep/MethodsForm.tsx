@@ -8,7 +8,8 @@ import { useTxBuilderContext } from "@/sections/TxBuilderView/TxBuilderContext/u
 
 import { UseAbiMethodSelectorResult } from "./useAbiMethodSelector";
 
-interface Props extends UseCustomContractDryRunHandlerResult {
+interface Props
+  extends Pick<UseCustomContractDryRunHandlerResult, "decodedValue"> {
   selectedAbiMethod: UseAbiMethodSelectorResult["selectedAbiMethod"];
   metadataContract: Contract;
 }
