@@ -18,12 +18,12 @@ import { ROUTES } from "@/config/routes";
 import { useProposeTransaction } from "@/hooks/multisigContract/useProposeTransaction";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
+import { useCustomContractDryRunHandler } from "@/hooks/useContractDryRunHandler";
 import { useContractFromMetadata } from "@/hooks/useContractFromMetadata";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import CopyButton from "@/sections/shared/common/CopyButton";
 import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
 import { MonoTypography } from "@/sections/shared/common/MonoTypography";
-import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
 import { getAccountWallet } from "@/services/fuel/connectors/transformer";
 import { hex_to_bytes, truncateAddress } from "@/utils/formatString";
@@ -60,27 +60,33 @@ export function MethodSelectorStep() {
     methodName: abiMethodSelected,
     metadataContract,
   });
-
-  const _handleNext = useCallback(() => {
-    if (
-      !selectedAbiMethod ||
-      !selectedAbiMethod.interfaceMethod ||
-      !contractAddress
-    ) {
+  const callParams = useMemo(() => {
+    if (!selectedAbiMethod || !selectedAbiMethod.interfaceMethod) {
       return;
     }
-    const callParams: ContractCallParamsInput = {
+
+    return {
       calldata: hex_to_bytes(abiSelectedParams),
       forwarded_gas: 10000000,
-      function_selector: hex_to_bytes(
-        selectedAbiMethod.interfaceMethod.selector
-      ),
-      single_value_type_arg: true,
+      function_selector: selectedAbiMethod.interfaceMethod.selectorBytes,
       transfer_params: {
-        asset_id: { value: BASE_ASSET_ID },
+        asset_id: { bits: BASE_ASSET_ID },
         value: new BigNumber(0).toString(),
       },
     };
+  }, [abiSelectedParams, selectedAbiMethod]);
+
+  const { druRunHandler, decodedValue } = useCustomContractDryRunHandler({
+    contract: metadataContract,
+    methodName: selectedAbiMethod?.interfaceMethod?.name,
+    callData: callParams?.calldata || [],
+  });
+
+  const _handleNext = useCallback(() => {
+    if (!contractAddress || !callParams) {
+      return;
+    }
+
     const contractAddressWallet = getAccountWallet(contractAddress);
     proposeTransaction({
       to: toIdentityContractIdInput(contractAddressWallet.bech32),
@@ -90,13 +96,7 @@ export function MethodSelectorStep() {
         router.push(ROUTES.App);
       }
     });
-  }, [
-    selectedAbiMethod,
-    abiSelectedParams,
-    contractAddress,
-    proposeTransaction,
-    router,
-  ]);
+  }, [contractAddress, proposeTransaction, callParams, router]);
 
   if (!metadataContract) {
     return (
@@ -160,8 +160,6 @@ export function MethodSelectorStep() {
       {selectedAbiMethodLoading ? (
         <>
           <Skeleton width={"100%"} />
-          <Skeleton width={"100%"} />
-          <Skeleton width={"100%"} />
         </>
       ) : (
         selectedAbiMethod &&
@@ -169,6 +167,7 @@ export function MethodSelectorStep() {
           <MethodsForm
             selectedAbiMethod={selectedAbiMethod}
             metadataContract={metadataContract}
+            decodedValue={decodedValue}
           />
         )
       )}

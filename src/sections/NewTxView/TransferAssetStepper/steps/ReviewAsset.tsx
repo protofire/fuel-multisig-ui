@@ -30,7 +30,7 @@ export function ReviewAsset() {
     return {
       to: toIdentityInput(recipientAddress),
       params: {
-        asset_id: { value: assetId },
+        asset_id: { bits: assetId },
         value: _amount,
       },
     };

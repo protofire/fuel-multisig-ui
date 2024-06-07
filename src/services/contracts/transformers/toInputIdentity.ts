@@ -4,7 +4,7 @@ import { IdentityInput } from "../multisig/contracts/FuelMultisigAbi";
 
 export function toIdentityInput(str: string): IdentityInput {
   const identityInput: IdentityInput = {
-    Address: { value: toB256(str) },
+    Address: { bits: toB256(str) },
   };
 
   return identityInput;
@@ -12,7 +12,7 @@ export function toIdentityInput(str: string): IdentityInput {
 
 export function toIdentityContractIdInput(str: string): IdentityInput {
   const identityInput: IdentityInput = {
-    ContractId: { value: toB256(str) },
+    ContractId: { bits: toB256(str) },
   };
 
   return identityInput;

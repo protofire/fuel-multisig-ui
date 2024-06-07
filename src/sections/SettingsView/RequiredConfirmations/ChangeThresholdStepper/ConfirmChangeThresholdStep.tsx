@@ -20,7 +20,7 @@ export function ConfirmChangeThresholdStep() {
   const { proposeChangeThreshold, isPending } = useChangeThreshold({
     multisigAddress: multisigSelected?.address as string,
     onSuccess: () => {
-      router.push(ROUTES.Settings);
+      router.push(ROUTES.Transactions);
       reset();
       managerStep.resetSteps();
     },

@@ -2,19 +2,22 @@ import { Box, Stack, TextField } from "@mui/material";
 import { Contract } from "fuels";
 import { Controller } from "react-hook-form";
 
+import { UseCustomContractDryRunHandlerResult } from "@/hooks/useContractDryRunHandler";
+import { DryRunMessage } from "@/sections/shared/DryRunMessage";
 import { useTxBuilderContext } from "@/sections/TxBuilderView/TxBuilderContext/useTxBuilderContext";
 
 import { UseAbiMethodSelectorResult } from "./useAbiMethodSelector";
 
-interface Props {
+interface Props
+  extends Pick<UseCustomContractDryRunHandlerResult, "decodedValue"> {
   selectedAbiMethod: UseAbiMethodSelectorResult["selectedAbiMethod"];
   metadataContract: Contract;
 }
 
-export function MethodsForm({ selectedAbiMethod, metadataContract }: Props) {
+export function MethodsForm({ selectedAbiMethod, decodedValue }: Props) {
   const { inputFormManager } = useTxBuilderContext();
   const thereAreAttributes =
-    selectedAbiMethod?.interfaceMethod?.jsonFn.inputs.length || 0;
+    selectedAbiMethod?.interfaceMethod?.jsonFn.inputs.length || false;
   const {
     control,
     formState: { isValid, errors },
@@ -37,18 +40,13 @@ export function MethodsForm({ selectedAbiMethod, metadataContract }: Props) {
             justifyContent="space-between"
             alignItems="center"
           >
-            {/* {thereAreAttributes && (
-              <Typography variant="caption" fontWeight="500">
-                Message to send:
-              </Typography>
-            )} */}
-            {/* <DryRunMessage
-              error={errorDryrun}
-              outcome={outcomeDryRun}
-              isRunning={isDryRunning}
-            /> */}
+            <DryRunMessage
+              error={undefined}
+              outcome={decodedValue}
+              isRunning={false}
+            />
           </Box>
-          {thereAreAttributes > 0 && (
+          {thereAreAttributes && (
             <Controller
               name={"abiMethodParams"}
               control={control}

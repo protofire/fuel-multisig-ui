@@ -95,6 +95,11 @@ export function hex_to_bytes(hex: string): number[] {
   return numbers;
 }
 
+export function bytes_to_hex(bytes: Uint8Array | number[]): string {
+  const buffer = Buffer.from(bytes);
+  return "0x" + buffer.toString("hex");
+}
+
 /**
  * Pluralizes a given verb if the provided count is greater than 1.
  *

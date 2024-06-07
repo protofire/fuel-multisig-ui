@@ -41,10 +41,6 @@ export function useProposeTransaction() {
       setIsLoading(true);
 
       try {
-        // const cost = await contract?.functions
-        //   .propose_tx(to, txValidityDuration, { Transfer: params })
-        //   .getTransactionCost();
-
         const _dryRun = await contract?.functions
           .propose_tx(to, _txValidityDuration, params)
           .dryRun();
@@ -53,10 +49,6 @@ export function useProposeTransaction() {
 
         const response = await contract?.functions
           .propose_tx(to, _txValidityDuration, params)
-          // .txParams({
-          //   gasPrice: cost?.gasPrice,
-          //   gasLimit: cost?.gasUsed.mul(1.1),
-          // })
           .call();
 
         return response;
