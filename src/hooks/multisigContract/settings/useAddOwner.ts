@@ -37,7 +37,7 @@ export function useAddOwner({
     mutationKey: ["proposeAddOwner", multisigContract?.account?.address],
     mutationFn: async (owner: AccountWalletItem) => {
       const methodSelector =
-        multisigContract?.interface.functions.add_owner.selector;
+        multisigContract?.interface.functions.add_owner.selectorBytes;
 
       if (!methodSelector) {
         throw Error("No add_owner selector found on multisig contract");
@@ -50,7 +50,7 @@ export function useAddOwner({
       const callParams: ContractCallParamsInput = {
         calldata: hex_owner_bytes,
         forwarded_gas: 10_000_000, // TODO check why 0 is not working
-        function_selector: hex_to_bytes(methodSelector),
+        function_selector: methodSelector,
         transfer_params: {
           asset_id: { bits: BASE_ASSET_ID },
           value: new BigNumber(0).toString(),

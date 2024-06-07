@@ -11,6 +11,7 @@ import {
 import { TransactionDataOutput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { getAccountWallet } from "@/services/fuel/connectors/transformer";
 import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
+import { bytes_to_hex } from "@/utils/formatString";
 
 export function toTransactionDisplayInfo(
   transactionOutput: TransactionDataOutput,
@@ -88,10 +89,12 @@ export function toTransactionDisplayInfo(
         )
       : "";
     callTransaction.signMathOperation = "-";
-    callTransaction.selector =
-      transactionOutput.tx_parameters.Call.function_selector.toString();
-    callTransaction.callData =
-      transactionOutput.tx_parameters.Call.calldata.toString();
+    callTransaction.selector = bytes_to_hex(
+      transactionOutput.tx_parameters.Call.function_selector
+    );
+    callTransaction.callData = bytes_to_hex(
+      transactionOutput.tx_parameters.Call.calldata
+    );
 
     const _result = {
       ...callTransaction,
