@@ -41,28 +41,7 @@ export function useSetupMultisig({
           .call()
           .then((_result) => _result)
           .catch(async (errorCallreason) => {
-            // Skip struct data size false positive error when dryRun display AlreadyInitialized
             const { message: msg } = parseFuelError(errorCallreason);
-            if (
-              typeof msg === "string" &&
-              msg.includes("Invalid struct data size")
-            ) {
-              try {
-                return await contract.functions
-                  .constructor(threshold, _usersIdentity)
-                  .dryRun();
-              } catch (errorDryRun) {
-                const dryRunMsg = getErrorMessage(errorDryRun);
-
-                if (
-                  typeof msg === "string" &&
-                  dryRunMsg.includes("AlreadyInitialized")
-                ) {
-                  console.dir(errorCallreason, { depth: null });
-                  return errorCallreason;
-                }
-              }
-            }
 
             throw Error(msg);
           });
