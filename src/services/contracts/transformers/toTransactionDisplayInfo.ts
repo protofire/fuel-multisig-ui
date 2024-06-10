@@ -1,6 +1,6 @@
 import { DateTime } from "fuels";
 
-import { assetByContractId } from "@/config/assetsMap";
+import { AssetInfoFinder } from "@/config/assetsMap";
 import { TX_TYPE_IMG } from "@/config/images";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import {
@@ -16,7 +16,8 @@ import { bytes_to_hex } from "@/utils/formatString";
 export function toTransactionDisplayInfo(
   transactionOutput: TransactionDataOutput,
   threshold: number,
-  multisigSelected: MultisignatureAccount | undefined
+  multisigSelected: MultisignatureAccount | undefined,
+  assetInfoFinder: AssetInfoFinder
 ): TransferDisplayInfo | CallDisplayInfo {
   if ("Transfer" in transactionOutput.tx_parameters) {
     const transferTransaction = { ...emptyDisplayInfo } as TransferDisplayInfo;
@@ -32,9 +33,12 @@ export function toTransactionDisplayInfo(
           transactionOutput.tx_parameters.Transfer?.value,
           {
             significantFigures: 4,
-            assetInfo: assetByContractId(transferTransaction.assetAddress, {
-              decimals: transferTransaction.assetDecimals,
-            }),
+            assetInfo: assetInfoFinder.byContractId(
+              transferTransaction.assetAddress,
+              {
+                decimals: transferTransaction.assetDecimals,
+              }
+            ),
           }
         )
       : "";
@@ -82,9 +86,12 @@ export function toTransactionDisplayInfo(
           transactionOutput.tx_parameters.Call.transfer_params.value,
           {
             significantFigures: 4,
-            assetInfo: assetByContractId(callTransaction.assetAddress, {
-              decimals: callTransaction.assetDecimals,
-            }),
+            assetInfo: assetInfoFinder.byContractId(
+              callTransaction.assetAddress,
+              {
+                decimals: callTransaction.assetDecimals,
+              }
+            ),
           }
         )
       : "";

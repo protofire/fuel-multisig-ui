@@ -3,21 +3,22 @@
 import { Grid } from "@mui/material";
 import { useMemo } from "react";
 
-import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
+import { useAssetsInfoFinder } from "@/hooks/useGetBalance";
 import { SummaryCard } from "@/sections/shared/common/SummaryCard";
 
 export function SummaryCardsView() {
   const { multisigSelected } = useMultisignatureAccountSelected();
+  const { baseAssetId } = useAssetsInfoFinder();
   const { balances, isLoading } = useAssetsBalance({
     contractId: multisigSelected?.address,
   });
 
   const ethBalance = useMemo(
     () =>
-      balances?.find((assetBalance) => assetBalance.assetId === BASE_ASSET_ID),
-    [balances]
+      balances?.find((assetBalance) => assetBalance.assetId === baseAssetId),
+    [balances, baseAssetId]
   );
 
   return (

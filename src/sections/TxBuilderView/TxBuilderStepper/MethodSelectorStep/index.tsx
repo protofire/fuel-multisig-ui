@@ -13,13 +13,13 @@ import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
-import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { ROUTES } from "@/config/routes";
 import { useProposeTransaction } from "@/hooks/multisigContract/useProposeTransaction";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
 import { useAddressInFormatPicked } from "@/hooks/useAddressInFormatPicked";
 import { useCustomContractDryRunHandler } from "@/hooks/useContractDryRunHandler";
 import { useContractFromMetadata } from "@/hooks/useContractFromMetadata";
+import { useAssetsInfoFinder } from "@/hooks/useGetBalance";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import CopyButton from "@/sections/shared/common/CopyButton";
 import { FallbackSpinner } from "@/sections/shared/common/FallbackSpinner";
@@ -43,6 +43,7 @@ export function MethodSelectorStep() {
   const { proposeTransaction } = useProposeTransaction();
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { activeStep, stepsLength, downStep: handleBack } = managerStep;
+  const { baseAssetId } = useAssetsInfoFinder();
   const { addressFormatted } = useAddressInFormatPicked({
     accountWallet: contractAddress,
   });
@@ -70,11 +71,11 @@ export function MethodSelectorStep() {
       forwarded_gas: 10000000,
       function_selector: selectedAbiMethod.interfaceMethod.selectorBytes,
       transfer_params: {
-        asset_id: { bits: BASE_ASSET_ID },
+        asset_id: { bits: baseAssetId },
         value: new BigNumber(0).toString(),
       },
     };
-  }, [abiSelectedParams, selectedAbiMethod]);
+  }, [abiSelectedParams, baseAssetId, selectedAbiMethod]);
 
   const { druRunHandler, decodedValue } = useCustomContractDryRunHandler({
     contract: metadataContract,

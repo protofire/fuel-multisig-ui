@@ -72,7 +72,7 @@ export const NetworkConnectionProvider: React.FC<
   const { account } = useAccount();
   const { accounts } = useAccounts();
   const { fuel } = useFuel();
-  const { connect, error: errorConnecting, isPending } = useConnect();
+  const { connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const { chain: chainData } = useChain();
   const [chainInfo, setChainInfo] = useState<ChainInfo | undefined>();

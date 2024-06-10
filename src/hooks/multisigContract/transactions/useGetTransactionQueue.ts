@@ -3,6 +3,7 @@ import { BigNumberish } from "fuels";
 import { useCallback } from "react";
 
 import { TransferDisplayInfo } from "@/domain/TransactionProposed";
+import { useAssetsInfoFinder } from "@/hooks/useGetBalance";
 import { toTransactionDisplayInfo } from "@/services/contracts/transformers/toTransactionDisplayInfo";
 import { getErrorMessage } from "@/utils/error";
 
@@ -15,6 +16,7 @@ export function useGetTransactionQueue() {
     isLoading: isGettingIds,
     multisigSelected,
   } = useGetTxIdList();
+  const { assetInfoFinder } = useAssetsInfoFinder();
 
   const fetchTransactionData = useCallback(
     async (transactionIds: BigNumberish[]) => {
@@ -53,7 +55,8 @@ export function useGetTransactionQueue() {
       ...toTransactionDisplayInfo(
         tx,
         multisigSelected?.threshold || 1,
-        multisigSelected
+        multisigSelected,
+        assetInfoFinder
       ),
     }));
 
