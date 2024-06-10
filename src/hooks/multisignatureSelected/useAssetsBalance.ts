@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { BN } from "fuels";
 
-import { assetsMap } from "@/config/assetsMap";
 import { AssetAmount } from "@/domain/ui/AssetAmount";
 import { irregularToDecimalFormatted } from "@/utils/bnJsFormatter";
 
 import { useGetMultisigContract } from "../multisigContract/useGetMultisigContract";
+import { useAssetsInfoFinder } from "../useGetBalance";
 
 interface Props {
   contractId: string | undefined;
@@ -20,12 +20,13 @@ export function useAssetsBalance({
   contractId,
 }: Props): UseAssetsBalanceReturn {
   const { contract } = useGetMultisigContract({ contractId });
+  const { assetInfoFinder, baseAssetId } = useAssetsInfoFinder();
 
   const { data, isLoading, isFetched } = useQuery({
     queryKey: ["useAssetsBalance", contract?.account?.address.toString()],
     queryFn: async () => {
       return Promise.all(
-        Object.values(assetsMap).map(async (asset) => {
+        Object.values(assetInfoFinder?.assetsMap || {}).map(async (asset) => {
           const balance = await contract?.getBalance(asset.assetId);
 
           const formatted = irregularToDecimalFormatted(balance, {
@@ -41,7 +42,7 @@ export function useAssetsBalance({
         })
       );
     },
-    enabled: !!contract,
+    enabled: !!contract && !!baseAssetId && !!assetInfoFinder,
     initialData: [],
   });
 

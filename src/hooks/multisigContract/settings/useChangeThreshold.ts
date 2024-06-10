@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 
-import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
+import { useAssetsInfoFinder } from "@/hooks/useGetBalance";
 import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
 
@@ -27,6 +27,7 @@ export function useChangeThreshold({
     contractId: multisigAddress,
   });
   const { proposeTransaction, isLoading } = useProposeTransaction();
+  const { baseAssetId } = useAssetsInfoFinder();
 
   const mutation = useMutation({
     mutationKey: ["proposeChangeThreshold", multisigContract?.account?.address],
@@ -43,7 +44,7 @@ export function useChangeThreshold({
         forwarded_gas: 10_000_000,
         function_selector: methodSelector,
         transfer_params: {
-          asset_id: { bits: BASE_ASSET_ID },
+          asset_id: { bits: baseAssetId },
           value: new BigNumber(0).toString(),
         },
       };

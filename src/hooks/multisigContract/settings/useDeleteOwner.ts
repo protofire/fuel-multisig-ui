@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import BigNumber from "bignumber.js";
 
-import { BASE_ASSET_ID } from "@/config/assetsMap";
 import { MultisignatureAccount } from "@/domain/MultisignatureAccount";
 import { AccountWalletItem } from "@/domain/ui/AccountSelectItem";
+import { useAssetsInfoFinder } from "@/hooks/useGetBalance";
 import { IDENTITY_ADDRESS } from "@/services/contracts/callData";
 import { ContractCallParamsInput } from "@/services/contracts/multisig/contracts/FuelMultisigAbi";
 import { toIdentityContractIdInput } from "@/services/contracts/transformers/toInputIdentity";
@@ -31,6 +31,7 @@ export function useDeleteOwner({
     contractId: multisigAddress,
   });
   const { proposeTransaction, isLoading } = useProposeTransaction();
+  const { baseAssetId } = useAssetsInfoFinder();
 
   const mutation = useMutation({
     mutationKey: ["proposeRemoveOwner", multisigContract?.account?.address],
@@ -51,7 +52,7 @@ export function useDeleteOwner({
         forwarded_gas: 10_000_000, // TODO check is this value needs to be changed
         function_selector: methodSelector,
         transfer_params: {
-          asset_id: { bits: BASE_ASSET_ID },
+          asset_id: { bits: baseAssetId },
           value: new BigNumber(0).toString(),
         },
       };
