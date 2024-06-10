@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 import { BaseStepper, transformSteps } from "@/sections/shared/BaseStepper";
 
+import {
+  FromWalletAssetForm,
+  TransferAssetContext,
+} from "./FromWalletAssetContext";
 import { STEPS } from "./steps";
 import { TransactionBox } from "./styled";
-import {
-  TransferAssetContext,
-  FromWalletAssetForm,
-} from "./FromWalletAssetContext";
 
 export function FromWalletAssetStepper() {
   const managerStep = useManagerActiveStep(STEPS.length);

@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
-import { assetsMap, BASE_ASSET_ID } from "@/config/assetsMap";
+import { assetsMap } from "@/config/assetsMap";
 import { ROUTES } from "@/config/routes";
 import { useDelay } from "@/hooks/common/useDelay";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
@@ -106,8 +106,18 @@ export function FormTransferAsset() {
       .multipliedBy(BigNumber(10).pow(assetInfo?.decimals ?? 0))
       .toString();
 
+    console.log(
+      "__",
+      _amount,
+      multisigSelected.address,
+      wallet.provider.getBaseAssetId()
+    );
     wallet
-      .transferToContract(multisigSelected?.address, _amount, BASE_ASSET_ID)
+      .transferToContract(
+        multisigSelected?.address,
+        _amount,
+        wallet.provider.getBaseAssetId()
+      )
       .then((r) => {
         console.log("__afterTransfer", r);
         router.push(ROUTES.App);
