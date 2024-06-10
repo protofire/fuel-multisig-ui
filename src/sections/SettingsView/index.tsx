@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 
 import { ROUTES } from "@/config/routes";
 import { useFormatAccountWalletItem } from "@/context/FormatAccountWalletItem/useFormatAccountWalletItem";
-import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 import { AccountSigner } from "../shared/AccountSigner";
@@ -17,7 +16,6 @@ export function SettingsView() {
   const { multisigSelected } = useSettingsMultisigContext();
   const { isB256Activated } = useFormatAccountWalletItem();
   const router = useRouter();
-  const { wallet } = useNetworkConnection();
 
   if (!multisigSelected || !router) {
     return (
