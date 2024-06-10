@@ -13,11 +13,10 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
-import { assetsMap } from "@/config/assetsMap";
 import { ROUTES } from "@/config/routes";
 import { useDelay } from "@/hooks/common/useDelay";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
-import { useGetBalance } from "@/hooks/useGetBalance";
+import { useAssetsInfoFinder, useGetBalance } from "@/hooks/useGetBalance";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { InputAddress } from "@/sections/shared/common/muiExtended/InputAddress";
 import { InputAmountWithMax } from "@/sections/shared/common/muiExtended/InputAmountWithMax";
@@ -60,6 +59,7 @@ export function FormTransferAsset() {
   const { balance, assetInfo, formatted, isLoading } = useGetBalance();
   const { wallet } = useWallet();
   const router = useRouter();
+  const { assetInfoFinder, baseAssetId } = useAssetsInfoFinder();
 
   const amountMaxText = formatted || "0";
 
@@ -193,7 +193,7 @@ export function FormTransferAsset() {
                 }}
                 sx={{ height: "3.7rem" }}
               >
-                {Object.values(assetsMap).map((asset) => {
+                {[assetInfoFinder.baseAssetInfo].map((asset) => {
                   return (
                     <MenuItem key={asset.assetId} value={asset.assetId}>
                       <Box display="flex" alignItems="center" gap={1}>
