@@ -20,6 +20,7 @@ export function TransferAssetStepper() {
       recipientAddress: "",
       amount: "",
       assetId: "",
+      isContractId: false,
     },
   });
 

@@ -57,7 +57,6 @@ export function useGetBalance(
     if (!balance || !assetInfo) return;
 
     const formatted = irregularToDecimalFormatted(balance, {
-      significantFigures: 4,
       assetInfo,
     });
 

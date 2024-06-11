@@ -2,7 +2,7 @@ import { toB256 } from "@/services/fuel/transformers/address";
 
 import { IdentityInput } from "../multisig/contracts/FuelMultisigAbi";
 
-export function toIdentityInput(str: string): IdentityInput {
+export function toIdentityAddressInput(str: string): IdentityInput {
   const identityInput: IdentityInput = {
     Address: { bits: toB256(str) },
   };
@@ -18,6 +18,6 @@ export function toIdentityContractIdInput(str: string): IdentityInput {
   return identityInput;
 }
 
-export function toIdentityInputs(strings: string[]): IdentityInput[] {
-  return strings.map((str) => toIdentityInput(str));
+export function toIdentityAddressInputs(strings: string[]): IdentityInput[] {
+  return strings.map((str) => toIdentityAddressInput(str));
 }

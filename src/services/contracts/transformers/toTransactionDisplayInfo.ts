@@ -53,7 +53,7 @@ export function toTransactionDisplayInfo(
       id: transactionOutput.tx_id.toString(),
       to: transactionOutput.to.Address
         ? getAccountWallet(transactionOutput.to.Address.bits)
-        : undefined,
+        : getAccountWallet(transactionOutput.to.ContractId.bits),
       validUntil: DateTime.fromTai64(transactionOutput.valid_until.toString()),
       approvalCount: transactionOutput.approvals_count,
       rejectionCount: transactionOutput.rejections_count,

@@ -48,14 +48,16 @@ export function useGetTransactionQueue() {
       const data = await fetchTransactionData(transactionIds as BigNumberish[]);
       return (data ?? [])
         .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
-        .map((tx) => ({
-          ...toTransactionDisplayInfo(
-            tx,
-            multisigSelected?.threshold || 1,
-            multisigSelected,
-            assetInfoFinder
-          ),
-        }));
+        .map((tx) => {
+          return {
+            ...toTransactionDisplayInfo(
+              tx,
+              multisigSelected?.threshold || 1,
+              multisigSelected,
+              assetInfoFinder
+            ),
+          };
+        });
     },
     enabled: !!transactionIds && !!contract,
     refetchInterval: 10000, // Refetch every 10 seconds

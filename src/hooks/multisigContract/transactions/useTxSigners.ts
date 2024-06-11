@@ -7,7 +7,7 @@ import {
   TransferProposed,
 } from "@/domain/TransactionProposed";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
-import { toIdentityInput } from "@/services/contracts/transformers/toInputIdentity";
+import { toIdentityAddressInput } from "@/services/contracts/transformers/toInputIdentity";
 import { getErrorMessage } from "@/utils/error";
 
 import { useGetMultisigContract } from "../useGetMultisigContract";
@@ -44,7 +44,7 @@ export function useTxSigners({ txId }: Props): UseTxSignersResult {
         multisigSelected.owners.map(async (owner) => {
           try {
             const transaction = await contract.functions
-              .get_tx_approval_by_owner(txId, toIdentityInput(owner.address))
+              .get_tx_approval_by_owner(txId, toIdentityAddressInput(owner.address))
               .dryRun();
 
             return {

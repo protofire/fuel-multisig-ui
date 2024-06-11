@@ -1,6 +1,8 @@
 import {
   Avatar,
   Box,
+  Checkbox,
+  FormControlLabel,
   MenuItem,
   Select,
   Skeleton,
@@ -48,7 +50,10 @@ export function FormTransferAsset() {
     control,
     setValue,
     getValues,
+    watch,
   } = inputFormManager;
+  const isContractId = watch("isContractId");
+  console.log("__is", isContractId);
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { balances, isLoading } = useAssetsBalance({
     contractId: multisigSelected?.address,
@@ -104,7 +109,9 @@ export function FormTransferAsset() {
         name="recipientAddress"
         control={control}
         rules={{
-          required: "Recipient address is required",
+          required: `Recipient ${
+            isContractId ? "contract ID" : ""
+          } address is required`,
           validate: {
             validAddress: (value) => {
               const error = validateAddress(value);
@@ -119,7 +126,7 @@ export function FormTransferAsset() {
             <InputAddress
               {...field}
               variant="outlined"
-              label={"Recipient Address *"}
+              label={`Recipient ${isContractId ? "Contract ID" : ""} address *`}
               fullWidth
               margin="normal"
               error={Boolean(errors["recipientAddress"])}
@@ -212,6 +219,23 @@ export function FormTransferAsset() {
           }}
         />
       </Box>
+      <Box display={"flex"} width={"100%"}>
+        <Controller
+          name="isContractId"
+          control={control}
+          render={({ field }) => {
+            return (
+              <FormControlLabel
+                control={<Checkbox />}
+                label="Contract ID address."
+                checked={field.value}
+                {...field}
+              />
+            );
+          }}
+        />
+      </Box>
+
       <Box pt={5} display={"flex"} width={"100%"}>
         <NextBackButtonStepper
           activeStep={activeStep}

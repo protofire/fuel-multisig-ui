@@ -9,6 +9,7 @@ export interface TransferAssetForm {
   amount: string;
   assetId: string;
   asset?: AssetAmount;
+  isContractId: boolean;
 }
 
 export interface TransferStepperState {

@@ -106,12 +106,6 @@ export function FormTransferAsset() {
       .multipliedBy(BigNumber(10).pow(assetInfo?.decimals ?? 0))
       .toString();
 
-    console.log(
-      "__",
-      _amount,
-      multisigSelected.address,
-      wallet.provider.getBaseAssetId()
-    );
     wallet
       .transferToContract(
         multisigSelected?.address,
@@ -119,7 +113,6 @@ export function FormTransferAsset() {
         wallet.provider.getBaseAssetId()
       )
       .then((r) => {
-        console.log("__afterTransfer", r);
         router.push(ROUTES.App);
       });
   };
