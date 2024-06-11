@@ -18,17 +18,28 @@ export const validateOwners = (owner: Owner[]): string | void => {
   if (error) return error;
 };
 
+/**
+ * Validates whether an address is unique within a list of addresses.
+ *
+ * This function checks if the given address is already present in the list of owners,
+ * ignoring the address at the provided index (useful for validation during updates).
+ */
+type AddressObject = {
+  address: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} & Record<string, any>;
 export const isAddressDuplicated = (
   address: string,
-  index: number,
-  allAddresses: Owner[]
-) => {
-  const exists =
-    allAddresses.filter((item, idx) => {
-      return toB256(item.address) === toB256(address) && index !== idx;
-    }).length >= 1;
+  allAddresses: AddressObject[],
+  index?: number
+): string | undefined => {
+  const isDuplicated = allAddresses.some((item, idx) => {
+    return toB256(item.address) === toB256(address) && index !== idx;
+  });
 
-  if (exists) {
+  if (isDuplicated) {
     return "Address owner must be unique";
   }
+
+  return undefined;
 };

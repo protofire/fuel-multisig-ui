@@ -3,6 +3,7 @@ export const ROUTES = {
   Connect: "/connect",
   App: "/app",
   New: "/new",
+  Load: "/load",
   NewTx: "/app/new-transaction",
   SendAsset: "/app/new-transaction/send-asset",
   FromWallet: "/app/new-transaction/from-wallet",
