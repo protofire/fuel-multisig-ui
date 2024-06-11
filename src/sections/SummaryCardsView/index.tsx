@@ -34,7 +34,9 @@ export function SummaryCardsView() {
       <Grid item xs={12} sm={6} md={3}>
         <SummaryCard
           captionTitle="Tracked Tokens"
-          caption={balances?.length.toString() || "0"}
+          caption={
+            balances?.filter((a) => a.amount.gt(0)).length.toString() || "0"
+          }
           widthSkeleton="60%"
         />
       </Grid>
