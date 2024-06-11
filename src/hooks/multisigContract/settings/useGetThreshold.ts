@@ -8,6 +8,7 @@ import { customReportError } from "@/utils/error";
 
 interface Props {
   contractId: string | undefined;
+  onSuccess?: (_threshold: number) => void;
 }
 
 interface UseGetThresholdReturn {
@@ -16,7 +17,10 @@ interface UseGetThresholdReturn {
   refetch: () => void;
 }
 
-export function useGetThreshold({ contractId }: Props): UseGetThresholdReturn {
+export function useGetThreshold({
+  contractId,
+  onSuccess,
+}: Props): UseGetThresholdReturn {
   const { contract } = useGetMultisigContract({ contractId });
 
   const { data, isLoading, isFetched, refetch } = useQuery({
@@ -26,6 +30,7 @@ export function useGetThreshold({ contractId }: Props): UseGetThresholdReturn {
         .get_threshold()
         .dryRun()
         .then((result) => {
+          onSuccess?.(result.value);
           return result.value;
         })
         .catch((e) => {

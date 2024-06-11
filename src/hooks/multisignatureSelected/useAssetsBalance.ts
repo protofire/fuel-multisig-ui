@@ -44,6 +44,7 @@ export function useAssetsBalance({
     },
     enabled: !!contract && !!baseAssetId && !!assetInfoFinder,
     initialData: [],
+    refetchInterval: 10000,
   });
 
   return { balances: data, isLoading: !isFetched || isLoading };

@@ -122,8 +122,8 @@ export function OwnersStep() {
                     unique: (value) => {
                       const error = isAddressDuplicated(
                         value,
-                        index,
-                        watch("owners")
+                        watch("owners"),
+                        index
                       );
                       if (error) return error;
 

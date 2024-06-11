@@ -1,6 +1,14 @@
 "use client";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Image from "next/image";
 import Link from "next/link";
@@ -90,15 +98,24 @@ export function WelcomeCard() {
             <Typography variant="body1" color="grey">
               A new Account that is controlled by one or multiple owners.
             </Typography>
-            <Link href={ROUTES.New} passHref>
-              <Button
-                variant="contained"
-                sx={{ color: theme.palette.common.black }}
-              >
-                <AddCircleIcon />
-                Create new Account
-              </Button>
-            </Link>
+            <Stack direction={"row"} justifyContent={"space-between"}>
+              <Link href={ROUTES.New} passHref>
+                <Button
+                  variant="contained"
+                  sx={{ color: theme.palette.common.black }}
+                >
+                  <AddCircleIcon />
+                  Create new Account
+                </Button>
+              </Link>
+              <Tooltip title={`Import created ${APP_NAME} account`}>
+                <Link href={ROUTES.Load} passHref>
+                  <Button variant="text" startIcon={<ImportExportIcon />}>
+                    Load
+                  </Button>
+                </Link>
+              </Tooltip>
+            </Stack>
           </Box>
         </Box>
       </MainContentCard>

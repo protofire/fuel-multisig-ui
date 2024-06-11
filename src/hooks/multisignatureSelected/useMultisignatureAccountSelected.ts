@@ -15,7 +15,7 @@ interface UseAccountMultisignatureSelected {
   multisigSelected: MultisignatureAccount | undefined;
 }
 
-function updateOwners(
+export function updateOwners(
   currentOwners: Owner[],
   newOwners: IdentityOutput[]
 ): Owner[] {
