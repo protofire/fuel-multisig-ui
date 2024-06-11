@@ -19,7 +19,7 @@ export function useGetTxIdList() {
         .get_active_tx_ids()
         .dryRun()
         .then((result) => result.value ?? []),
-    refetchInterval: 10000,
+    refetchInterval: 15000,
     enabled: !!multisigSelected?.address && !!contract,
     initialData: [],
   });

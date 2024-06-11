@@ -44,12 +44,17 @@ export function useMultisignatureAccountSelected(): UseAccountMultisignatureSele
   const { multisignatureSelectedRepository, multisignatureAccountsRepository } =
     useLocalDbContext();
   const { chainInfo } = useNetworkConnection();
-  const { threshold } = useGetThreshold({
+  const { threshold, isLoading: isFetchingThreshold } = useGetThreshold({
     contractId: multisigSelected?.address,
   });
-  const { owners } = useGetOwners({
+  const { owners, isLoading: isFetchingOwners } = useGetOwners({
     contractId: multisigSelected?.address,
   });
+  const isFetching =
+    threshold === undefined ||
+    owners === undefined ||
+    isFetchingOwners ||
+    isFetchingThreshold;
 
   useEffect(() => {
     if (!chainInfo) return;
@@ -81,28 +86,17 @@ export function useMultisignatureAccountSelected(): UseAccountMultisignatureSele
 
   useEffect(() => {
     if (
-      !multisigSelected ||
-      !threshold ||
-      multisigSelected.threshold === threshold
-    ) {
+      !multisigSelected?.address ||
+      isFetching ||
+      (multisigSelected.threshold === threshold &&
+        multisigSelected.owners.length === owners.length)
+    )
       return;
-    }
-
-    mutation.mutate({ threshold });
-  }, [multisigSelected, mutation, threshold]);
-
-  useEffect(() => {
-    if (
-      !multisigSelected ||
-      !owners ||
-      multisigSelected.owners.length === owners.length
-    ) {
-      return;
-    }
 
     const _updatedOwners = updateOwners(multisigSelected.owners, owners);
-    mutation.mutate({ owners: _updatedOwners });
-  }, [multisigSelected, mutation, owners]);
+    mutation.mutate({ owners: _updatedOwners, threshold });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching, multisigSelected, owners, threshold]);
 
   return { multisigSelected };
 }
