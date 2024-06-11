@@ -86,8 +86,8 @@ export function AddOwnerStep() {
                 unique: (value) => {
                   const error = isAddressDuplicated(
                     value,
-                    ownerNumber,
-                    multisigSelected?.owners || []
+                    multisigSelected?.owners || [],
+                    ownerNumber
                   );
                   if (error) return error;
 
