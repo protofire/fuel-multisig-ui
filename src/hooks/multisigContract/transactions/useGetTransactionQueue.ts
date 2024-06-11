@@ -42,26 +42,28 @@ export function useGetTransactionQueue() {
     [contract]
   );
 
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, error, isError } = useQuery<TransferDisplayInfo[]>({
     queryKey: ["transactionQueue", transactionIds],
-    queryFn: () => fetchTransactionData(transactionIds as BigNumberish[]),
+    queryFn: async () => {
+      const data = await fetchTransactionData(transactionIds as BigNumberish[]);
+      return (data ?? [])
+        .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
+        .map((tx) => ({
+          ...toTransactionDisplayInfo(
+            tx,
+            multisigSelected?.threshold || 1,
+            multisigSelected,
+            assetInfoFinder
+          ),
+        }));
+    },
     enabled: !!transactionIds && !!contract,
     refetchInterval: 10000, // Refetch every 10 seconds
+    initialData: [],
   });
 
-  const transactionData: TransferDisplayInfo[] = (data ?? [])
-    .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
-    .map((tx) => ({
-      ...toTransactionDisplayInfo(
-        tx,
-        multisigSelected?.threshold || 1,
-        multisigSelected,
-        assetInfoFinder
-      ),
-    }));
-
   return {
-    transactionData,
+    transactionData: data,
     error: error && getErrorMessage(error),
     isLoading: isLoading || isGettingIds,
   };
