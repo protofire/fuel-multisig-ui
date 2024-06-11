@@ -39,7 +39,7 @@ export function NewTxView() {
                     sx={{ fontSize: "3rem" }}
                   />
                 }
-                textButton="Send from wallet"
+                textButton="Fund multisig"
                 href={ROUTES.FromWallet}
               />
             }
