@@ -30,7 +30,7 @@ export function useAssetsBalance({
           const balance = await contract?.getBalance(asset.assetId);
 
           const formatted = irregularToDecimalFormatted(balance, {
-            significantFigures: 4,
+            significantFigures: 5,
             assetInfo: asset,
           });
 
