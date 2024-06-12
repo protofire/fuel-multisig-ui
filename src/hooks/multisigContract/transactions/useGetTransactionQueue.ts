@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { BigNumberish } from "fuels";
-import { useCallback } from "react";
 
 import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { TransferDisplayInfo } from "@/domain/TransactionProposed";
@@ -20,15 +19,17 @@ export function useGetTransactionQueue() {
   } = useGetTxIdList();
   const { assetInfoFinder } = useAssetsInfoFinder();
 
-  const fetchTransactionData = useCallback(
-    async (transactionIds: BigNumberish[]) => {
+  const { data, isLoading, error, isError, refetch } = useQuery<
+    TransferDisplayInfo[]
+  >({
+    queryKey: ["transactionQueue", transactionIds],
+    queryFn: async () => {
       if (!contract || transactionIds.length === 0) return [];
 
-      return Promise.all(
-        transactionIds.map(async (id) => {
+      const data = await Promise.all(
+        (transactionIds as BigNumberish[]).map(async (id) => {
           try {
             const transaction = await contract.functions.get_tx(id).dryRun();
-
             return transaction.value;
           } catch (error) {
             console.error(
@@ -40,16 +41,7 @@ export function useGetTransactionQueue() {
           }
         })
       );
-    },
-    [contract]
-  );
 
-  const { data, isLoading, error, isError, refetch } = useQuery<
-    TransferDisplayInfo[]
-  >({
-    queryKey: ["transactionQueue", transactionIds],
-    queryFn: async () => {
-      const data = await fetchTransactionData(transactionIds as BigNumberish[]);
       return (data ?? [])
         .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
         .map((tx) => {
@@ -63,7 +55,7 @@ export function useGetTransactionQueue() {
           };
         });
     },
-    enabled: !!transactionIds && !!contract,
+    enabled: transactionIds !== undefined && !!contract,
     refetchInterval: 10000, // Refetch every 10 seconds
     initialData: [],
   });
@@ -72,7 +64,6 @@ export function useGetTransactionQueue() {
     [
       MultisigLocalManagmentEvents.txApproved,
       MultisigLocalManagmentEvents.txRejected,
-      MultisigLocalManagmentEvents.txExecuted,
     ],
     () => refetch(),
     { delay: 2000 }

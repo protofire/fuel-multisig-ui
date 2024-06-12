@@ -40,7 +40,8 @@ export function MethodSelectorStep() {
   const abiSelectedParams = watch("abiMethodParams");
   const { contractAddress, metadataSource } = getValues();
   const router = useRouter();
-  const { proposeTransaction } = useProposeTransaction();
+  const { proposeTransaction, isLoading: isLoadingProposing } =
+    useProposeTransaction();
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { activeStep, stepsLength, downStep: handleBack } = managerStep;
   const { baseAssetId } = useAssetsInfoFinder();
@@ -186,6 +187,7 @@ export function MethodSelectorStep() {
           }
           nextButtonProps={{
             disabled: !selectedAbiMethod || selectedAbiMethod.isReadOnly,
+            isLoading: isLoadingProposing,
           }}
         />
       </Box>
