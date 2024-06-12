@@ -54,12 +54,11 @@ export function FormTransferAsset() {
     getValues,
   } = inputFormManager;
   const { multisigSelected } = useMultisignatureAccountSelected();
-  const { assetId } = getValues();
   const { isDelayFinished } = useDelay(500);
   const { balance, assetInfo, formatted, isLoading } = useGetBalance();
   const { wallet } = useWallet();
   const router = useRouter();
-  const { assetInfoFinder, baseAssetId } = useAssetsInfoFinder();
+  const { assetInfoFinder } = useAssetsInfoFinder();
 
   const amountMaxText = formatted || "0";
 
@@ -123,7 +122,7 @@ export function FormTransferAsset() {
         name="recipientAddress"
         control={control}
         rules={{
-          required: "Recipient address is required",
+          required: "Recipient Contract ID address is required",
           validate: {
             validAddress: (value) => {
               const error = validateAddress(value);
@@ -138,7 +137,7 @@ export function FormTransferAsset() {
             <InputAddress
               {...field}
               variant="outlined"
-              label={"Recipient Address *"}
+              label={"Recipient Contract ID address*"}
               fullWidth
               margin="normal"
               error={Boolean(errors["recipientAddress"])}
