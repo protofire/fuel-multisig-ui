@@ -75,7 +75,7 @@ export function useGetTransactionQueue() {
       MultisigLocalManagmentEvents.txExecuted,
     ],
     () => refetch(),
-    { delay: 1000 }
+    { delay: 2000 }
   );
 
   return {
