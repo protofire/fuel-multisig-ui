@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { BigNumberish } from "fuels";
 import { useCallback } from "react";
 
+import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { TransferDisplayInfo } from "@/domain/TransactionProposed";
+import { useEventListenerCallback } from "@/hooks/useEventListenerCallback";
 import { useAssetsInfoFinder } from "@/hooks/useGetBalance";
 import { toTransactionDisplayInfo } from "@/services/contracts/transformers/toTransactionDisplayInfo";
 import { getErrorMessage } from "@/utils/error";
@@ -42,7 +44,9 @@ export function useGetTransactionQueue() {
     [contract]
   );
 
-  const { data, isLoading, error, isError } = useQuery<TransferDisplayInfo[]>({
+  const { data, isLoading, error, isError, refetch } = useQuery<
+    TransferDisplayInfo[]
+  >({
     queryKey: ["transactionQueue", transactionIds],
     queryFn: async () => {
       const data = await fetchTransactionData(transactionIds as BigNumberish[]);
@@ -63,6 +67,16 @@ export function useGetTransactionQueue() {
     refetchInterval: 10000, // Refetch every 10 seconds
     initialData: [],
   });
+
+  useEventListenerCallback(
+    [
+      MultisigLocalManagmentEvents.txApproved,
+      MultisigLocalManagmentEvents.txRejected,
+      MultisigLocalManagmentEvents.txExecuted,
+    ],
+    () => refetch(),
+    { delay: 1000 }
+  );
 
   return {
     transactionData: data,

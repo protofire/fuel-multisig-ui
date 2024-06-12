@@ -53,7 +53,6 @@ export function FormTransferAsset() {
     watch,
   } = inputFormManager;
   const isContractId = watch("isContractId");
-  console.log("__is", isContractId);
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { balances, isLoading } = useAssetsBalance({
     contractId: multisigSelected?.address,

@@ -40,7 +40,7 @@ export function useChangeThreshold({
       }
 
       const callParams: ContractCallParamsInput = {
-        calldata: [0, 0, 0, 0, 0, 0, 0, threshold],
+        calldata: [threshold],
         forwarded_gas: 10_000_000,
         function_selector: methodSelector,
         transfer_params: {
