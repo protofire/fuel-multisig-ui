@@ -52,8 +52,10 @@ export function useGetOwners({
     refetchOnWindowFocus: false,
   });
 
-  useEventListenerCallback([MultisigLocalManagmentEvents.txExecuted], () =>
-    refetch()
+  useEventListenerCallback(
+    [MultisigLocalManagmentEvents.txExecuted],
+    () => refetch(),
+    { delay: 2000 }
   );
 
   return {

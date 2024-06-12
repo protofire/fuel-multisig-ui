@@ -39,7 +39,6 @@ export function TxExecutionHandler({
   multisigSelected,
   signersApprovalStatus: owners,
   expanded,
-  isB256Activated,
 }: Props) {
   const { status, approvalCount, id: proposedTxId } = txData;
   const isProposed = status === TX_STATUS_TYPE.PROPOSED;
@@ -168,49 +167,55 @@ export function TxExecutionHandler({
         </StyledStep>
 
         {/* Executed section */}
-        <StyledStep active={true}>
-          <StepLabel
-            sx={{ mt: 1.5 }}
-            StepIconComponent={() =>
-              CircleStepIcon(status, approvalCount, multisigSelected.threshold)
-            }
-          >
-            <Typography>
-              {isReady ? "Ready to execute" : "Can be executed"}
-            </Typography>
-          </StepLabel>
-          <StepContent sx={{ mt: "0.4rem", padding: "0px" }}>
-            <Box sx={{ ml: 2 }}>
-              <>
-                {isProposed ? (
-                  <Typography sx={{ fontSize: "0.8rem", mb: 3, mr: 3 }}>
-                    This transaction can be executed once the threshold is
-                    reached
-                  </Typography>
-                ) : null}
-                {isReady
-                  ? multisigContract && (
-                      <ExecutionWidget
-                        multisigSelected={multisigSelected}
-                        multisigContract={multisigContract}
-                        setSignerExecuting={setSignerExecuting}
-                        expanded={expanded}
-                        proposedTxId={proposedTxId}
-                      />
-                    )
-                  : multisigContract && (
-                      <ConfirmationWidget
-                        multisigSelected={multisigSelected}
-                        multisigContract={multisigContract}
-                        setSignerExecuting={setSignerExecuting}
-                        expanded={expanded}
-                        proposedTxId={proposedTxId}
-                      />
-                    )}
-              </>
-            </Box>
-          </StepContent>
-        </StyledStep>
+        {expanded && (
+          <StyledStep active={true}>
+            <StepLabel
+              sx={{ mt: 1.5 }}
+              StepIconComponent={() =>
+                CircleStepIcon(
+                  status,
+                  approvalCount,
+                  multisigSelected.threshold
+                )
+              }
+            >
+              <Typography>
+                {isReady ? "Ready to execute" : "Can be executed"}
+              </Typography>
+            </StepLabel>
+            <StepContent sx={{ mt: "0.4rem", padding: "0px" }}>
+              <Box sx={{ ml: 2 }}>
+                <>
+                  {isProposed ? (
+                    <Typography sx={{ fontSize: "0.8rem", mb: 3, mr: 3 }}>
+                      This transaction can be executed once the threshold is
+                      reached
+                    </Typography>
+                  ) : null}
+                  {isReady
+                    ? multisigContract && (
+                        <ExecutionWidget
+                          multisigSelected={multisigSelected}
+                          multisigContract={multisigContract}
+                          setSignerExecuting={setSignerExecuting}
+                          expanded={expanded}
+                          proposedTxId={proposedTxId}
+                        />
+                      )
+                    : multisigContract && (
+                        <ConfirmationWidget
+                          multisigSelected={multisigSelected}
+                          multisigContract={multisigContract}
+                          setSignerExecuting={setSignerExecuting}
+                          expanded={expanded}
+                          proposedTxId={proposedTxId}
+                        />
+                      )}
+                </>
+              </Box>
+            </StepContent>
+          </StyledStep>
+        )}
       </Stepper>
     </Box>
   );

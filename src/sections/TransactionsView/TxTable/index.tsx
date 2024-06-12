@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ROUTES } from "@/config/routes";
-import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
 import { capitalizeFirstLetter } from "@/utils/formatString";
 
 import { TxQueueDetails } from "../TxQueueDetails";
@@ -15,7 +14,6 @@ export type TxTabType = (typeof TAB_TX)[number];
 export const DEFAULT_TAB = 0; // Initial tab index "queue"
 
 export function TxTable() {
-  const { chainInfo } = useNetworkConnection();
   const [tabSelectedIndex, setTabSelectedIndex] = useState(DEFAULT_TAB);
   const params = useSearchParams();
   const router = useRouter();
