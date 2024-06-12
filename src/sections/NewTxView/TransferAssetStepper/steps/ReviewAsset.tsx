@@ -9,7 +9,10 @@ import { useDelay } from "@/hooks/common/useDelay";
 import { useTransferAsset } from "@/hooks/multisigContract/useTransferAsset";
 import { AccountSigner } from "@/sections/shared/AccountSigner";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
-import { toIdentityInput } from "@/services/contracts/transformers/toInputIdentity";
+import {
+  toIdentityAddressInput,
+  toIdentityContractIdInput,
+} from "@/services/contracts/transformers/toInputIdentity";
 import { toAccountWalletItem } from "@/services/fuel/connectors/transformer";
 
 import { FlexCenterBox, StyledBox, TypographyBodyStyled } from "../styled";
@@ -20,7 +23,8 @@ export function ReviewAsset() {
   const router = useRouter();
   const { activeStep, stepsLength, upStep, downStep } = managerStep;
   const { getValues, reset } = inputFormManager;
-  const { recipientAddress, asset, amount, assetId } = getValues();
+  const { recipientAddress, asset, amount, assetId, isContractId } =
+    getValues();
   const { isDelayFinished } = useDelay(500);
   const sendParams = useMemo(() => {
     const _amount = new BigNumber(amount)
@@ -28,13 +32,15 @@ export function ReviewAsset() {
       .toString();
 
     return {
-      to: toIdentityInput(recipientAddress),
+      to: isContractId
+        ? toIdentityContractIdInput(recipientAddress)
+        : toIdentityAddressInput(recipientAddress),
       params: {
         asset_id: { bits: assetId },
         value: _amount,
       },
     };
-  }, [amount, asset?.decimals, assetId, recipientAddress]);
+  }, [amount, asset?.decimals, assetId, isContractId, recipientAddress]);
   const { send, isPending } = useTransferAsset({
     ...sendParams,
     onSuccess: () => {
@@ -104,6 +110,19 @@ export function ReviewAsset() {
               <TypographyBodyStyled variant="body1">
                 {asset.symbol ? asset.symbol : asset.name}
               </TypographyBodyStyled>
+            </Typography>
+          </FlexCenterBox>
+          <FlexCenterBox>
+            <Typography variant="h6" width={200}>
+              Address Type:
+            </Typography>
+            <Typography
+              display="flex"
+              alignItems="center"
+              gap={1}
+              component="div"
+            >
+              {isContractId ? "ContractId" : "Address"}
             </Typography>
           </FlexCenterBox>
         </StyledBox>

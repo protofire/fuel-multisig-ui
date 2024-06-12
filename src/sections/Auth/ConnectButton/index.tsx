@@ -1,5 +1,6 @@
 "use client";
-import { Box } from "@mui/material";
+import ErrorOutlinedIcon from "@mui/icons-material/ErrorOutlined";
+import { Box, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
 
 import { useNetworkConnection } from "@/context/NetworkConnectionConfig/useNetworkConnection";
@@ -27,6 +28,7 @@ export const ConnectButton: React.FC = () => {
     walletProviderConnected,
   } = useNetworkConnection();
   const { formatted, isLoading: isLoadingBalance } = useGetBalance();
+  const wrongAccount = !accountConnected && accounts.length;
 
   useEventListenerCallback(WalletConnectionEvents.onConnectWallet, () =>
     openModal()
@@ -50,13 +52,23 @@ export const ConnectButton: React.FC = () => {
 
   return (
     <>
-      <StyledConnectButton
-        ref={refButton}
-        isLoading={recentlyClicked || isLoading}
-        onClick={openModal}
-      >
-        Connect
-      </StyledConnectButton>
+      {wrongAccount ? (
+        <Tooltip title="The account allowed to interact with the DApp is not the one currently selected in the wallet provider.">
+          <Box display="flex" alignItems="center" gap={1}>
+            <ErrorOutlinedIcon color="error" />
+            <Typography variant="button">Wrong Account</Typography>
+          </Box>
+        </Tooltip>
+      ) : (
+        <StyledConnectButton
+          ref={refButton}
+          isLoading={recentlyClicked || isLoading}
+          onClick={openModal}
+        >
+          Connect
+        </StyledConnectButton>
+      )}
+
       <ModalWallet
         wallets={walletProviders}
         open={isOpen}

@@ -4,27 +4,26 @@ import { UseFormReturn } from "react-hook-form";
 import { AssetAmount } from "@/domain/ui/AssetAmount";
 import { ManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 
-export interface TransferAssetForm {
+export interface FromWalletAssetForm {
   recipientAddress: string;
   amount: string;
   assetId: string;
   asset?: AssetAmount;
-  isContractId: boolean;
 }
 
-export interface TransferStepperState {
-  inputFormManager: UseFormReturn<TransferAssetForm>;
+export interface FromWalletStepperState {
+  inputFormManager: UseFormReturn<FromWalletAssetForm>;
   managerStep: ManagerActiveStep;
   reset: () => void;
 }
 
-export const TransferAssetContext = createContext({} as TransferStepperState);
+export const TransferAssetContext = createContext({} as FromWalletStepperState);
 
-export function useTransferAssetContext() {
+export function useFromWalletAssetContext() {
   const context = useContext(TransferAssetContext);
   if (!context) {
     throw new Error(
-      "useTransferStepperContext must be used within the context Provider"
+      "useFromWalletAssetContext must be used within the context Provider"
     );
   }
   return context;

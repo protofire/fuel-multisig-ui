@@ -24,8 +24,10 @@ export function useGetTxIdList() {
     initialData: [],
   });
 
-  useEventListenerCallback([MultisigLocalManagmentEvents.txExecuted], () =>
-    refetch()
+  useEventListenerCallback(
+    [MultisigLocalManagmentEvents.txExecuted],
+    () => refetch(),
+    { delay: 2000 }
   );
 
   return {

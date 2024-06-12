@@ -41,7 +41,8 @@ export function useApproveTx({
       MultisigLocalManagmentEvents.txApproved,
       MultisigLocalManagmentEvents.txRejected,
     ],
-    () => dryRunHandler.executeDryRun()
+    () => dryRunHandler.executeDryRun(),
+    { delay: 1000 }
   );
 
   const mutation = useMutation({

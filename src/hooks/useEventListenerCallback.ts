@@ -9,10 +9,16 @@ type EventNames =
   | keyof typeof WalletConnectionEvents
   | MultisigLocalManagmentEvents;
 
+interface UseEventListenerCallbackOptions {
+  delay?: number;
+}
+
 export function useEventListenerCallback(
   events: EventNames[] | EventNames, // accept any array of strings as event names
-  callback: EventCallback
+  callback: EventCallback,
+  options?: UseEventListenerCallbackOptions
 ): void {
+  const { delay } = options || {};
   const callbackRef = useRef<EventCallback>(callback);
 
   useEffect(() => {
@@ -24,7 +30,14 @@ export function useEventListenerCallback(
       if (IS_DEVELOPMENT) {
         console.info("Received event::", event.type);
       }
-      callback();
+      if (delay !== undefined) {
+        const timeoutId = setTimeout(() => {
+          callbackRef.current();
+        }, delay);
+        return () => clearTimeout(timeoutId);
+      } else {
+        callbackRef.current();
+      }
     };
 
     const _events = Array.isArray(events) ? events : [events];
@@ -38,5 +51,5 @@ export function useEventListenerCallback(
         document.removeEventListener(eventName, handleEvent);
       });
     };
-  }, [events, callback]);
+  }, [events, callback, delay]);
 }

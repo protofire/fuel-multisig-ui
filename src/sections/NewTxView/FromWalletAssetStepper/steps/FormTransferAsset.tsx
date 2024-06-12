@@ -1,26 +1,28 @@
+import { useWallet } from "@fuels/react";
 import {
   Avatar,
   Box,
-  Checkbox,
-  FormControlLabel,
   MenuItem,
   Select,
   Skeleton,
   Typography,
 } from "@mui/material";
+import BigNumber from "bignumber.js";
 import Image from "next/image";
-import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
+import { ROUTES } from "@/config/routes";
 import { useDelay } from "@/hooks/common/useDelay";
-import { useAssetsBalance } from "@/hooks/multisignatureSelected/useAssetsBalance";
 import { useMultisignatureAccountSelected } from "@/hooks/multisignatureSelected/useMultisignatureAccountSelected";
+import { useAssetsInfoFinder, useGetBalance } from "@/hooks/useGetBalance";
 import { NextBackButtonStepper } from "@/sections/shared/BaseStepper/NextBackButtonStepper";
 import { InputAddress } from "@/sections/shared/common/muiExtended/InputAddress";
 import { InputAmountWithMax } from "@/sections/shared/common/muiExtended/InputAmountWithMax";
 import { validateAddress } from "@/validations/blockchain";
 
-import { useTransferAssetContext } from "../TransferAssetContext";
+import { useFromWalletAssetContext } from "../FromWalletAssetContext";
 
 function FormTransferSkeleton() {
   return (
@@ -43,44 +45,38 @@ function FormTransferSkeleton() {
 }
 
 export function FormTransferAsset() {
-  const { inputFormManager, managerStep } = useTransferAssetContext();
+  const { inputFormManager, managerStep } = useFromWalletAssetContext();
   const { activeStep, stepsLength, upStep, downStep } = managerStep;
   const {
     formState: { errors, isValid },
     control,
     setValue,
     getValues,
-    watch,
   } = inputFormManager;
-  const isContractId = watch("isContractId");
   const { multisigSelected } = useMultisignatureAccountSelected();
-  const { balances, isLoading } = useAssetsBalance({
-    contractId: multisigSelected?.address,
-  });
-  const { assetId } = getValues();
   const { isDelayFinished } = useDelay(500);
-  const amountMaxText = useMemo(() => {
-    if (!balances) return "0";
+  const { balance, assetInfo, formatted, isLoading } = useGetBalance();
+  const { wallet } = useWallet();
+  const router = useRouter();
+  const { assetInfoFinder } = useAssetsInfoFinder();
 
-    const assetSelected = balances.find(
-      (assetBalance) => assetBalance.assetId === assetId
-    );
-    const amountSplitted = assetSelected?.amountFormatted.split(" ");
-
-    return amountSplitted ? amountSplitted[0] : "0";
-  }, [assetId, balances]);
+  const amountMaxText = formatted || "0";
 
   useEffect(() => {
-    if (!balances || !balances.length) return;
+    if (!assetInfo || !balance?.toNumber()) return;
 
-    const _defaultAsset = balances[0];
-    setValue("assetId", _defaultAsset.assetId);
-    setValue("asset", _defaultAsset);
-  }, [balances, setValue]);
+    setValue("assetId", assetInfo.assetId);
+  }, [assetInfo, balance, setValue]);
 
-  if (isLoading || !isDelayFinished) return <FormTransferSkeleton />;
+  useEffect(() => {
+    if (multisigSelected?.address) {
+      setValue("recipientAddress", multisigSelected.address);
+    }
+  }, [multisigSelected, setValue]);
 
-  if (Array.isArray(balances) && balances.length === 0) {
+  if (!isDelayFinished) return <FormTransferSkeleton />;
+
+  if (!assetInfo || !balance?.toNumber()) {
     return (
       <Box
         display="flex"
@@ -95,11 +91,29 @@ export function FormTransferAsset() {
   }
 
   const handleMax = (amountMax: string) => {
-    setValue("amount", amountMax ? amountMax : "0", {
+    setValue("amount", amountMax ? parseFloat(amountMax).toString() : "0", {
       shouldTouch: true,
       shouldDirty: true,
       shouldValidate: true,
     });
+  };
+
+  const transferFromWallet = async () => {
+    if (!wallet || !multisigSelected?.address) return;
+    const amount = getValues("amount");
+    const _amount = new BigNumber(amount)
+      .multipliedBy(BigNumber(10).pow(assetInfo?.decimals ?? 0))
+      .toString();
+
+    wallet
+      .transferToContract(
+        multisigSelected?.address,
+        _amount,
+        wallet.provider.getBaseAssetId()
+      )
+      .then((r) => {
+        router.push(ROUTES.App);
+      });
   };
 
   return (
@@ -108,9 +122,7 @@ export function FormTransferAsset() {
         name="recipientAddress"
         control={control}
         rules={{
-          required: `Recipient ${
-            isContractId ? "contract ID" : ""
-          } address is required`,
+          required: "Recipient Contract ID address is required",
           validate: {
             validAddress: (value) => {
               const error = validateAddress(value);
@@ -125,7 +137,7 @@ export function FormTransferAsset() {
             <InputAddress
               {...field}
               variant="outlined"
-              label={`Recipient ${isContractId ? "Contract ID" : ""} address *`}
+              label={"Recipient Contract ID address*"}
               fullWidth
               margin="normal"
               error={Boolean(errors["recipientAddress"])}
@@ -168,80 +180,51 @@ export function FormTransferAsset() {
                 labelId="assetId-tx-asset"
                 onChange={(e) => {
                   const _assetId = e.target.value;
-                  balances &&
-                    setValue(
-                      "asset",
-                      balances.find(
-                        (assetBalance) => assetBalance.assetId === _assetId
-                      )
-                    );
-
                   field.onChange(e);
                   handleMax("0");
                 }}
                 sx={{ height: "3.7rem" }}
               >
-                {!balances ? (
-                  <MenuItem value="">No Asset</MenuItem>
-                ) : (
-                  balances?.map((asset) => {
-                    return (
-                      <MenuItem key={asset.assetId} value={asset.assetId}>
-                        <Box display="flex" alignItems="center" gap={1}>
-                          {asset.imageUrl ? (
-                            <Avatar>
-                              <Image
-                                alt={String(asset.name)}
-                                src={asset.imageUrl as string}
-                                width={"24"}
-                                height={"24"}
-                              />
-                            </Avatar>
-                          ) : (
-                            <Avatar>❓</Avatar>
-                          )}
-                          <Box flexDirection="column">
-                            <Typography variant="body1">
-                              {asset.symbol}
-                            </Typography>
-                            <Typography variant="body2">
-                              {asset.amountFormatted}
-                            </Typography>
-                          </Box>
+                {[assetInfoFinder.baseAssetInfo].map((asset) => {
+                  return (
+                    <MenuItem key={asset.assetId} value={asset.assetId}>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        {asset.imageUrl ? (
+                          <Avatar>
+                            <Image
+                              alt={String(asset.name)}
+                              src={asset.imageUrl as string}
+                              width={"24"}
+                              height={"24"}
+                            />
+                          </Avatar>
+                        ) : (
+                          <Avatar>❓</Avatar>
+                        )}
+                        <Box flexDirection="column">
+                          <Typography variant="body1">
+                            {asset.symbol}
+                          </Typography>
+                          <Typography variant="body2">
+                            {amountMaxText}
+                          </Typography>
                         </Box>
-                      </MenuItem>
-                    );
-                  })
-                )}
+                      </Box>
+                    </MenuItem>
+                  );
+                })}
               </Select>
             );
           }}
         />
       </Box>
-      <Box display={"flex"} width={"100%"}>
-        <Controller
-          name="isContractId"
-          control={control}
-          render={({ field }) => {
-            return (
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Contract ID address."
-                checked={field.value}
-                {...field}
-              />
-            );
-          }}
-        />
-      </Box>
-
       <Box pt={5} display={"flex"} width={"100%"}>
         <NextBackButtonStepper
           activeStep={activeStep}
           stepsLength={stepsLength}
           hiddenBack={true}
           handleBack={downStep}
-          handleNext={upStep}
+          handleNext={transferFromWallet}
           nextButtonProps={{
             disabled: isLoading || !isValid,
             isLoading: isLoading,

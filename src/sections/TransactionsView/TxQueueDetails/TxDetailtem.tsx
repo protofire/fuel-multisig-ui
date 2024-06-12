@@ -60,6 +60,9 @@ export function TxDetailItem({
           background: "#82ffdd26",
         },
       }}
+      key={txData.id}
+      expanded={expanded}
+      onChange={handleChange(txData.id)}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}

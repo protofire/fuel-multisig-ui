@@ -44,6 +44,9 @@ export function useExecuteTx({
       return multisigContract?.functions
         .execute_tx(proposedTxId)
         .call()
+        .then((r) =>
+          console.info("TransactionId: ", r.transactionId.toString())
+        )
         .catch((e) => {
           const parsedError = parseFuelError(e);
           const msg = customReportError(e);

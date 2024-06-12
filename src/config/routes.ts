@@ -6,6 +6,7 @@ export const ROUTES = {
   Load: "/load",
   NewTx: "/app/new-transaction",
   SendAsset: "/app/new-transaction/send-asset",
+  FromWallet: "/app/new-transaction/fund-multisig",
   Assets: "/app/assets",
   Transactions: "/app/transactions",
   TxBuilder: "/app/transaction-builder",

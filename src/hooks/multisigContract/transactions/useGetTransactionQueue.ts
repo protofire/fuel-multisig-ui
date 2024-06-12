@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { BigNumberish } from "fuels";
 import { useCallback } from "react";
 
+import { MultisigLocalManagmentEvents } from "@/domain/events/MultisigLocalManagmentEvents";
 import { TransferDisplayInfo } from "@/domain/TransactionProposed";
+import { useEventListenerCallback } from "@/hooks/useEventListenerCallback";
 import { useAssetsInfoFinder } from "@/hooks/useGetBalance";
 import { toTransactionDisplayInfo } from "@/services/contracts/transformers/toTransactionDisplayInfo";
 import { getErrorMessage } from "@/utils/error";
@@ -42,25 +44,39 @@ export function useGetTransactionQueue() {
     [contract]
   );
 
-  const { data, isLoading, error, isError } = useQuery<TransferDisplayInfo[]>({
+  const { data, isLoading, error, isError, refetch } = useQuery<
+    TransferDisplayInfo[]
+  >({
     queryKey: ["transactionQueue", transactionIds],
     queryFn: async () => {
       const data = await fetchTransactionData(transactionIds as BigNumberish[]);
       return (data ?? [])
         .filter((tx): tx is NonNullable<typeof tx> => tx !== null)
-        .map((tx) => ({
-          ...toTransactionDisplayInfo(
-            tx,
-            multisigSelected?.threshold || 1,
-            multisigSelected,
-            assetInfoFinder
-          ),
-        }));
+        .map((tx) => {
+          return {
+            ...toTransactionDisplayInfo(
+              tx,
+              multisigSelected?.threshold || 1,
+              multisigSelected,
+              assetInfoFinder
+            ),
+          };
+        });
     },
     enabled: !!transactionIds && !!contract,
     refetchInterval: 10000, // Refetch every 10 seconds
     initialData: [],
   });
+
+  useEventListenerCallback(
+    [
+      MultisigLocalManagmentEvents.txApproved,
+      MultisigLocalManagmentEvents.txRejected,
+      MultisigLocalManagmentEvents.txExecuted,
+    ],
+    () => refetch(),
+    { delay: 2000 }
+  );
 
   return {
     transactionData: data,

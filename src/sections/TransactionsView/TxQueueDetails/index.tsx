@@ -8,7 +8,6 @@ import { TxDetailItem } from "./TxDetailtem";
 
 export function TxQueueDetails() {
   const { transactionData, isLoading, error } = useGetTransactionQueue();
-  const unavailableData = !transactionData || transactionData.length === 0;
   const { multisigSelected } = useMultisignatureAccountSelected();
   const { isB256Activated } = useFormatAccountWalletItem();
 

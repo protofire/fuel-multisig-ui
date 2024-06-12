@@ -4,23 +4,22 @@ import { useForm } from "react-hook-form";
 import { useManagerActiveStep } from "@/hooks/common/useManagerActiveStep";
 import { BaseStepper, transformSteps } from "@/sections/shared/BaseStepper";
 
+import {
+  FromWalletAssetForm,
+  TransferAssetContext,
+} from "./FromWalletAssetContext";
 import { STEPS } from "./steps";
 import { TransactionBox } from "./styled";
-import {
-  TransferAssetContext,
-  TransferAssetForm,
-} from "./TransferAssetContext";
 
-export function TransferAssetStepper() {
+export function FromWalletAssetStepper() {
   const managerStep = useManagerActiveStep(STEPS.length);
   const formSteps = useMemo(() => transformSteps(STEPS), []);
-  const inputFormManager = useForm<TransferAssetForm>({
+  const inputFormManager = useForm<FromWalletAssetForm>({
     mode: "all",
     defaultValues: {
       recipientAddress: "",
       amount: "",
       assetId: "",
-      isContractId: false,
     },
   });
 
