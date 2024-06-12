@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import Link from "next/link";
 
 import { ROUTES } from "@/config/routes";
@@ -28,7 +28,7 @@ export function TxQueueWidget() {
         <StyledList>
           <NoItems>
             {isLoading ? (
-              <Skeleton />
+              <CircularProgress />
             ) : (
               error || "There are no transactions in this account"
             )}
